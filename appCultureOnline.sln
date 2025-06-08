@@ -10,6 +10,10 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Elementos de la solución",
 		.gitignore = .gitignore
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CultureOnline.Application", "CultureOnline.Application\CultureOnline.Application.csproj", "{A1C66130-6ACE-4761-B84A-BBB103343143}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CultureOnline.Infraestructure", "CultureOnline.Infraestructure\CultureOnline.Infraestructure.csproj", "{87CC2A98-1438-4CD2-964D-4792DFB91D49}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -20,6 +24,14 @@ Global
 		{6B0D54D8-C268-4645-BE30-E7B274A190EA}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6B0D54D8-C268-4645-BE30-E7B274A190EA}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6B0D54D8-C268-4645-BE30-E7B274A190EA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A1C66130-6ACE-4761-B84A-BBB103343143}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A1C66130-6ACE-4761-B84A-BBB103343143}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A1C66130-6ACE-4761-B84A-BBB103343143}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A1C66130-6ACE-4761-B84A-BBB103343143}.Release|Any CPU.Build.0 = Release|Any CPU
+		{87CC2A98-1438-4CD2-964D-4792DFB91D49}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{87CC2A98-1438-4CD2-964D-4792DFB91D49}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{87CC2A98-1438-4CD2-964D-4792DFB91D49}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{87CC2A98-1438-4CD2-964D-4792DFB91D49}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

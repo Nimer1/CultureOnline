@@ -1,0 +1,52 @@
+﻿@model MVCCultureOnline.Models.LoginViewModel;
+@{
+    Layout = "_layoutlogin";
+}
+<div class="my-5">
+    @using (Html.BeginForm("Login", "Login", FormMethod.Post))
+    {
+        @Html.AntiForgeryToken()
+        <div class="d-flex align-items-center justify-content-center">
+            <div class="card col-sm-10 col-md-8 col-lg-6">
+                <div class="card-header">
+                    Bienvenidos a CultureOnline
+                </div>
+                <div class="card-body">
+                    <h5 class="card-title ">Seguridad</h5>
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.User, htmlAttributes:
+                        new { @class = "control-label col-md-2" })
+                    <div class="col-md-12">
+                        @Html.EditorFor(model => model.User, new {
+                                                htmlAttributes = new { @class = "form-control" } })
+                    </div>
+                    @Html.LabelFor(model => model.Password,
+                                        htmlAttributes: new { @class = "control-label col-md-2" })
+                    <div class="col-md-12">
+                        @Html.EditorFor(model => model.Password, new {
+                                                htmlAttributes = new { type = "password", @class = "form-control" } })
+                    </div>
+                    <div class="col-md-10 mt-4">
+                        <button type="submit" id="btnGuardar"
+                                class="btn btn-lg btn-primary">
+                            Ingresar
+                        </button>´
+                    </div>
+                </div>
+            </div>
+            <div class="card-footer text-muted">
+                Universidad Técnica Nacional
+                @{
+                    if (!string.IsNullOrEmpty(ViewBag.Message))
+                    {
+                        <div class="alert alert
+        danger">
+                            @ViewBag.Message
+                        </div>
+                    }
+                }
+            </div>
+        </div>
+    </div>
+        }
+</div> 
