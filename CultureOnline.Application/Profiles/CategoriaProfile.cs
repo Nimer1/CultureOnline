@@ -1,21 +1,19 @@
 ﻿using CultureOnline.Application.DTOs;
+using CultureOnline.Infraestructure.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using AutoMapper;
-using CultureOnline.Infraestructure.Models;
-
-
 namespace CultureOnline.Application.Profiles
 {
-    public class AutorProfile : Profile
+    public class CategoriaProfile : Profile
     {
-        public AutorProfile()
+        public CategoriaProfile()
         {
 
-            CreateMap<AutorDTO, Autor>().ReverseMap();
+            CreateMap<CategoriaDTO, Autor>().ReverseMap();
         }
     }
 }
