@@ -5,7 +5,7 @@ namespace CultureOnline.Infraestructure.Models;
 
 public partial class RolUsuario
 {
-    public int Idrol { get; set; }
+    public int IDrol { get; set; }
 
     public string? Descripcion { get; set; }
 

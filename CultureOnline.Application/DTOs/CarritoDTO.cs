@@ -8,17 +8,19 @@ using System.Threading.Tasks;
 
 namespace CultureOnline.Application.DTOs
 {
-    public record CategoriaDTO
+    public record CarritoDTO
     {
         public int Id { get; set; }
 
-        [Display(Name = "Nombre Categoría")]
+        [Display(Name = "Usuario")]
         [Required(ErrorMessage = "{0} es un dato requerido")]
-        public string Nombre { get; set; } = null!;
+        public int UsuarioId { get; set; }
 
-        [Display(Name = "Estado")]
-        public string? IdEstado { get; set; }
-        public List<ProductoDTO>? Productos { get; set; }
-        public List<PromocionDTO>? Promociones { get; set; }
+        [Display(Name = "Fecha de Modificación")]
+        public DateTime FechaModificacion { get; set; }
+
+        public UsuarioDTO Usuario { get; set; } = null!;
+
+        public List<DetalleCarritoDTO> DetalleCarrito { get; set; } = new();
     }
 }

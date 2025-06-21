@@ -195,10 +195,21 @@ public partial class CultureOnlineContext : DbContext
             entity.Property(e => e.Precio).HasColumnType("decimal(10, 2)");
             entity.Property(e => e.PromedioValoracion).HasDefaultValue(0.0);
 
-            entity.HasOne(d => d.Categoria).WithMany(p => p.Productos)
-                .HasForeignKey(d => d.CategoriaId)
+            entity.HasMany(d => d.Categorias).WithMany(p => p.Productos)
+                .UsingEntity<Dictionary<string, object>>(
+                 "ProductoCategorias",
+                 d => d.HasOne<Categorias>().WithMany()
+                .HasForeignKey("CategoriaId")
                 .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK_Productos_Categorias");
+                .HasConstraintName("FK_ProductoCategorias_Categorias"),
+                d => d.HasOne<Productos>().WithMany()
+                .HasForeignKey("ProductoId")
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_ProductoCategorias_Productos"),
+                j =>
+                {
+                j.HasKey("ProductoId", "CategoriaId");
+                });
 
             entity.HasOne(d => d.IdAutorNavigation).WithMany(p => p.Productos)
                 .HasForeignKey(d => d.IdAutor)
@@ -276,9 +287,9 @@ public partial class CultureOnlineContext : DbContext
 
         modelBuilder.Entity<RolUsuario>(entity =>
         {
-            entity.HasKey(e => e.Idrol);
+            entity.HasKey(e => e.IDrol);
 
-            entity.Property(e => e.Idrol).HasColumnName("IDRol");
+            entity.Property(e => e.IDrol).HasColumnName("IDRol");
             entity.Property(e => e.Descripcion).HasMaxLength(15);
         });
 

@@ -16,7 +16,7 @@ namespace CultureOnline.Application.DTOs
         [Display(Name = "Nombre Autor")]
         public string Descripcion { get; set; } = null!;
 
-       // public virtual List<ProductoDTO>Productos{ get; set; } = null!;
+       public List<ProductoDTO>? Productos{ get; set; } = null;
 
     }
 }

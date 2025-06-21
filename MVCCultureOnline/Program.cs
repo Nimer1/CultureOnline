@@ -18,13 +18,31 @@ builder.Services.AddControllersWithViews();
 // Configurar D.I.
 //Repository 
 builder.Services.AddTransient<IRepositoryAutor, RepositoryAutor>();
+builder.Services.AddTransient<IRepositoryCategoria, RepositoryCategoria>();
 //Services 
 builder.Services.AddTransient<IServiceAutor, ServiceAutor>();
+builder.Services.AddTransient<IServiceCategoria, ServiceCategoria>();
 
 //Configurar Automapper 
 builder.Services.AddAutoMapper(config =>
 {
 config.AddProfile<AutorProfile>();
+config.AddProfile<CategoriaProfile>();
+config.AddProfile<ProductoProfile>();
+config.AddProfile<UsuarioProfile>();
+config.AddProfile<RolUsuarioProfile>();
+config.AddProfile<DetallePedidoProfile>();
+config.AddProfile<EtiquetaProfile>();
+config.AddProfile<PagoProfile>();
+config.AddProfile<PedidoProfile>();
+config.AddProfile<ProductoImagenesProfile>();
+config.AddProfile<PromocionProfile>();
+config.AddProfile<ReseñaProfile>();
+config.AddProfile<DetalleCarritoProfile>();
+config.AddProfile<CarritoProfile>();
+config.AddProfile<GeneroProductoProfile>();
+config.AddProfile<TipoPromocionProfile>();
+config.AddProfile<ProductoEtiquetaProfile>();
 });
 
 // Configuar Conexión a la Base de Datos SQL 

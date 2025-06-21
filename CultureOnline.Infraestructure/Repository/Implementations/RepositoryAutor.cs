@@ -27,7 +27,11 @@ namespace CultureOnline.Infraestructure.Repository.Implementations
 
         public async Task<Autor> FindByIdAsync(int id)
         {
-            return await _context.Set<Autor>().FindAsync(id);
+            //return await _context.Set<Autor>().FindAsync(id);
+            var @object = await _context.Set<Autor>().FindAsync(id);
+
+            return @object!;
+
         }
     }
 }

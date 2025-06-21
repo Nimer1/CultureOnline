@@ -60,11 +60,15 @@ namespace CultureOnline.Application.DTOs
         public bool EsPersonalizable { get; set; }
 
         [Display(Name = "Autor")]
-       // [ValidateNever]
-        public virtual AutorDTO IdAutorNavigation { get; set; } = null!;
+        // [ValidateNever]
+        public AutorDTO? IdAutorNavigation { get; set; }
 
         //[ValidateNever]
-       // public virtual List<PedidoDetalleDTO> DetallePedido { get; set; } = null!;
-
+        // public virtual List<PedidoDetalleDTO> DetallePedido { get; set; } = null!;
+        public List<CategoriaDTO> Categorias { get; set; } = new();
+        public List<EtiquetaDTO> Etiquetas { get; set; } = new();
+        public List<ProductoImagenesDTO> Imagenes { get; set; } = new();
+        public List<ReseñaDTO> Reseñas { get; set; } = new();
+        public List<PromocionDTO> Promociones { get; set; } = new();
     }
 }

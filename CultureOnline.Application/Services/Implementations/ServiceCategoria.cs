@@ -6,7 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-
+using CultureOnline.Infraestructure.Repository.Interfaces;
 namespace CultureOnline.Application.Services.Implementations
 {
     public class ServiceCategoria : IServiceCategoria

@@ -50,4 +50,6 @@ public partial class Productos
     public virtual ICollection<Reseñas> Reseñas { get; set; } = new List<Reseñas>();
 
     public virtual ICollection<Etiquetas> Etiqueta { get; set; } = new List<Etiquetas>();
+    //public virtual ICollection<ProductoEtiquetas> ProductoEtiquetas { get; set; } = new List<ProductoEtiquetas>();
+    public virtual ICollection<Categorias> Categorias { get; set; } = new List<Categorias>();
 }
