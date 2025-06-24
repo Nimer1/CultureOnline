@@ -15,7 +15,7 @@ public partial class Productos
 
     public int Stock { get; set; }
 
-    public string? IdEstado { get; set; }
+    public string? Estado { get; set; }
 
     public int? AnioPublicacion { get; set; }
 
@@ -25,15 +25,15 @@ public partial class Productos
 
     public string? Editorial { get; set; }
 
-    public int? IdGeneroProducto { get; set; }
+    //public int? IdGeneroProducto { get; set; }
 
-    public int CategoriaId { get; set; }
+    //public int CategoriaId { get; set; }
 
     public double? PromedioValoracion { get; set; }
 
     public bool EsPersonalizable { get; set; }
 
-    public virtual Categorias Categoria { get; set; } = null!;
+    //public virtual Categorias Categoria { get; set; } = null!;
 
     public virtual ICollection<DetalleCarrito> DetalleCarrito { get; set; } = new List<DetalleCarrito>();
 
@@ -41,7 +41,7 @@ public partial class Productos
 
     public virtual Autor? IdAutorNavigation { get; set; }
 
-    public virtual GeneroProducto? IdGeneroProductoNavigation { get; set; }
+   // public virtual GeneroProducto? IdGeneroProductoNavigation { get; set; }
 
     public virtual ICollection<ProductoImagenes> ProductoImagenes { get; set; } = new List<ProductoImagenes>();
 

@@ -1,0 +1,133 @@
+﻿@model CultureOnline.Application.DTOs.ProductoDTO
+
+@{
+    ViewData["Title"] = "Detalle del Producto";
+}
+
+<h3 class="text-center mt-4 mb-4">Detalle del Producto</h3>
+
+<div class="card mx-auto" style="max-width: 800px;">
+    <div class="row g-0">
+        <!-- Imagen / carrusel -->
+        <div class="col-md-6">
+            @if (Model.Imagenes != null && Model.Imagenes.Any())
+            {
+                <div id="carouselDetalle" class="carousel slide h-100" data-bs-ride="carousel">
+
+                    <div class="carousel-indicators">
+                        @for (int i = 0; i < Model.Imagenes.Count; i++)
+                        {
+                            <button type="button" data-bs-target="#carouselDetalle" data-bs-slide-to="@i" class="@(i == 0 ? "active" : "")" aria-current="@(i == 0 ? "true" : "false")" aria-label="Slide @(i + 1)"></button>
+                        }
+                    </div>
+
+                    <div class="carousel-inner">
+                        @for (int i = 0; i < Model.Imagenes.Count; i++)
+                        {
+                            var ruta = Model.Imagenes[i].Ruta;
+                            <div class="carousel-item @(i == 0 ? "active" : "")">
+                                <img src="@Url.Content($"/images/{ruta}")"
+                                     class="d-block w-100 h-100"
+                                     style="object-fit: contain; max-height: 460px;"
+                                     alt="Imagen de @Model.Nombre" />
+                            </div>
+                        }
+                    </div>
+                   
+                </div>
+            }
+            else
+            {
+                <img src="@Url.Content("/images/Default.jpg")"
+                     class="img-fluid"
+                     style="height: 460px; object-fit: contain;"
+                     alt="Imagen por defecto" />
+            }
+        </div>
+
+        <!-- Información del producto -->
+        <div class="col-md-6">
+            <div class="card-body">
+                <h4 class="card-title">@Model.Nombre</h4>
+                <p class="card-text"></b> @Model.Descripcion</p>
+                <p class="card-text"><b>@Html.DisplayNameFor(m => m.Precio):</b> &cent; @Model.Precio</p>
+
+                @if (!string.IsNullOrEmpty(Model.IdAutorNavigation?.Descripcion))
+                {
+                    <p class="card-text"><b>@Html.DisplayNameFor(m => m.IdAutorNavigation):</b> @Model.IdAutorNavigation.Descripcion</p>
+                }
+
+                @if (!string.IsNullOrEmpty(Model.Editorial))
+                {
+                    <p class="card-text"><b>@Html.DisplayNameFor(m => m.Editorial):</b> @Model.Editorial</p>
+                }
+
+                @if (!string.IsNullOrWhiteSpace(Model.ClasificacionEdad))
+                {
+                    <p class="card-text"><b>@Html.DisplayNameFor(m => m.ClasificacionEdad):</b> @Model.ClasificacionEdad</p>
+                }
+
+                @if (Model.Categorias?.Any() == true)
+                {
+                    <p class="card-text">
+                        <b>Categorías:</b>
+                        <ul>
+                            @foreach (var cat in Model.Categorias)
+                            {
+                                <li>@cat.Nombre</li>
+                            }
+                        </ul>
+                    </p>
+                }
+
+                @* Valoración *@
+                @{
+                    var valoracion = Model.PromedioValoracion ?? 0;
+                    var enteras = (int)Math.Floor(valoracion);
+                    var tieneMedia = (valoracion % 1) > 0;
+                    var vacias = 5 - enteras - (tieneMedia ? 1 : 0);
+                }
+
+                <p class="card-text">
+                    <b>Valoración:</b>
+                    <span class="text-warning ms-2">
+                        @for (int i = 0; i < enteras; i++)
+                        {
+                            <i class="fas fa-star"></i>
+                        }
+                        @if (tieneMedia)
+                        {
+                            <i class="fas fa-star-half-alt"></i>
+                        }
+                        @for (int i = 0; i < vacias; i++)
+                        {
+                            <i class="far fa-star"></i>
+                        }
+                    </span>
+                    <span class="ms-2 text-muted">(@valoracion.ToString("0.0"))</span>
+                </p>
+                
+                <p class="card-text">
+                    <b>@Html.DisplayNameFor(m => m.EsPersonalizable):</b>
+                    @(Model.EsPersonalizable ? "Sí" : "No")
+                </p>
+
+                @if (Model.Etiquetas?.Any() == true)
+                {
+                    <p class="card-text">
+                        <b>Etiquetas:</b>
+                        <ul>
+                            @foreach (var et in Model.Etiquetas)
+                            {
+                                <li>@et.Descripcion</li>
+                            }
+                        </ul>
+                    </p>
+                }
+
+                <a asp-action="Index" class="btn custom-hover rounded-pill px-5 py-2 fw-semibold shadow-sm btn-detalle-largo mt-3">Volver al listado</a>
+            </div>
+        </div>
+    </div>
+</div>
+

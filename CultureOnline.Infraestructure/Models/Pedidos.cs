@@ -13,7 +13,7 @@ public partial class Pedidos
 
     public string? Direccion { get; set; }
 
-    public string IdEstado { get; set; } = null!;
+    public string Estado { get; set; } = null!;
 
     public int IdmetodoPago { get; set; }
 

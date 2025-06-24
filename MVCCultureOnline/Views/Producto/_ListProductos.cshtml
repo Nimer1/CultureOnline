@@ -1,0 +1,72 @@
+﻿@model IEnumerable<CultureOnline.Application.DTOs.ProductoDTO>
+
+@foreach (var item in Model)
+{
+    var imagen = item.Imagenes?.FirstOrDefault()?.Ruta ?? "Defaul.jpg";
+
+    <div class="col-md-4 mb-4">
+        <div class="card shadow-sm h-100">
+            <img class="card-img-top"
+                 style="height: 460px; object-fit: cover;"
+                 src="@Url.Content($"/images/{imagen}")"
+                 alt="Imagen de @item.Nombre"/>
+
+            <h4 class="card-title text-center mt-2">@item.Nombre</h4>
+            <div class="card-body">
+                <h6 class="card-text">@item.Descripcion</h6><br/>
+                <h6>@Html.DisplayNameFor(modelItem => item.Precio): @Html.DisplayFor(modelItem => item.Precio)</h6>
+                @if (!string.IsNullOrEmpty(item.IdAutorNavigation?.Descripcion))
+                {
+                    <h6>@Html.DisplayNameFor(modelItem => item.IdAutorNavigation): @item.IdAutorNavigation.Descripcion</h6>
+                }
+                @if (!string.IsNullOrEmpty(item.Editorial))
+                {
+                    <h6>@Html.DisplayNameFor(modelItem => item.Editorial): @item.Editorial</h6>
+                }
+                @if (!string.IsNullOrWhiteSpace(item.ClasificacionEdad))
+                {
+                    <h6>@Html.DisplayNameFor(modelItem => item.ClasificacionEdad): @item.ClasificacionEdad</h6>
+                }
+
+                @*<h6>@Html.DisplayNameFor(modelItem => item.IdAutorNavigation): @item.IdAutorNavigation?.Descripcion</h6>*@
+                @*<h6>@Html.DisplayNameFor(modelItem => item.Editorial): @item.Editorial</h6>*@
+                @*<h6>@Html.DisplayNameFor(modelItem => item.ClasificacionEdad): @Html.DisplayFor(modelItem => item.ClasificacionEdad)</h6>*@
+              
+                    @{
+                        var valoracion = item.PromedioValoracion ?? 0;
+                        var enteras = (int)Math.Floor(valoracion);
+                        var tieneMedia = (valoracion % 1) > 0;
+                        var vacias = 5 - enteras - (tieneMedia ? 1 : 0);
+                    }
+
+                <h6>
+                    Valoración:
+                    <span class="text-warning ms-2">
+                        @for (int i = 0; i < enteras; i++)
+                        {
+                            <i class="fas fa-star"></i>
+                        }
+                        @if (tieneMedia)
+                        {
+                            <i class="fas fa-star-half-alt"></i>
+                        }
+                        @for (int i = 0; i < vacias; i++)
+                        {
+                            <i class="far fa-star"></i>
+                        }
+                    </span>
+                    <span class="ms-2 text-muted">(@valoracion.ToString("0.0"))</span>
+                </h6>
+            </div>
+            <div class="card-footer text-center bg-white border-0">
+                <a class="btn custom-hover rounded-pill px-5 py-2 fw-semibold shadow-sm btn-detalle-largo"
+                   asp-action="Detalle"
+                   asp-controller="Producto"
+                   asp-route-id="@item.Id">
+                    Ver Detalle
+                </a>
+            </div>
+        </div>
+    </div>
+}
+

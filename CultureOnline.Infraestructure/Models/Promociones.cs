@@ -21,7 +21,7 @@ public partial class Promociones
 
     public DateTime FechaFin { get; set; }
 
-    public string IdEstado { get; set; } = null!;
+    public string Estado { get; set; } = null!;
 
     public virtual Categorias? Categoria { get; set; }
 

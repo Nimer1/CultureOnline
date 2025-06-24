@@ -72,10 +72,10 @@ public partial class CultureOnlineContext : DbContext
 
         modelBuilder.Entity<Categorias>(entity =>
         {
-            entity.Property(e => e.IdEstado)
+            entity.Property(e => e.Estado)
                 .HasMaxLength(20)
                 .IsUnicode(false)
-                .HasColumnName("idEstado");
+                .HasColumnName("Estado");
             entity.Property(e => e.Nombre).HasMaxLength(50);
         });
 
@@ -155,10 +155,10 @@ public partial class CultureOnlineContext : DbContext
             entity.Property(e => e.Fecha)
                 .HasDefaultValueSql("(getdate())")
                 .HasColumnType("datetime");
-            entity.Property(e => e.IdEstado)
+            entity.Property(e => e.Estado)
                 .HasMaxLength(20)
                 .IsUnicode(false)
-                .HasColumnName("idEstado");
+                .HasColumnName("Estado");
             entity.Property(e => e.IdSeguimiento).HasMaxLength(100);
             entity.Property(e => e.IdmetodoPago).HasColumnName("IDMetodoPago");
             entity.Property(e => e.ImagenPersonalizada)
@@ -186,11 +186,11 @@ public partial class CultureOnlineContext : DbContext
             entity.Property(e => e.ClasificacionEdad).HasMaxLength(20);
             entity.Property(e => e.Editorial).HasMaxLength(100);
             entity.Property(e => e.IdAutor).HasColumnName("idAutor");
-            entity.Property(e => e.IdEstado)
+            entity.Property(e => e.Estado)
                 .HasMaxLength(20)
                 .IsUnicode(false)
-                .HasColumnName("idEstado");
-            entity.Property(e => e.IdGeneroProducto).HasColumnName("idGeneroProducto");
+                .HasColumnName("Estado");
+            //entity.Property(e => e.IdGeneroProducto).HasColumnName("idGeneroProducto");
             entity.Property(e => e.Nombre).HasMaxLength(100);
             entity.Property(e => e.Precio).HasColumnType("decimal(10, 2)");
             entity.Property(e => e.PromedioValoracion).HasDefaultValue(0.0);
@@ -215,9 +215,15 @@ public partial class CultureOnlineContext : DbContext
                 .HasForeignKey(d => d.IdAutor)
                 .HasConstraintName("FK_Productos_Autor");
 
-            entity.HasOne(d => d.IdGeneroProductoNavigation).WithMany(p => p.Productos)
+            entity.HasMany(p => p.ProductoImagenes)
+            .WithOne(pi => pi.Producto)
+            .HasForeignKey(pi => pi.ProductoId)
+            .HasConstraintName("FK_ProductoImagenes_Productos");
+
+
+            /*entity.HasOne(d => d.IdGeneroProductoNavigation).WithMany(p => p.Productos)
                 .HasForeignKey(d => d.IdGeneroProducto)
-                .HasConstraintName("FK_Productos_GeneroProducto");
+                .HasConstraintName("FK_Productos_GeneroProducto");*/
 
             entity.HasMany(d => d.Etiqueta).WithMany(p => p.Producto)
                 .UsingEntity<Dictionary<string, object>>(
@@ -244,10 +250,10 @@ public partial class CultureOnlineContext : DbContext
             entity.Property(e => e.DescuentoPorcentaje).HasColumnType("decimal(18, 0)");
             entity.Property(e => e.FechaFin).HasColumnType("datetime");
             entity.Property(e => e.FechaInicio).HasColumnType("datetime");
-            entity.Property(e => e.IdEstado)
+            entity.Property(e => e.Estado)
                 .HasMaxLength(20)
                 .IsUnicode(false)
-                .HasColumnName("idEstado");
+                .HasColumnName("Estado");
             entity.Property(e => e.Nombre).HasMaxLength(100);
 
             entity.HasOne(d => d.Categoria).WithMany(p => p.Promociones)
@@ -307,10 +313,10 @@ public partial class CultureOnlineContext : DbContext
 
             entity.Property(e => e.Contrasena).HasMaxLength(255);
             entity.Property(e => e.Correo).HasMaxLength(100);
-            entity.Property(e => e.IdEstado)
+            entity.Property(e => e.Estado)
                 .HasMaxLength(20)
                 .IsUnicode(false)
-                .HasColumnName("idEstado");
+                .HasColumnName("Estado");
             entity.Property(e => e.Idrol).HasColumnName("IDRol");
             entity.Property(e => e.Nombre).HasMaxLength(50);
             entity.Property(e => e.UltimoInicioSesion)

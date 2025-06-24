@@ -21,10 +21,11 @@ namespace CultureOnline.Infraestructure.Repository.Implementations
 
         public async Task<Productos> FindByIdAsync(int id)
         {
-            // Incluís relaciones si querés más datos (categorías, etiquetas, etc.)
             var producto = await _context.Productos
                 .Include(p => p.Categorias)
                 .Include(p => p.Etiqueta)
+                .Include(p => p.Promociones)
+                .Include(p => p.ProductoImagenes)
                 .FirstOrDefaultAsync(p => p.Id == id);
 
             return producto!;
@@ -33,8 +34,11 @@ namespace CultureOnline.Infraestructure.Repository.Implementations
         public async Task<ICollection<Productos>> ListAsync()
         {
             var productos = await _context.Productos
-                .Include(p => p.Categorias)
+                //.Include(p => p.Categorias)
                 .Include(p => p.Etiqueta)
+                .Include(p => p.Promociones)
+                .Include(p => p.ProductoImagenes)
+                .Include(p => p.IdAutorNavigation)
                 .AsNoTracking()
                 .ToListAsync();
 
@@ -65,7 +69,7 @@ namespace CultureOnline.Infraestructure.Repository.Implementations
 
             if (producto == null) throw new Exception("Producto no encontrado");
 
-            producto.Categorias.Clear(); // Limpia relación que hay de muchos a muchos
+            producto.Categorias.Clear(); // Limpia la relación que hay de muchos a muchos
             _context.Productos.Remove(producto);
             await _context.SaveChangesAsync();
         }
@@ -122,6 +126,12 @@ namespace CultureOnline.Infraestructure.Repository.Implementations
 
             await _context.SaveChangesAsync();
         }
+        /*public async Task<ICollection<Productos>> GetProductoByCategoria(int idCategoria)
+        {
+            return await _context.Productos
+                .Where(p => p.CategoriaId == idCategoria)
+                .ToListAsync();
+        }*/
 
 
     }

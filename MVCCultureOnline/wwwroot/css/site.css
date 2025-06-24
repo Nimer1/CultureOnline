@@ -57,6 +57,30 @@ body.d-flex.flex-column.min-vh-100 {
     background: #4B3621;
     color: white;
 }
+.btn-detalle-largo {
+    border: 2px solid #D58D75;
+    color: black;
+    background-color: #ECAE7E;
+    transition: background-color 0.3s, color 0.3s;
+}
+.custom-hover:hover {
+    background-color: #D58D75 !important;
+    border-color: #D58D75 !important;
+    color: black !important;
+}
+
+.btn-detalle-largo {
+    min-width: 150px;
+}
+
+#carouselDetalle .carousel-indicators [data-bs-target] {
+    background-color: gray;
+    opacity: 1;
+}
+
+#carouselDetalle .carousel-indicators .active {
+    background-color: brown;
+}
 
 
 

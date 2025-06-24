@@ -40,7 +40,7 @@ namespace CultureOnline.Application.DTOs
         public DateTime FechaFin { get; set; }
 
         [Display(Name = "Estado")]
-        public string? IdEstado { get; set; }
+        public string? Estado { get; set; }
 
         public List<CategoriaDTO> Categorias { get; set; } = new();
         public ProductoDTO? Producto { get; set; }

@@ -23,7 +23,7 @@ namespace CultureOnline.Application.DTOs
         public string? Direccion { get; set; }
 
         [Display(Name = "Estado")]
-        public string? IdEstado { get; set; } = null!;
+        public string? Estado { get; set; } = null!;
 
         [Display(Name = "Método de Pago")]
         [Required(ErrorMessage = "{0} es un dato requerido")]

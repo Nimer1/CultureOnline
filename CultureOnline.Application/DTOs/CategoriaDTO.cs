@@ -17,7 +17,7 @@ namespace CultureOnline.Application.DTOs
         public string Nombre { get; set; } = null!;
 
         [Display(Name = "Estado")]
-        public string? IdEstado { get; set; }
+        public string? Estado { get; set; }
         public List<ProductoDTO>? Productos { get; set; }
         public List<PromocionDTO>? Promociones { get; set; }
     }

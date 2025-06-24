@@ -17,7 +17,7 @@ namespace CultureOnline.Application.DTOs
         public string Descripcion { get; set; } = null!;
 
  
-        public List<ProductoDTO> Productos { get; set; } = new();
+        //public List<ProductoDTO> Productos { get; set; } = new();
     }
 }
 

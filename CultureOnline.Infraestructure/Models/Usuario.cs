@@ -17,7 +17,7 @@ public partial class Usuario
 
     public DateTime UltimoInicioSesion { get; set; }
 
-    public string? IdEstado { get; set; }
+    public string? Estado { get; set; }
 
     public virtual ICollection<Carrito> Carrito { get; set; } = new List<Carrito>();
 

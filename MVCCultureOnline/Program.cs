@@ -19,9 +19,11 @@ builder.Services.AddControllersWithViews();
 //Repository 
 builder.Services.AddTransient<IRepositoryAutor, RepositoryAutor>();
 builder.Services.AddTransient<IRepositoryCategoria, RepositoryCategoria>();
+builder.Services.AddTransient<IRepositoryProducto, RepositoryProducto>();
 //Services 
 builder.Services.AddTransient<IServiceAutor, ServiceAutor>();
 builder.Services.AddTransient<IServiceCategoria, ServiceCategoria>();
+builder.Services.AddTransient<IServiceProducto, ServiceProducto>();
 
 //Configurar Automapper 
 builder.Services.AddAutoMapper(config =>
@@ -110,6 +112,7 @@ app.UseAuthorization();
 app.UseAntiforgery(); 
 
 app.MapStaticAssets();
+app.UseStaticFiles();
 
 app.MapControllerRoute(
     name: "default",

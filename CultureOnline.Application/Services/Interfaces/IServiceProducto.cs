@@ -7,9 +7,11 @@ using System.Threading.Tasks;
 
 namespace CultureOnline.Application.Services.Interfaces
 {
-    internal interface IServiceProducto
+    public interface IServiceProducto
     {
         Task<ICollection<ProductoDTO>> ListAsync();
         Task<ProductoDTO> FindByIdAsync(int id);
+        //Task<ICollection<ProductoDTO>> GetProductoByCategoria(int categoriaId);
+
     }
 }

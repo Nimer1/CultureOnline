@@ -10,8 +10,13 @@ namespace CultureOnline.Application.Profiles
 {
     public class ProductoProfile: Profile
     {
-        public ProductoProfile() { 
-            CreateMap<ProductoDTO, Productos>().ReverseMap();
+        public ProductoProfile() {
+            CreateMap<Productos, ProductoDTO>()
+                   .ForMember(dest => dest.Imagenes, opt => opt.MapFrom(src => src.ProductoImagenes))
+                   .ReverseMap();
+
+            CreateMap<ProductoImagenes, ProductoImagenesDTO>().ReverseMap();
         }
     }
+    
 }

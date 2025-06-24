@@ -30,7 +30,7 @@ namespace CultureOnline.Application.DTOs
         public int Stock { get; set; }
 
         [Display(Name = "Estado ")]
-        public string? IdEstado { get; set; }
+        public string? Estado { get; set; }
 
         [Display(Name = "Año de publicación")]
         public int? AnioPublicacion { get; set; }
@@ -40,20 +40,20 @@ namespace CultureOnline.Application.DTOs
 
         public int? IdAutor { get; set; }
 
-        [Display(Name = "Clasificación de Edad")]
+        [Display(Name = "Clasificación")]
         public string? ClasificacionEdad { get; set; }
 
         [Display(Name = "Editorial ")]
         public string? Editorial { get; set; }
 
-        [Display(Name = "Genero del Producto")]
-        public int? IdGeneroProducto { get; set; }
+        //[Display(Name = "Genero del Producto")]
+        //public int? IdGeneroProducto { get; set; }
 
-        [Display(Name = "Categoría")]
-        public int CategoriaId { get; set; }
+        //[Display(Name = "Categoría")]
+        //public int CategoriaId { get; set; }
 
 
-        [Display(Name = "Promedio de Valoración")]
+        [Display(Name = "Valoración")]
         public double? PromedioValoracion { get; set; }
 
         [Display(Name = "Personalizable")]
@@ -62,6 +62,7 @@ namespace CultureOnline.Application.DTOs
         [Display(Name = "Autor")]
         // [ValidateNever]
         public AutorDTO? IdAutorNavigation { get; set; }
+        public CategoriaDTO? Categoria { get; set; }
 
         //[ValidateNever]
         // public virtual List<PedidoDetalleDTO> DetallePedido { get; set; } = null!;

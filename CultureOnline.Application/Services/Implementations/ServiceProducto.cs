@@ -35,13 +35,7 @@ namespace CultureOnline.Application.Services.Implementations
         //Listar productos
         public async Task<ProductoDTO> FindByIdAsync(int id)
         {
-            _logger.LogInformation($"Buscando producto con ID: {id}");
             var @object = await _repository.FindByIdAsync(id);
-            if (@object == null)
-            {
-                _logger.LogWarning($"Producto con ID: {id} no encontrado.");
-                return null;
-            }
             var objectMapped = _mapper.Map<ProductoDTO>(@object);
             return objectMapped;
         }
@@ -73,15 +67,15 @@ namespace CultureOnline.Application.Services.Implementations
             await _repository.UpdateAsync(entity, selectedCategorias);
         }
         // Obtener productos por categoría
-        public async Task<ICollection<ProductoDTO>> GetProductoByCategoria(int IdCategoria)
+        /*public async Task<ICollection<ProductoDTO>> GetProductoByCategoria(int IdCategoria)
         {
             // Get data from Repository
-            var list = await _repository.GetLibroByCategoria(IdCategoria);
+            var list = await _repository.GetProductoByCategoria(IdCategoria);
             // Map List<Libro> to ICollection<LibroDTO>
             var collection = _mapper.Map<ICollection<ProductoDTO>>(list);
             // Return Data
             return collection;
-        }
+        }*/
 
     }
 }
