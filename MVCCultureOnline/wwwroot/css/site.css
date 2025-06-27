@@ -81,9 +81,104 @@ body.d-flex.flex-column.min-vh-100 {
 #carouselDetalle .carousel-indicators .active {
     background-color: brown;
 }
+.etiqueta-pill {
+    background-color: #fbd1a2;
+    color: #5c3c00;
+    padding: 0.5em 0.75em;
+    border-radius: 20px;
+    font-size: 0.85rem;
+    font-weight: 500;
+}
 
+.table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+    background-color: #ECAE7E;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
+}
 
+.table thead {
+    background: linear-gradient(to right, #6a11cb, #2575fc);
+    color: #ffffff;
+}
 
+.table thead th {
+    padding: 16px;
+    font-size: 15px;
+    font-weight: 600;
+    text-align: left;
+    border-bottom: 1px solid #7F5048;
+}
+
+.table tbody tr {
+    transition: background-color 0.2s ease;
+}
+
+.table tbody tr:hover {
+    background-color: #f8f9fa;
+}
+
+.table tbody td {
+     padding: 16px;
+     font-size: 16px;
+     border-top: 1px solid #dee2e6;
+     vertical-align: middle;
+     color: #333;
+}
+
+.table a {
+     color: #2575fc;
+     font-weight: 500;
+     text-decoration: none;
+}
+
+.table a:hover {
+     text-decoration: underline;
+}
+
+.text-warning {
+    color: #ffc107 !important;
+    transition: transform 0.2s ease;
+}
+
+.text-warning i:hover {
+     transform: scale(1.1);
+}
+
+.text-muted {
+    color: #6c757d !important;
+}
+
+.ms-2 {
+    margin-left: 0.5rem;
+}
+
+.fas.fa-star, .far.fa-star {
+    font-size: 1rem;
+}
+
+.btn-verDetalle {
+    display: inline-block;
+    background-color: #981D26;
+    color: white !important;
+    padding: 8px 14px;
+    border-radius: 30px;
+    font-weight: 600;
+    font-size: 14px;
+    text-align: center;
+    text-decoration: none;
+    transition: background-color 0.3s ease;
+    user-select: none;
+    white-space: nowrap;
+}
+
+.btn-verDetalle:hover {
+    background-color: #a10223;
+    text-decoration: none;
+}
 
 .form-floating > .form-control-plaintext::placeholder, .form-floating > .form-control::placeholder {
     color: var(--bs-secondary-color);

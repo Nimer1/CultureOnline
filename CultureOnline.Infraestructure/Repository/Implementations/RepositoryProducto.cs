@@ -23,7 +23,7 @@ namespace CultureOnline.Infraestructure.Repository.Implementations
         {
             var producto = await _context.Productos
                 .Include(p => p.Categorias)
-                .Include(p => p.Etiqueta)
+                .Include(p => p.Etiquetas)
                 .Include(p => p.Promociones)
                 .Include(p => p.ProductoImagenes)
                 .FirstOrDefaultAsync(p => p.Id == id);
@@ -35,7 +35,7 @@ namespace CultureOnline.Infraestructure.Repository.Implementations
         {
             var productos = await _context.Productos
                 //.Include(p => p.Categorias)
-                .Include(p => p.Etiqueta)
+                .Include(p => p.Etiquetas)
                 .Include(p => p.Promociones)
                 .Include(p => p.ProductoImagenes)
                 .Include(p => p.IdAutorNavigation)
@@ -78,7 +78,7 @@ namespace CultureOnline.Infraestructure.Repository.Implementations
             return await _context.Productos
                 .Where(p => p.Categorias.Any(c => c.Id == idCategoria))
                 .Include(p => p.Categorias)
-                .Include(p => p.Etiqueta)
+                .Include(p => p.Etiquetas)
                 .ToListAsync();
         }
         public async Task UpdateAsync(Productos producto, string[] selectedCategorias)

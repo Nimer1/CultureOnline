@@ -1,0 +1,54 @@
+﻿@model IEnumerable<CultureOnline.Application.DTOs.ReseñaDTO>
+
+@*<h2>Reseñas</h2>*@
+
+<table class="table align-middle">
+    <thead>
+        <tr>
+            <th>Fecha</th>
+            <th>Usuario</th>
+            <th>Producto</th>
+            <th>Valoración</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+
+        @foreach (var r in Model)
+        {
+            <tr>
+                <td>@(r.Fecha?.ToShortDateString())</td>
+                <td>@r.Usuario?.Nombre</td>
+                <td>
+                    @{
+                        var nombreProducto = r.Producto?.Nombre ?? "";
+                        var lowerNombre = nombreProducto.ToLower();
+
+                        var etiqueta = lowerNombre.Contains("separador") ? "(Separador)" :
+                        "(Libro) ";
+                    }
+                    @etiqueta @nombreProducto
+                </td>
+                <td>
+                    @{
+                        var valoracion = r.Valoracion;
+                        var vacias = 5 - valoracion;
+                    }
+                    <span class="text-warning">
+                        @for (int i = 0; i < valoracion; i++)
+                        {
+                            <i class="fas fa-star"></i>
+                        }
+                        @for (int i = 0; i < vacias; i++)
+                        {
+                            <i class="far fa-star"></i>
+                        }
+                    </span>
+                    <span class="ms-2 text-muted">(@valoracion.ToString("0.0"))</span>
+                </td>
+                <td>  <a class="btn-verDetalle" href="@Url.Action("Detalle", "Reseña", new { id = r.Id })">Ver Detalle</a></td>
+            </tr>
+        }
+    </tbody>
+</table>
+

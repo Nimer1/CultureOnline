@@ -225,7 +225,7 @@ public partial class CultureOnlineContext : DbContext
                 .HasForeignKey(d => d.IdGeneroProducto)
                 .HasConstraintName("FK_Productos_GeneroProducto");*/
 
-            entity.HasMany(d => d.Etiqueta).WithMany(p => p.Producto)
+            entity.HasMany(d => d.Etiquetas).WithMany(p => p.Producto)
                 .UsingEntity<Dictionary<string, object>>(
                     "ProductoEtiquetas",
                     r => r.HasOne<Etiquetas>().WithMany()

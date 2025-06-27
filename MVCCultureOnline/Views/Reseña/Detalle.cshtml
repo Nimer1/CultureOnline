@@ -1,0 +1,49 @@
+﻿@model CultureOnline.Application.DTOs.ReseñaDTO
+
+@{
+    ViewData["Title"] = "Detalle de Reseña";
+    var valoracion = Model.Valoracion;
+    var vacias = 5 - valoracion;
+}
+
+<h4 class="text-center mt-4 mb-4">Detalle de la Reseña</h4>
+<div class="container mt-5">
+    <div class="row">
+        <div class="col-md-8 mx-auto">
+    <div class="card shadow rounded-3">
+        <div class="card-body">
+
+            <p><strong>Usuario:</strong> @Model.Usuario?.Nombre</p>
+            <p>
+                <strong>Producto:</strong>
+                @{
+                    var nombreProducto = Model.Producto?.Nombre ?? "";
+                    var lowerNombre = nombreProducto.ToLower();
+                    var etiqueta = lowerNombre.Contains("separador") ? "(Separador)" : "(Libro)";
+                }
+                @etiqueta @nombreProducto
+            </p>
+            <p><strong>Fecha:</strong> @Model.Fecha?.ToString("dd/MM/yyyy")</p>
+            <p><strong>Comentario:</strong> @Model.Comentario</p>
+            <p>
+                <strong>Valoración:</strong>
+                <span class="text-warning">
+                    @for (int i = 0; i < valoracion; i++)
+                    {
+                        <i class="fas fa-star"></i>
+                    }
+                    @for (int i = 0; i < vacias; i++)
+                    {
+                        <i class="far fa-star"></i>
+                    }
+                </span>
+                <span class="ms-2 text-muted">(@valoracion.ToString("0.0"))</span>
+            </p>
+
+           <a asp-action="Index" class="btn custom-hover rounded-pill px-5 py-2 fw-semibold shadow-sm btn-detalle-largo mt-3">Volver al listado</a>
+        </div>
+    </div>
+    </div>
+    </div>
+</div>
+

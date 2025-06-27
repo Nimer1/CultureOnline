@@ -20,10 +20,24 @@ builder.Services.AddControllersWithViews();
 builder.Services.AddTransient<IRepositoryAutor, RepositoryAutor>();
 builder.Services.AddTransient<IRepositoryCategoria, RepositoryCategoria>();
 builder.Services.AddTransient<IRepositoryProducto, RepositoryProducto>();
+builder.Services.AddTransient<IRepositoryReseña, RepositoryReseña>();
+builder.Services.AddTransient<IRepositoryDetalleCarrito, RepositoryDetalleCarrito>();
+builder.Services.AddTransient<IRepositoryEtiqueta, RepositoryEtiqueta>();
+builder.Services.AddTransient<IRepositoryGeneroProducto, RepositoryGeneroProducto>();
+builder.Services.AddTransient<IRepositoryPago, RepositoryPago>();
+builder.Services.AddTransient<IRepositoryPedido, RepositoryPedido>();
+builder.Services.AddTransient<IRepositoryProductoEtiqueta, RepositoryProductoEtiqueta>();
+builder.Services.AddTransient<IRepositoryProductoImagen, RepositoryProductoImagenes>();
+builder.Services.AddTransient<IRepositoryPromocion, RepositoryPromocion>();
+builder.Services.AddTransient<IRepositoryRolUsuario, RepositoryRolUsuario>();
+builder.Services.AddTransient<IRepositoryTipoPromocion, RepositoryTipoPromocion>();
+builder.Services.AddTransient<IRepositoryUsuario, RepositoryUsuario>();
+
 //Services 
 builder.Services.AddTransient<IServiceAutor, ServiceAutor>();
 builder.Services.AddTransient<IServiceCategoria, ServiceCategoria>();
 builder.Services.AddTransient<IServiceProducto, ServiceProducto>();
+builder.Services.AddTransient<IServiceReseña, ServiceReseña>();
 
 //Configurar Automapper 
 builder.Services.AddAutoMapper(config =>
