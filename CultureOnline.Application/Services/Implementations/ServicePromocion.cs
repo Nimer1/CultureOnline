@@ -21,7 +21,7 @@ namespace CultureOnline.Application.Services.Implementations
         {
             _repository = repository;
             _mapper = mapper;
-            _logger = _logger;
+            _logger = logger;
         }
         public async Task<PromocionDTO> FindByIdAsync(int id)
         {
