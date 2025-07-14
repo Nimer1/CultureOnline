@@ -36,14 +36,18 @@ builder.Services.AddTransient<IRepositoryPromocion, RepositoryPromocion>();
 builder.Services.AddTransient<IRepositoryRolUsuario, RepositoryRolUsuario>();
 builder.Services.AddTransient<IRepositoryTipoPromocion, RepositoryTipoPromocion>();
 builder.Services.AddTransient<IRepositoryUsuario, RepositoryUsuario>();
+<<<<<<< HEAD
 builder.Services.AddTransient<IRepositoryProductoPersonalizado, RepositoryProductoPersonalizado>();
 builder.Services.AddTransient<IRepositoryProductoCategorias, RepositoryProductoCategorias>();
+=======
+>>>>>>> 22ca98ce21393483d4490652a8d3de1a5a180651
 
 //Services 
 builder.Services.AddTransient<IServiceAutor, ServiceAutor>();
 builder.Services.AddTransient<IServiceCategoria, ServiceCategoria>();
 builder.Services.AddTransient<IServiceProducto, ServiceProducto>();
 builder.Services.AddTransient<IServiceReseña, ServiceReseña>();
+<<<<<<< HEAD
 builder.Services.AddTransient<IservicePedido, ServicePedido>();
 builder.Services.AddTransient<IServiceProductoPersonalizado, ServiceProductoPersonalizado>();
 builder.Services.AddTransient<IServicePromocion, ServicePromocion>();
@@ -59,6 +63,8 @@ builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationSc
     });
 builder.Services.Configure<AppConfig>(builder.Configuration.GetSection("AppConfig"));
 
+=======
+>>>>>>> 22ca98ce21393483d4490652a8d3de1a5a180651
 
 //Configurar Automapper 
 builder.Services.AddAutoMapper(config =>

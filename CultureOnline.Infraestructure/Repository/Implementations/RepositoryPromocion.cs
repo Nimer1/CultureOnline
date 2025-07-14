@@ -21,6 +21,7 @@ namespace CultureOnline.Infraestructure.Repository.Implementations
 
         public async Task<ICollection<Promociones>> ListAsync()
         {
+<<<<<<< HEAD
             var now = DateTime.Now;
 
             var promociones = await _context.Promociones
@@ -58,10 +59,14 @@ namespace CultureOnline.Infraestructure.Repository.Implementations
                 .ToListAsync();
 
             return promociones;
+=======
+            return await _context.Set<Promociones>().ToListAsync();
+>>>>>>> 22ca98ce21393483d4490652a8d3de1a5a180651
         }
 
         public async Task<Promociones> FindByIdAsync(int id)
         {
+<<<<<<< HEAD
             var now = DateTime.Now;
 
             var promocion = await _context.Promociones
@@ -96,6 +101,23 @@ namespace CultureOnline.Infraestructure.Repository.Implementations
                 .FirstOrDefaultAsync();
 
             return promocion!;
+=======
+            //return await _context.Set<Autor>().FindAsync(id);
+            var @object = await _context.Set<Promociones>().FindAsync(id);
+
+            return @object!;
+
+        }
+
+        Task<ICollection<Etiquetas>> IRepositoryPromocion.ListAsync()
+        {
+            throw new NotImplementedException();
+        }
+
+        Task<Etiquetas> IRepositoryPromocion.FindByIdAsync(int id)
+        {
+            throw new NotImplementedException();
+>>>>>>> 22ca98ce21393483d4490652a8d3de1a5a180651
         }
     }
 }

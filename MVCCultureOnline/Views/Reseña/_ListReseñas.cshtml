@@ -1,5 +1,6 @@
 ﻿@model IEnumerable<CultureOnline.Application.DTOs.ReseñaDTO>
 
+<<<<<<< HEAD
 <table class="table align-middle w-100" style="table-layout:auto;">
     <thead>
         <tr>
@@ -25,6 +26,38 @@
                     @etiqueta @nombreProducto
                 </td>
                 <td class="text-center">
+=======
+@*<h2>Reseñas</h2>*@
+
+<table class="table align-middle">
+    <thead>
+        <tr>
+            <th>Fecha</th>
+            <th>Usuario</th>
+            <th>Producto</th>
+            <th>Valoración</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+
+        @foreach (var r in Model)
+        {
+            <tr>
+                <td>@(r.Fecha?.ToShortDateString())</td>
+                <td>@r.Usuario?.Nombre</td>
+                <td>
+                    @{
+                        var nombreProducto = r.Producto?.Nombre ?? "";
+                        var lowerNombre = nombreProducto.ToLower();
+
+                        var etiqueta = lowerNombre.Contains("separador") ? "(Separador)" :
+                        "(Libro) ";
+                    }
+                    @etiqueta @nombreProducto
+                </td>
+                <td>
+>>>>>>> 22ca98ce21393483d4490652a8d3de1a5a180651
                     @{
                         var valoracion = r.Valoracion;
                         var vacias = 5 - valoracion;
@@ -41,6 +74,7 @@
                     </span>
                     <span class="ms-2 text-muted">(@valoracion.ToString("0.0"))</span>
                 </td>
+<<<<<<< HEAD
                 <td class="text-center">
                     <div class="d-flex justify-content-center gap-3 flex-wrap align-items-center">
                         <!-- Botón ver detalle -->
@@ -65,11 +99,15 @@
                     </div>
                 </td>
 
+=======
+                <td>  <a class="btn-verDetalle" href="@Url.Action("Detalle", "Reseña", new { id = r.Id })">Ver Detalle</a></td>
+>>>>>>> 22ca98ce21393483d4490652a8d3de1a5a180651
             </tr>
         }
     </tbody>
 </table>
 
+<<<<<<< HEAD
 <script>
     document.addEventListener('DOMContentLoaded', function () {
         var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
@@ -79,3 +117,5 @@
     });
 </script>
 
+=======
+>>>>>>> 22ca98ce21393483d4490652a8d3de1a5a180651

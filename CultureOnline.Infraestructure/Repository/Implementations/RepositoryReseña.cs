@@ -38,6 +38,7 @@ namespace CultureOnline.Infraestructure.Repository.Implementations
             return resena!;
         }
 
+<<<<<<< HEAD
         public async Task AddAsync(Reseñas reseña)
         {
             try
@@ -67,5 +68,7 @@ namespace CultureOnline.Infraestructure.Repository.Implementations
             }
         }
 
+=======
+>>>>>>> 22ca98ce21393483d4490652a8d3de1a5a180651
     }
 }

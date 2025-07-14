@@ -22,8 +22,12 @@ namespace CultureOnline.Infraestructure.Repository.Implementations
         public async Task<Productos> FindByIdAsync(int id)
         {
             var producto = await _context.Productos
+<<<<<<< HEAD
                 .Include(p => p.ProductoCategorias)
                     .ThenInclude(pc => pc.Categoria)
+=======
+                .Include(p => p.Categorias)
+>>>>>>> 22ca98ce21393483d4490652a8d3de1a5a180651
                 .Include(p => p.Etiquetas)
                 .Include(p => p.Promociones)
                 .Include(p => p.ProductoImagenes)
@@ -35,7 +39,11 @@ namespace CultureOnline.Infraestructure.Repository.Implementations
         public async Task<ICollection<Productos>> ListAsync()
         {
             var productos = await _context.Productos
+<<<<<<< HEAD
                 .Include(p => p.ProductoCategorias).ThenInclude(pc => pc.Categoria)
+=======
+                //.Include(p => p.Categorias)
+>>>>>>> 22ca98ce21393483d4490652a8d3de1a5a180651
                 .Include(p => p.Etiquetas)
                 .Include(p => p.Promociones)
                 .Include(p => p.ProductoImagenes)

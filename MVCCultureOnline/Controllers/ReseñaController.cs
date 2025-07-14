@@ -1,13 +1,19 @@
+<<<<<<< HEAD
 ﻿using CultureOnline.Application.DTOs;
 using CultureOnline.Application.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
+=======
+﻿using CultureOnline.Application.Services.Interfaces;
+using Microsoft.AspNetCore.Mvc;
+>>>>>>> 22ca98ce21393483d4490652a8d3de1a5a180651
 
 namespace MVCCultureOnline.Controllers
 {
     public class ReseñaController : Controller
     {
         private readonly IServiceReseña _serviceReseña;
+<<<<<<< HEAD
         private readonly IServiceProducto _serviceProducto;
         private readonly IservicePedido _servicePedido;
 
@@ -16,14 +22,24 @@ namespace MVCCultureOnline.Controllers
             _serviceReseña = serviceReseña;
             _serviceProducto = serviceProducto;
             _servicePedido = servicePedido;
+=======
+
+        public ReseñaController(IServiceReseña serviceReseña)
+        {
+            _serviceReseña = serviceReseña;
+>>>>>>> 22ca98ce21393483d4490652a8d3de1a5a180651
         }
 
         [HttpGet]
         public async Task<IActionResult> Index()
         {
             var reseñas = await _serviceReseña.ListAsync();
+<<<<<<< HEAD
             var reseñasOrdenadas = reseñas.OrderByDescending(r => r.Fecha);
             return View(reseñasOrdenadas); // Vista: Views/Reseña/Index.cshtml
+=======
+            return View(reseñas); // Vista: Views/Reseña/Index.cshtml
+>>>>>>> 22ca98ce21393483d4490652a8d3de1a5a180651
         }
 
         [HttpGet]
@@ -35,6 +51,7 @@ namespace MVCCultureOnline.Controllers
 
             return View("Detalle", reseña); // Vista: Views/Reseña/Detalle.cshtml
         }
+<<<<<<< HEAD
 
         [HttpGet]
         [Authorize] 
@@ -285,6 +302,8 @@ namespace MVCCultureOnline.Controllers
             await _serviceReseña.DeleteAsync(id);
             return RedirectToAction(nameof(Index));
         }
+=======
+>>>>>>> 22ca98ce21393483d4490652a8d3de1a5a180651
     }
 }
 

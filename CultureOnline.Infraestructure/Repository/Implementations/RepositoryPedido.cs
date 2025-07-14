@@ -31,7 +31,11 @@ namespace CultureOnline.Infraestructure.Repository.Implementations
                     var libro = await _context.Set<Productos>().FindAsync(item.Id);
                     //Actualizar cantidad en stock
                     libro!.Stock= libro.Stock - item.Cantidad;
+<<<<<<< HEAD
                     //Actualizar producto
+=======
+                    //Actualizar libro
+>>>>>>> 22ca98ce21393483d4490652a8d3de1a5a180651
                     _context.Set<Productos>().Update(libro);
                 }
                 await _context.SaveChangesAsync();
@@ -54,23 +58,35 @@ namespace CultureOnline.Infraestructure.Repository.Implementations
         {
             var @object = await _context.Set<Pedidos>()
                    .Include(cliente => cliente.Usuario)
+<<<<<<< HEAD
                    .Include(detalle => detalle.DetallePedido)
                    .ThenInclude(detalle => detalle.Producto)
                    .Include(p => p.Pago)
                    .Include(p => p.ProductosPersonalizados)       
                    .ThenInclude(pp => pp.Producto)
                    .Where(x => x.Id == id).FirstOrDefaultAsync();
+=======
+                .Include(detalle => detalle.DetallePedido)
+                .ThenInclude(Producto => Producto.ProductoId)
+                .Where(x => x.Id == id).FirstOrDefaultAsync();
+>>>>>>> 22ca98ce21393483d4490652a8d3de1a5a180651
 
             return @object!;
         }
         public async Task<ICollection<Pedidos>> ListAsync()
         {
             var collection = await _context.Set<Pedidos>()
+<<<<<<< HEAD
                 .Include(x => x.Usuario)
                 .Include(x => x.DetallePedido)
                 .ThenInclude(d => d.Producto)
                 .AsNoTracking()
                 .ToListAsync();
+=======
+                                            .Include(x => x.Usuario)
+                                            .AsNoTracking()
+                                            .ToListAsync();
+>>>>>>> 22ca98ce21393483d4490652a8d3de1a5a180651
             return collection;
         }
         public async Task<int> GetNextNumberOrden()

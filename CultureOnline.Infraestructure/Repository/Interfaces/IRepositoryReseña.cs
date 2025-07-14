@@ -11,8 +11,11 @@ namespace CultureOnline.Infraestructure.Repository.Interfaces
     {
         Task<ICollection<Reseñas>> ListAsync();
         Task<Reseñas> FindByIdAsync(int id);
+<<<<<<< HEAD
         Task AddAsync(Reseñas reseña);
         Task UpdateAsync(Reseñas reseña);
         Task DeleteAsync(int id);
+=======
+>>>>>>> 22ca98ce21393483d4490652a8d3de1a5a180651
     }
 }

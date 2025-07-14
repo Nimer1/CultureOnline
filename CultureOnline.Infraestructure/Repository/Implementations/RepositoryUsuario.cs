@@ -64,6 +64,7 @@ namespace CultureOnline.Infraestructure.Repository.Implementations
                                         .Include(b => b.IdrolNavigation)
                                         .Where(p => p.Correo == id && p.Contrasena == password)
                                         .FirstOrDefaultAsync();
+<<<<<<< HEAD
             if (@object != null && @object.Contrasena.Equals(password, StringComparison.Ordinal))
             {
                 return @object;
@@ -71,6 +72,9 @@ namespace CultureOnline.Infraestructure.Repository.Implementations
 
             return null!;
             //return @object!;
+=======
+            return @object!;
+>>>>>>> 22ca98ce21393483d4490652a8d3de1a5a180651
         }
 
         public async Task UpdateAsync()

@@ -226,9 +226,18 @@ public partial class CultureOnlineContext : DbContext
                 .HasForeignKey(pi => pi.ProductoId)
                 .HasConstraintName("FK_ProductoImagenes_Productos");
 
+<<<<<<< HEAD
             // Relación con Etiquetas (muchos a muchos anónima, esta sí puede quedar así si no tenés entidad explícita)
             entity.HasMany(d => d.Etiquetas)
                 .WithMany(p => p.Producto)
+=======
+
+            /*entity.HasOne(d => d.IdGeneroProductoNavigation).WithMany(p => p.Productos)
+                .HasForeignKey(d => d.IdGeneroProducto)
+                .HasConstraintName("FK_Productos_GeneroProducto");*/
+
+            entity.HasMany(d => d.Etiquetas).WithMany(p => p.Producto)
+>>>>>>> 22ca98ce21393483d4490652a8d3de1a5a180651
                 .UsingEntity<Dictionary<string, object>>(
                     "ProductoEtiquetas",
                     r => r.HasOne<Etiquetas>().WithMany()

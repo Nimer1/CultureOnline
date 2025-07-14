@@ -28,7 +28,11 @@
 
 <div class="card mx-auto" style="max-width: 820px;">
     <div class="row g-0">
+<<<<<<< HEAD
 
+=======
+       
+>>>>>>> 22ca98ce21393483d4490652a8d3de1a5a180651
         <div class="col-md-6">
             @if (Model.Imagenes != null && Model.Imagenes.Any())
             {
@@ -65,6 +69,7 @@
         <!-- Información del producto -->
         <div class="col-md-6">
             <div class="card-body">
+<<<<<<< HEAD
                 <h2 class="card-title">@Model.Nombre</h2>
                 <p class="card-text">@Model.Descripcion</p>
 
@@ -100,6 +105,11 @@
                         <span>&cent; @Model.Precio.ToString("N2")</span>
                     }
                 </p>
+=======
+                <h4 class="card-title">@Model.Nombre</h4>
+                <p class="card-text"> @Model.Descripcion</p>
+                <p class="card-text"><b>@Html.DisplayNameFor(m => m.Precio):</b> &cent; @Model.Precio</p>
+>>>>>>> 22ca98ce21393483d4490652a8d3de1a5a180651
 
                 @if (!string.IsNullOrEmpty(Model.IdAutorNavigation?.Descripcion))
                 {
@@ -128,6 +138,21 @@
                         </ul>
                     </p>
                 }
+                 
+                @*Etiquetas*@
+                @if (Model.Etiquetas?.Any() == true)
+                {
+                    <div class="card-text mb-2">
+                        <b>Etiquetas:</b>
+                        <div class="d-flex flex-wrap gap-2 mt-2">
+                            @foreach (var etiqueta in Model.Etiquetas)
+                            {
+                                <span class="badge etiqueta-pill">@etiqueta.Descripcion</span>
+                            }
+                        </div>
+                    </div>
+                }
+
 
                 @*Etiquetas*@
                 @if (Model.Etiquetas?.Any() == true)
@@ -169,6 +194,7 @@
                     </span>
                     <span class="ms-2 text-muted">(@valoracion.ToString("0.0"))</span>
                 </p>
+<<<<<<< HEAD
 
                 @if (Model.Categorias != null && Model.Categorias.Any(c => c.Nombre.Equals("Marcapáginas", StringComparison.OrdinalIgnoreCase)))
                 {
@@ -177,6 +203,15 @@
                         @(Model.EsPersonalizable ? "Si" : "No")
                     </p>
                 }
+=======
+
+                <p class="card-text">
+                    <b>@Html.DisplayNameFor(m => m.EsPersonalizable):</b>
+                    @(Model.EsPersonalizable ? "Sí" : "No")
+                </p>
+
+                <a asp-action="Index" class="btn custom-hover rounded-pill px-5 py-2 fw-semibold shadow-sm btn-detalle-largo mt-3">Volver al listado</a>
+>>>>>>> 22ca98ce21393483d4490652a8d3de1a5a180651
             </div>
         </div>
     </div>

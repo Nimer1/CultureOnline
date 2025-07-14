@@ -12,6 +12,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+//using CultureOnline.Application.Config;
 
 namespace CultureOnline.Application.Services.Implementations
 {
@@ -99,7 +100,7 @@ namespace CultureOnline.Application.Services.Implementations
 
 
             if (@object != null)
-            {
+        {
                 usuarioDTO = _mapper.Map<UsuarioDTO>(@object);
             }
 
