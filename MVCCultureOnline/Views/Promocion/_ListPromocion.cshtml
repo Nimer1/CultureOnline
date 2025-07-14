@@ -1,0 +1,72 @@
+﻿@model IEnumerable<CultureOnline.Application.DTOs.PromocionDTO>
+
+<table class="table w-100" style="table-layout:auto;">
+    <thead>
+        <tr>
+            <th style="background-color:white">Nombre</th>
+            <th style="background-color:white">Fecha Inicio</th>
+            <th style="background-color:white">Fecha Final</th>
+            <th style="background-color:white">Estado</th>
+            <th style="background-color:white" class="text-center">Acciones</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var promo in Model)
+        {
+            var estado = (promo.Estado ?? "").Trim().ToLower();
+            var bgColor = estado switch
+            {
+                "pendiente" => "#F6EFD8",
+                "vigente" => "#B6D8C0",
+                "aplicado" => "#E5E1DC",
+                _ => "white"
+            };
+            var textColor = estado switch
+            {
+                "pendiente" => "#5A3E1B",
+                "vigente" => "#385F3A",
+                "aplicado" => "#505050",
+                _ => "black"
+            };
+            <tr>
+                <td style="background-color:@bgColor; color:@textColor">@promo.Nombre</td>
+                <td style="background-color:@bgColor; color:@textColor">@promo.FechaInicio.ToShortDateString()</td>
+                <td style="background-color:@bgColor; color:@textColor">@promo.FechaFin.ToShortDateString()</td>
+                <td style="background-color:@bgColor; color:@textColor"><strong>@promo.Estado</strong></td>
+                <td class="text-center" style="background-color:@bgColor;">
+                    <div class="d-flex justify-content-center align-items-center gap-3 flex-wrap">
+                        <!-- botón de ver detalle -->
+                        <a class="btn-verDetalle" style="color:white"
+                           href="@Url.Action("Detalle", "Promocion", new { id = promo.IdPromocion })">
+                            Ver Detalle
+                        </a>
+
+                        <!-- botón de crear -->
+                        <div class="circulo-contenedor">
+                            <a class="mx-3" href="@Url.Action("Crear", "Promocion", new { id = promo.IdPromocion })"
+                               data-bs-toggle="tooltip" data-bs-placement="top" title="Crear">
+                                <i class="fas fa-plus"></i>
+                            </a>
+
+                            <!-- botón de editar -->
+                            <a class="mx-3" href="@Url.Action("Editar", "Promocion", new { id = promo.IdPromocion })"
+                               data-bs-toggle="tooltip" data-bs-placement="top" title="Editar">
+                                <i class="fas fa-edit"></i>
+                            </a>
+                        </div>
+                    </div>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+        tooltipTriggerList.forEach(function (tooltipTriggerEl) {
+            new bootstrap.Tooltip(tooltipTriggerEl);
+        });
+    });
+</script>
+

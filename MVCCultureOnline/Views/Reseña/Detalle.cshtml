@@ -1,0 +1,42 @@
+﻿@model CultureOnline.Application.DTOs.ReseñaDTO
+
+@{
+    ViewData["Title"] = "Detalle de Reseña";
+    var valoracion = Model.Valoracion;
+    var vacias = 5 - valoracion;
+}
+<h3 class="text-center mt-4 mb-4">Detalle de la reseña</h3>
+
+<div class="card-resena">
+    <div class="card-details">
+        <p class="text-title">@Model.Usuario?.Nombre</p>
+
+        <p class="text-subtitle">
+            @{
+                var nombreProducto = Model.Producto?.Nombre ?? "";
+                var lowerNombre = nombreProducto.ToLower();
+                var etiqueta = lowerNombre.Contains("separador") ? "(Separador)" : "(Libro)";
+            }
+            @etiqueta @nombreProducto
+        </p>
+
+        <p class="text-body"><strong>Fecha:</strong> @Model.Fecha?.ToString("dd/MM/yyyy")</p>
+
+        <p class="text-body"><strong>Comentario:</strong> @Model.Comentario</p>
+
+        <p class="text-body">
+            <span class="text-warning">
+                @for (int i = 0; i < valoracion; i++)
+                {
+                    <i class="fas fa-star"></i>
+                }
+                @for (int i = 0; i < vacias; i++)
+                {
+                    <i class="far fa-star"></i>
+                }
+            </span>
+            <span class="ms-2 text-muted">(@valoracion.ToString("0.0"))</span>
+        </p>
+    </div>
+    <a asp-action="Index" class="card-button">Volver al listado</a>
+</div>

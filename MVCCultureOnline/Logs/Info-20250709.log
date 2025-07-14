@@ -1,0 +1,116 @@
+2025-07-09 13:19:44.341 -06:00 [INF] Conexion correcta de ana.martinez@gmail.com
+2025-07-09 13:45:00.048 -06:00 [INF] Error en login de admin, Error --> Error en acceso
+2025-07-09 13:46:59.429 -06:00 [INF] Error en login de ViewModelLogin { User = admin, Password =  }, Errores --> Contrase?a es requerido
+2025-07-09 13:47:06.179 -06:00 [INF] Error en login de ViewModelLogin { User = , Password =  }, Errores --> Correo Usuario es requerido; Contrase?a es requerido
+2025-07-09 14:00:51.710 -06:00 [INF] Error en login de admin, Error --> Error en acceso
+2025-07-09 14:01:04.867 -06:00 [INF] Error en login de ViewModelLogin { User = admin, Password =  }, Errores --> Contrase?a es requerido
+2025-07-09 14:01:10.070 -06:00 [INF] Error en login de admin, Error --> Error en acceso
+2025-07-09 14:02:08.439 -06:00 [INF] Error en login de admin, Error --> Error en acceso
+2025-07-09 14:02:11.929 -06:00 [INF] Error en login de admin, Error --> Error en acceso
+2025-07-09 14:02:13.899 -06:00 [INF] Error en login de ViewModelLogin { User = admin, Password =  }, Errores --> Contrase?a es requerido
+2025-07-09 14:02:26.186 -06:00 [INF] Conexion correcta de ana.martinez@gmail.com
+2025-07-09 14:04:49.981 -06:00 [INF] Error en login de admin, Error --> Error en acceso
+2025-07-09 14:05:03.087 -06:00 [INF] Error en login de admin, Error --> Error en acceso
+2025-07-09 14:14:13.292 -06:00 [INF] Error en login de , Errores --> Correo Usuario es requerido; Contrase?a es requerido
+2025-07-09 14:14:23.336 -06:00 [INF] Error en login de admin, Error --> Usuario o contrase?a incorrectos
+2025-07-09 14:14:31.414 -06:00 [INF] Error en login de admin, Error --> Usuario o contrase?a incorrectos
+2025-07-09 14:14:54.460 -06:00 [INF] Error en login de daniela@gmail.com, Error --> Usuario o contrase?a incorrectos
+2025-07-09 14:15:27.616 -06:00 [INF] Error en login de daniela@gmail.com, Error --> Usuario o contrase?a incorrectos
+2025-07-09 14:15:31.219 -06:00 [INF] Error en login de daniela@gmail.com, Errores --> Contrase?a es requerido
+2025-07-09 14:15:36.416 -06:00 [INF] Error en login de daniela@gmail.com, Error --> Usuario o contrase?a incorrectos
+2025-07-09 14:15:56.923 -06:00 [INF] Error en login de daniela@gmail.com, Error --> Usuario o contrase?a incorrectos
+2025-07-09 14:16:01.816 -06:00 [INF] Error en login de daniela@gmail.com, Error --> Usuario o contrase?a incorrectos
+2025-07-09 14:16:07.569 -06:00 [INF] Error en login de daniela@gmail.com, Error --> Usuario o contrase?a incorrectos
+2025-07-09 14:25:49.858 -06:00 [INF] Error en login de admin1@prueba.com, Error --> Usuario o contrase?a incorrectos
+2025-07-09 14:25:53.272 -06:00 [INF] Error en login de admin1@prueba.com, Errores --> Contrase?a es requerido
+2025-07-09 14:25:56.917 -06:00 [INF] Error en login de admin1@prueba.com, Error --> Usuario o contrase?a incorrectos
+2025-07-09 14:26:44.770 -06:00 [INF] Error en login de admin1@prueba.com, Error --> Usuario o contrase?a incorrectos
+2025-07-09 14:26:54.365 -06:00 [INF] Error en login de admin1@prueba.com, Error --> Usuario o contrase?a incorrectos
+2025-07-09 14:26:58.906 -06:00 [INF] Error en login de admin1@prueba.com, Errores --> Error en pol?tica de largo de contrase?a
+2025-07-09 14:27:04.936 -06:00 [INF] Error en login de admin1@prueba.com, Error --> Usuario o contrase?a incorrectos
+2025-07-09 14:27:06.141 -06:00 [INF] Error en login de admin1@prueba.com, Errores --> Contrase?a es requerido
+2025-07-09 14:28:57.472 -06:00 [INF] Error en login de admin1@prueba.com, Errores --> Contrase?a es requerido
+2025-07-09 14:29:01.257 -06:00 [INF] Error en login de admin1@prueba.com, Errores --> Contrase?a es requerido
+2025-07-09 14:29:07.282 -06:00 [INF] Error en login de admin1@prueba.com, Error --> Usuario o contrase?a incorrectos
+2025-07-09 14:29:09.162 -06:00 [INF] Error en login de admin1@prueba.com, Errores --> Contrase?a es requerido
+2025-07-09 14:34:59.385 -06:00 [INF] Error en login de admin, Error --> Usuario o contrase?a incorrectos
+2025-07-09 14:35:22.640 -06:00 [INF] Conexion correcta de daniel.ruiz@gmail.com
+2025-07-09 14:41:22.550 -06:00 [INF] Error en login de admin, Error --> Usuario o contrase?a incorrectos
+2025-07-09 14:43:20.029 -06:00 [INF] Error en login de admin, Error --> Usuario o contrase?a incorrectos
+2025-07-09 14:48:25.580 -06:00 [INF] Error en login de admin, Error --> Usuario o contrase?a incorrectos
+2025-07-09 14:48:47.944 -06:00 [INF] Conexion correcta de daniel.ruiz@gmail.com
+2025-07-09 15:13:18.725 -06:00 [INF] Error en login de admin, Error --> Usuario o contrase?a incorrectos
+2025-07-09 15:13:21.064 -06:00 [INF] Error en login de admin, Errores --> Contrase?a es requerido
+2025-07-09 15:14:57.052 -06:00 [INF] Error en login de admin, Error --> Usuario o contrase?a incorrectos
+2025-07-09 15:17:24.223 -06:00 [INF] Error en login de admin, Error --> Usuario o contrase?a incorrectos
+2025-07-09 15:17:34.055 -06:00 [INF] Error en login de admin, Error --> Usuario o contrase?a incorrectos
+2025-07-09 15:18:16.540 -06:00 [INF] Error en login de admin, Error --> Usuario o contrase?a incorrectos
+2025-07-09 15:19:49.435 -06:00 [INF] Error en login de admin, Error --> Usuario o contrase?a incorrectos
+2025-07-09 15:19:58.733 -06:00 [INF] Error en login de admin, Error --> Usuario o contrase?a incorrectos
+2025-07-09 15:20:23.590 -06:00 [INF] Error en login de admin, Error --> Usuario o contrase?a incorrectos
+2025-07-09 15:21:13.693 -06:00 [INF] Error en login de admin, Error --> Usuario o contrase?a incorrectos
+2025-07-09 15:21:18.850 -06:00 [INF] Error en login de admin, Error --> Usuario o contrase?a incorrectos
+2025-07-09 15:22:50.622 -06:00 [INF] Error en login de admin, Error --> Usuario o contrase?a incorrectos
+2025-07-09 15:23:22.740 -06:00 [INF] Error en login de admin, Error --> Usuario o contrase?a incorrectos
+2025-07-09 15:24:40.324 -06:00 [INF] Error en login de admin, Error --> Usuario o contrase?a incorrectos
+2025-07-09 15:24:56.879 -06:00 [INF] Error en login de admin, Error --> Usuario o contrase?a incorrectos
+2025-07-09 15:25:19.267 -06:00 [INF] Error en login de admin, Error --> Usuario o contrase?a incorrectos
+2025-07-09 15:25:25.958 -06:00 [INF] Error en login de admin, Error --> Usuario o contrase?a incorrectos
+2025-07-09 15:26:17.305 -06:00 [INF] Error en login de admin, Error --> Usuario o contrase?a incorrectos
+2025-07-09 15:26:23.116 -06:00 [INF] Error en login de admin, Error --> Usuario o contrase?a incorrectos
+2025-07-09 15:26:44.776 -06:00 [INF] Error en login de admin, Error --> Usuario o contrase?a incorrectos
+2025-07-09 15:27:14.823 -06:00 [INF] Error en login de admin, Error --> Usuario o contrase?a incorrectos
+2025-07-09 15:28:28.862 -06:00 [INF] Error en login de admin, Error --> Usuario o contrase?a incorrectos
+2025-07-09 15:29:42.373 -06:00 [INF] Error en login de admin, Error --> Usuario o contrase?a incorrectos
+2025-07-09 15:32:26.001 -06:00 [INF] Error en login de admin, Error --> Usuario o contrase?a incorrectos
+2025-07-09 15:33:24.186 -06:00 [INF] Error en login de admin, Error --> Usuario o contrase?a incorrectos
+2025-07-09 15:33:37.863 -06:00 [INF] Error en login de admin, Error --> Usuario o contrase?a incorrectos
+2025-07-09 15:33:52.830 -06:00 [INF] Error en login de admin, Error --> Usuario o contrase?a incorrectos
+2025-07-09 15:34:04.707 -06:00 [INF] Error en login de admin, Error --> Usuario o contrase?a incorrectos
+2025-07-09 15:34:23.275 -06:00 [INF] Error en login de admin, Error --> Usuario o contrase?a incorrectos
+2025-07-09 15:34:44.024 -06:00 [INF] Error en login de admin, Error --> Usuario o contrase?a incorrectos
+2025-07-09 15:35:00.341 -06:00 [INF] Error en login de admin, Error --> Usuario o contrase?a incorrectos
+2025-07-09 15:42:24.138 -06:00 [INF] Error en login de admin, Error --> Usuario o contrase?a incorrectos
+2025-07-09 15:43:25.616 -06:00 [INF] Error en login de admin, Error --> Usuario o contrase?a incorrectos
+2025-07-09 15:45:26.329 -06:00 [INF] Error en login de admin, Error --> Usuario o contrase?a incorrectos
+2025-07-09 15:45:44.390 -06:00 [INF] Error en login de admin, Error --> Usuario o contrase?a incorrectos
+2025-07-09 15:46:20.149 -06:00 [INF] Error en login de admin, Error --> Usuario o contrase?a incorrectos
+2025-07-09 15:46:51.635 -06:00 [INF] Error en login de admin, Error --> Usuario o contrase?a incorrectos
+2025-07-09 15:47:22.298 -06:00 [INF] Error en login de admin, Error --> Usuario o contrase?a incorrectos
+2025-07-09 15:47:32.777 -06:00 [INF] Error en login de admin, Error --> Usuario o contrase?a incorrectos
+2025-07-09 15:48:21.136 -06:00 [INF] Error en login de admin, Error --> Usuario o contrase?a incorrectos
+2025-07-09 15:48:45.732 -06:00 [INF] Error en login de admin, Error --> Usuario o contrase?a incorrectos
+2025-07-09 15:49:13.559 -06:00 [INF] Error en login de admin, Error --> Usuario o contrase?a incorrectos
+2025-07-09 15:49:28.687 -06:00 [INF] Error en login de admin, Error --> Usuario o contrase?a incorrectos
+2025-07-09 15:49:45.832 -06:00 [INF] Error en login de admin, Error --> Usuario o contrase?a incorrectos
+2025-07-09 15:50:01.944 -06:00 [INF] Error en login de admin, Error --> Usuario o contrase?a incorrectos
+2025-07-09 15:50:21.094 -06:00 [INF] Error en login de admin, Error --> Usuario o contrase?a incorrectos
+2025-07-09 15:50:29.518 -06:00 [INF] Error en login de admin, Error --> Usuario o contrase?a incorrectos
+2025-07-09 15:50:52.540 -06:00 [INF] Error en login de admin, Error --> Usuario o contrase?a incorrectos
+2025-07-09 15:50:56.982 -06:00 [INF] Error en login de admin, Error --> Usuario o contrase?a incorrectos
+2025-07-09 15:51:16.952 -06:00 [INF] Conexion correcta de daniel.ruiz@gmail.com
+2025-07-09 15:55:20.320 -06:00 [INF] Error en login de admin@gmail.com, Error --> Usuario o contrase?a incorrectos
+2025-07-09 15:56:35.915 -06:00 [INF] Error en login de admin@gmail.com, Error --> Usuario o contrase?a incorrectos
+2025-07-09 15:57:04.662 -06:00 [INF] Error en login de admin@gmail.com, Error --> Usuario o contrase?a incorrectos
+2025-07-09 15:57:20.660 -06:00 [INF] Conexion correcta de ana.martinez@gmail.com
+2025-07-09 17:17:37.018 -06:00 [INF] Error en login de admin, Error --> Usuario o contrase?a incorrectos
+2025-07-09 17:17:52.728 -06:00 [INF] Error en login de admin, Error --> Usuario o contrase?a incorrectos
+2025-07-09 17:18:08.451 -06:00 [INF] Error en login de admin, Error --> Usuario o contrase?a incorrectos
+2025-07-09 17:18:18.934 -06:00 [INF] Error en login de admin, Error --> Usuario o contrase?a incorrectos
+2025-07-09 17:18:29.381 -06:00 [INF] Error en login de admin, Error --> Usuario o contrase?a incorrectos
+2025-07-09 17:18:38.056 -06:00 [INF] Error en login de admin, Error --> Usuario o contrase?a incorrectos
+2025-07-09 17:18:49.850 -06:00 [INF] Error en login de admin, Error --> Usuario o contrase?a incorrectos
+2025-07-09 17:18:58.696 -06:00 [INF] Error en login de admin, Error --> Usuario o contrase?a incorrectos
+2025-07-09 17:19:11.275 -06:00 [INF] Error en login de admin, Error --> Usuario o contrase?a incorrectos
+2025-07-09 17:19:18.605 -06:00 [INF] Error en login de admin, Error --> Usuario o contrase?a incorrectos
+2025-07-09 17:21:37.560 -06:00 [INF] Error en login de admin, Error --> Usuario o contrase?a incorrectos
+2025-07-09 17:26:54.067 -06:00 [INF] Error en login de admin, Error --> Usuario o contrase?a incorrectos
+2025-07-09 17:27:47.584 -06:00 [INF] Conexion correcta de ana.martinez@gmail.com
+2025-07-09 17:54:31.182 -06:00 [INF] Conexion correcta de ana.martinez@gmail.com
+2025-07-09 17:56:01.809 -06:00 [INF] Conexion correcta de daniel.ruiz@gmail.com
+2025-07-09 17:56:31.331 -06:00 [INF] Conexion correcta de ana.martinez@gmail.com
+2025-07-09 18:40:22.248 -06:00 [INF] Conexion correcta de ana.martinez@gmail.com
+2025-07-09 18:54:32.395 -06:00 [INF] Conexion correcta de carlos.zamora@gmail.com
+2025-07-09 19:21:34.609 -06:00 [INF] Conexion correcta de ana.martinez@gmail.com
+2025-07-09 19:27:32.010 -06:00 [INF] Conexion correcta de daniel.ruiz@gmail.com
+2025-07-09 19:29:05.128 -06:00 [INF] Error en login de admin, Error --> Usuario o contrase?a incorrectos

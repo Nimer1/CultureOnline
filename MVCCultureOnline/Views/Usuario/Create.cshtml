@@ -1,0 +1,92 @@
+﻿
+@model MVCCultureOnline.Models.RegistroViewModel
+@{
+    Layout = "_layoutlogin";
+}
+
+<div class="container my-5">
+    <div class="d-flex align-items-center justify-content-center">
+        <div class="card shadow-lg border-0 rounded-4 p-4" style="width: 100%; max-width: 450px;">
+            <div class="card-header rounded-4 d-flex justify-content-center align-items-center" style="background-color: white; height: 80px;">
+                <h3 class="fw-semibold" style="color: #B22222; margin: 0;">Crear una cuenta</h3>
+            </div>
+
+
+            <div class="card-body">
+                <form asp-controller="Usuario" asp-action="Create" method="post" asp-antiforgery="true">
+                    <div class="mb-3">
+                        <label asp-for="Nombre" class="form-label fw-semibold">Nombre</label>
+                        <input asp-for="Nombre" class="form-control" placeholder="Ingrese su nombre completo" />
+                        <span asp-validation-for="Nombre" class="text-danger small"></span>
+                    </div>
+
+                    <div class="mb-3">
+                        <label asp-for="Correo" class="form-label fw-semibold">Correo electrónico</label>
+                        <input asp-for="Correo" class="form-control" placeholder="Ingrese su correo" />
+                        <span asp-validation-for="Correo" class="text-danger small"></span>
+                    </div>
+
+                    <div class="mb-3">
+                        <label asp-for="Contrasena" class="form-label fw-semibold">Contraseña</label>
+                        <input asp-for="Contrasena" type="password" class="form-control" placeholder="Ingrese una contraseña segura" />
+                        <span asp-validation-for="Contrasena" class="text-danger small"></span>
+
+                        <div id="passwordRequirements" class="mt-2 small text-muted">
+                        <p id="lengthReq" class="mb-1 text-danger">• Entre 8 y 20 caracteres</p>
+                        <p id="upperReq" class="mb-1 text-danger">• Al menos una letra mayúscula</p>
+                        <p id="lowerReq" class="mb-1 text-danger">• Al menos una letra minúscula</p>
+                        <p id="numberReq" class="mb-1 text-danger">• Al menos un número</p>
+                        <p id="specialReq" class="mb-1 text-danger">• Al menos un carácter especial (!@@#$%^&*)</p>
+                        </div>
+
+                    </div>
+
+                    <div class="mb-3">
+                        <label asp-for="ConfirmarContrasena" class="form-label fw-semibold">Confirmar Contraseña</label>
+                        <input asp-for="ConfirmarContrasena" type="password" class="form-control" placeholder="Confirme su contraseña" />
+                        <span asp-validation-for="ConfirmarContrasena" class="text-danger small"></span>
+                    </div>
+
+
+                    <div class="d-grid mt-4">
+                        <button type="submit" class="btn btn-lg text-white" style="background-color: #B22222;" onclick="spinnerEffect()">
+                            Registrarse
+                        </button>
+                    </div>
+
+                    <div id="loader" class="d-none text-center mt-3">
+                        <div class="spinner-border text-danger" role="status">
+                            <span class="visually-hidden">Cargando...</span>
+                        </div>
+                    </div>
+
+                    <div class="text-center mt-3">
+                        <span class="small">¿Ya tienes una cuenta?</span>
+                        <a href="@Url.Action("Index", "Login")" class="text-decoration-none small fw-semibold" style="color: #B22222;">
+                            Iniciar sesión
+                        </a>
+                    </div>
+                </form>
+            </div>
+
+            <div class="card-footer text-center text-muted small">
+                CultureOnline &copy; @DateTime.Now.Year
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
+    <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
+
+    <script>
+        function spinnerEffect() {
+            document.getElementById("loader").classList.remove("d-none");
+        }
+    </script>
+}
+
+

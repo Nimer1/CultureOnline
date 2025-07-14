@@ -1,0 +1,1273 @@
+2025-06-29 13:43:49.302 -06:00 [ERR] Failed executing DbCommand (51ms) [Parameters=[@__id_0='2'], CommandType='"Text"', CommandTimeout='30']
+SELECT [s].[Id], [s].[CodigoDescuento], [s].[Direccion], [s].[Estado], [s].[Fecha], [s].[IdSeguimiento], [s].[imagenPersonalizada], [s].[Notas], [s].[NumeroFactura], [s].[Total], [s].[UsuarioId], [s].[Id0], [s].[Contrasena], [s].[Correo], [s].[Estado0], [s].[IDRol], [s].[Nombre], [s].[UltimoInicioSesion], [s0].[Id], [s0].[Cantidad], [s0].[Impuesto], [s0].[Observacion], [s0].[PedidoId], [s0].[PrecioUnitario], [s0].[ProductoId], [s0].[SubTotal], [s0].[Id0], [s0].[AnioPublicacion], [s0].[ClasificacionEdad], [s0].[Descripcion], [s0].[Editorial], [s0].[EsPersonalizable], [s0].[Estado], [s0].[idAutor], [s0].[Nombre], [s0].[Precio], [s0].[PromedioValoracion], [s0].[Stock], [p1].[Id], [p1].[CodigoAutorizacion], [p1].[descripcion], [p1].[FechaExpiracion], [p1].[FechaPago], [p1].[MetodoPago], [p1].[monto], [p1].[NombreTitular], [p1].[Numero], [p1].[PedidoId], [s1].[Id], [s1].[CostoBase], [s1].[Nombre], [s1].[PedidoId], [s1].[TotalPersonalizado], [s1].[Id0], [s1].[CostoOpcion], [s1].[DetallePersonalizadoId], [s1].[Nombre0], [s1].[OpcionSeleccionada]
+FROM (
+    SELECT TOP(1) [p].[Id], [p].[CodigoDescuento], [p].[Direccion], [p].[Estado], [p].[Fecha], [p].[IdSeguimiento], [p].[imagenPersonalizada], [p].[Notas], [p].[NumeroFactura], [p].[Total], [p].[UsuarioId], [u].[Id] AS [Id0], [u].[Contrasena], [u].[Correo], [u].[Estado] AS [Estado0], [u].[IDRol], [u].[Nombre], [u].[UltimoInicioSesion]
+    FROM [Pedidos] AS [p]
+    LEFT JOIN [Usuario] AS [u] ON [p].[UsuarioId] = [u].[Id]
+    WHERE [p].[Id] = @__id_0
+) AS [s]
+LEFT JOIN (
+    SELECT [d].[Id], [d].[Cantidad], [d].[Impuesto], [d].[Observacion], [d].[PedidoId], [d].[PrecioUnitario], [d].[ProductoId], [d].[SubTotal], [p0].[Id] AS [Id0], [p0].[AnioPublicacion], [p0].[ClasificacionEdad], [p0].[Descripcion], [p0].[Editorial], [p0].[EsPersonalizable], [p0].[Estado], [p0].[idAutor], [p0].[Nombre], [p0].[Precio], [p0].[PromedioValoracion], [p0].[Stock]
+    FROM [DetallePedido] AS [d]
+    LEFT JOIN [Productos] AS [p0] ON [d].[ProductoId] = [p0].[Id]
+) AS [s0] ON [s].[Id] = [s0].[PedidoId]
+LEFT JOIN [Pago] AS [p1] ON [s].[Id] = [p1].[PedidoId]
+LEFT JOIN (
+    SELECT [d0].[Id], [d0].[CostoBase], [d0].[Nombre], [d0].[PedidoId], [d0].[TotalPersonalizado], [d1].[Id] AS [Id0], [d1].[CostoOpcion], [d1].[DetallePersonalizadoId], [d1].[Nombre] AS [Nombre0], [d1].[OpcionSeleccionada]
+    FROM [DetallePedidoPersonalizado] AS [d0]
+    LEFT JOIN [DetallePersonalizacionOpcion] AS [d1] ON [d0].[Id] = [d1].[DetallePersonalizadoId]
+) AS [s1] ON [s].[Id] = [s1].[PedidoId]
+ORDER BY [s].[Id], [s].[Id0], [s0].[Id], [s0].[Id0], [p1].[Id], [s1].[Id]
+2025-06-29 13:43:49.405 -06:00 [ERR] An exception occurred while iterating over the results of a query for context type 'CultureOnline.Infraestructure.Data.CultureOnlineContext'.
+Microsoft.Data.SqlClient.SqlException (0x80131904): Invalid object name 'DetallePedidoPersonalizado'.
+   at Microsoft.Data.SqlClient.SqlCommand.<>c.<ExecuteDbDataReaderAsync>b__211_0(Task`1 result)
+   at System.Threading.Tasks.ContinuationResultTaskFromResultTask`2.InnerInvoke()
+   at System.Threading.ExecutionContext.RunInternal(ExecutionContext executionContext, ContextCallback callback, Object state)
+--- End of stack trace from previous location ---
+   at System.Threading.ExecutionContext.RunInternal(ExecutionContext executionContext, ContextCallback callback, Object state)
+   at System.Threading.Tasks.Task.ExecuteWithThreadLocal(Task& currentTaskSlot, Thread threadPoolThread)
+--- End of stack trace from previous location ---
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.AsyncEnumerator.InitializeReaderAsync(AsyncEnumerator enumerator, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.SqlServer.Storage.Internal.SqlServerExecutionStrategy.ExecuteAsync[TState,TResult](TState state, Func`4 operation, Func`4 verifySucceeded, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.AsyncEnumerator.MoveNextAsync()
+ClientConnectionId:58de2a26-2090-4fa0-bd25-5d7937207ed1
+Error Number:208,State:1,Class:16
+Microsoft.Data.SqlClient.SqlException (0x80131904): Invalid object name 'DetallePedidoPersonalizado'.
+   at Microsoft.Data.SqlClient.SqlCommand.<>c.<ExecuteDbDataReaderAsync>b__211_0(Task`1 result)
+   at System.Threading.Tasks.ContinuationResultTaskFromResultTask`2.InnerInvoke()
+   at System.Threading.ExecutionContext.RunInternal(ExecutionContext executionContext, ContextCallback callback, Object state)
+--- End of stack trace from previous location ---
+   at System.Threading.ExecutionContext.RunInternal(ExecutionContext executionContext, ContextCallback callback, Object state)
+   at System.Threading.Tasks.Task.ExecuteWithThreadLocal(Task& currentTaskSlot, Thread threadPoolThread)
+--- End of stack trace from previous location ---
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.AsyncEnumerator.InitializeReaderAsync(AsyncEnumerator enumerator, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.SqlServer.Storage.Internal.SqlServerExecutionStrategy.ExecuteAsync[TState,TResult](TState state, Func`4 operation, Func`4 verifySucceeded, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.AsyncEnumerator.MoveNextAsync()
+ClientConnectionId:58de2a26-2090-4fa0-bd25-5d7937207ed1
+Error Number:208,State:1,Class:16
+2025-06-29 14:19:46.618 -06:00 [ERR] Failed executing DbCommand (54ms) [Parameters=[@__id_0='1'], CommandType='"Text"', CommandTimeout='30']
+SELECT [s].[Id], [s].[CodigoDescuento], [s].[Direccion], [s].[Estado], [s].[Fecha], [s].[IdSeguimiento], [s].[imagenPersonalizada], [s].[Notas], [s].[NumeroFactura], [s].[Total], [s].[UsuarioId], [s].[Id0], [s].[Contrasena], [s].[Correo], [s].[Estado0], [s].[IDRol], [s].[Nombre], [s].[UltimoInicioSesion], [s0].[Id], [s0].[Cantidad], [s0].[Impuesto], [s0].[Observacion], [s0].[PedidoId], [s0].[PrecioUnitario], [s0].[ProductoId], [s0].[SubTotal], [s0].[Id0], [s0].[AnioPublicacion], [s0].[ClasificacionEdad], [s0].[Descripcion], [s0].[Editorial], [s0].[EsPersonalizable], [s0].[Estado], [s0].[idAutor], [s0].[Nombre], [s0].[Precio], [s0].[PromedioValoracion], [s0].[Stock], [p1].[Id], [p1].[CodigoAutorizacion], [p1].[descripcion], [p1].[FechaExpiracion], [p1].[FechaPago], [p1].[MetodoPago], [p1].[monto], [p1].[NombreTitular], [p1].[Numero], [p1].[PedidoId], [s2].[Id], [s2].[CostoBase], [s2].[PedidoId], [s2].[ProductoPersonalizadoId], [s2].[TotalPersonalizado], [s2].[Id0], [s2].[CostoBase0], [s2].[Nombre], [s2].[TotalPersonalizado0], [s2].[Id1], [s2].[CostoOpcion], [s2].[CriterioId], [s2].[DetallePedidoPersonalizadoId], [s2].[DetallePersonalizadoId], [s2].[OpcionSeleccionada], [s2].[Id00], [s2].[Modificable], [s2].[NombreCriterio], [s2].[Obligatorio], [s2].[ProductoPersonalizadoId0]
+FROM (
+    SELECT TOP(1) [p].[Id], [p].[CodigoDescuento], [p].[Direccion], [p].[Estado], [p].[Fecha], [p].[IdSeguimiento], [p].[imagenPersonalizada], [p].[Notas], [p].[NumeroFactura], [p].[Total], [p].[UsuarioId], [u].[Id] AS [Id0], [u].[Contrasena], [u].[Correo], [u].[Estado] AS [Estado0], [u].[IDRol], [u].[Nombre], [u].[UltimoInicioSesion]
+    FROM [Pedidos] AS [p]
+    LEFT JOIN [Usuario] AS [u] ON [p].[UsuarioId] = [u].[Id]
+    WHERE [p].[Id] = @__id_0
+) AS [s]
+LEFT JOIN (
+    SELECT [d].[Id], [d].[Cantidad], [d].[Impuesto], [d].[Observacion], [d].[PedidoId], [d].[PrecioUnitario], [d].[ProductoId], [d].[SubTotal], [p0].[Id] AS [Id0], [p0].[AnioPublicacion], [p0].[ClasificacionEdad], [p0].[Descripcion], [p0].[Editorial], [p0].[EsPersonalizable], [p0].[Estado], [p0].[idAutor], [p0].[Nombre], [p0].[Precio], [p0].[PromedioValoracion], [p0].[Stock]
+    FROM [DetallePedido] AS [d]
+    LEFT JOIN [Productos] AS [p0] ON [d].[ProductoId] = [p0].[Id]
+) AS [s0] ON [s].[Id] = [s0].[PedidoId]
+LEFT JOIN [Pago] AS [p1] ON [s].[Id] = [p1].[PedidoId]
+LEFT JOIN (
+    SELECT [d0].[Id], [d0].[CostoBase], [d0].[PedidoId], [d0].[ProductoPersonalizadoId], [d0].[TotalPersonalizado], [p2].[Id] AS [Id0], [p2].[CostoBase] AS [CostoBase0], [p2].[Nombre], [p2].[TotalPersonalizado] AS [TotalPersonalizado0], [s1].[Id] AS [Id1], [s1].[CostoOpcion], [s1].[CriterioId], [s1].[DetallePedidoPersonalizadoId], [s1].[DetallePersonalizadoId], [s1].[OpcionSeleccionada], [s1].[Id0] AS [Id00], [s1].[Modificable], [s1].[NombreCriterio], [s1].[Obligatorio], [s1].[ProductoPersonalizadoId] AS [ProductoPersonalizadoId0]
+    FROM [DetallePedidoPersonalizado] AS [d0]
+    INNER JOIN [ProductoPersonalizado] AS [p2] ON [d0].[ProductoPersonalizadoId] = [p2].[Id]
+    LEFT JOIN (
+        SELECT [d1].[Id], [d1].[CostoOpcion], [d1].[CriterioId], [d1].[DetallePedidoPersonalizadoId], [d1].[DetallePersonalizadoId], [d1].[OpcionSeleccionada], [c].[Id] AS [Id0], [c].[Modificable], [c].[NombreCriterio], [c].[Obligatorio], [c].[ProductoPersonalizadoId]
+        FROM [DetallePersonalizacionOpcion] AS [d1]
+        INNER JOIN [CriterioPersonalizacion] AS [c] ON [d1].[CriterioId] = [c].[Id]
+    ) AS [s1] ON [d0].[Id] = [s1].[DetallePedidoPersonalizadoId]
+) AS [s2] ON [s].[Id] = [s2].[PedidoId]
+ORDER BY [s].[Id], [s].[Id0], [s0].[Id], [s0].[Id0], [p1].[Id], [s2].[Id], [s2].[Id0], [s2].[Id1]
+2025-06-29 14:19:46.719 -06:00 [ERR] An exception occurred while iterating over the results of a query for context type 'CultureOnline.Infraestructure.Data.CultureOnlineContext'.
+Microsoft.Data.SqlClient.SqlException (0x80131904): Invalid object name 'DetallePedidoPersonalizado'.
+   at Microsoft.Data.SqlClient.SqlCommand.<>c.<ExecuteDbDataReaderAsync>b__211_0(Task`1 result)
+   at System.Threading.Tasks.ContinuationResultTaskFromResultTask`2.InnerInvoke()
+   at System.Threading.ExecutionContext.RunInternal(ExecutionContext executionContext, ContextCallback callback, Object state)
+--- End of stack trace from previous location ---
+   at System.Threading.ExecutionContext.RunInternal(ExecutionContext executionContext, ContextCallback callback, Object state)
+   at System.Threading.Tasks.Task.ExecuteWithThreadLocal(Task& currentTaskSlot, Thread threadPoolThread)
+--- End of stack trace from previous location ---
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.AsyncEnumerator.InitializeReaderAsync(AsyncEnumerator enumerator, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.SqlServer.Storage.Internal.SqlServerExecutionStrategy.ExecuteAsync[TState,TResult](TState state, Func`4 operation, Func`4 verifySucceeded, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.AsyncEnumerator.MoveNextAsync()
+ClientConnectionId:57552fde-3e39-42bf-b611-9311bcc22239
+Error Number:208,State:1,Class:16
+Microsoft.Data.SqlClient.SqlException (0x80131904): Invalid object name 'DetallePedidoPersonalizado'.
+   at Microsoft.Data.SqlClient.SqlCommand.<>c.<ExecuteDbDataReaderAsync>b__211_0(Task`1 result)
+   at System.Threading.Tasks.ContinuationResultTaskFromResultTask`2.InnerInvoke()
+   at System.Threading.ExecutionContext.RunInternal(ExecutionContext executionContext, ContextCallback callback, Object state)
+--- End of stack trace from previous location ---
+   at System.Threading.ExecutionContext.RunInternal(ExecutionContext executionContext, ContextCallback callback, Object state)
+   at System.Threading.Tasks.Task.ExecuteWithThreadLocal(Task& currentTaskSlot, Thread threadPoolThread)
+--- End of stack trace from previous location ---
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.AsyncEnumerator.InitializeReaderAsync(AsyncEnumerator enumerator, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.SqlServer.Storage.Internal.SqlServerExecutionStrategy.ExecuteAsync[TState,TResult](TState state, Func`4 operation, Func`4 verifySucceeded, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.AsyncEnumerator.MoveNextAsync()
+ClientConnectionId:57552fde-3e39-42bf-b611-9311bcc22239
+Error Number:208,State:1,Class:16
+2025-06-29 14:20:36.631 -06:00 [ERR] Failed executing DbCommand (29ms) [Parameters=[@__id_0='3'], CommandType='"Text"', CommandTimeout='30']
+SELECT [s].[Id], [s].[CodigoDescuento], [s].[Direccion], [s].[Estado], [s].[Fecha], [s].[IdSeguimiento], [s].[imagenPersonalizada], [s].[Notas], [s].[NumeroFactura], [s].[Total], [s].[UsuarioId], [s].[Id0], [s].[Contrasena], [s].[Correo], [s].[Estado0], [s].[IDRol], [s].[Nombre], [s].[UltimoInicioSesion], [s0].[Id], [s0].[Cantidad], [s0].[Impuesto], [s0].[Observacion], [s0].[PedidoId], [s0].[PrecioUnitario], [s0].[ProductoId], [s0].[SubTotal], [s0].[Id0], [s0].[AnioPublicacion], [s0].[ClasificacionEdad], [s0].[Descripcion], [s0].[Editorial], [s0].[EsPersonalizable], [s0].[Estado], [s0].[idAutor], [s0].[Nombre], [s0].[Precio], [s0].[PromedioValoracion], [s0].[Stock], [p1].[Id], [p1].[CodigoAutorizacion], [p1].[descripcion], [p1].[FechaExpiracion], [p1].[FechaPago], [p1].[MetodoPago], [p1].[monto], [p1].[NombreTitular], [p1].[Numero], [p1].[PedidoId], [s2].[Id], [s2].[CostoBase], [s2].[PedidoId], [s2].[ProductoPersonalizadoId], [s2].[TotalPersonalizado], [s2].[Id0], [s2].[CostoBase0], [s2].[Nombre], [s2].[TotalPersonalizado0], [s2].[Id1], [s2].[CostoOpcion], [s2].[CriterioId], [s2].[DetallePedidoPersonalizadoId], [s2].[DetallePersonalizadoId], [s2].[OpcionSeleccionada], [s2].[Id00], [s2].[Modificable], [s2].[NombreCriterio], [s2].[Obligatorio], [s2].[ProductoPersonalizadoId0]
+FROM (
+    SELECT TOP(1) [p].[Id], [p].[CodigoDescuento], [p].[Direccion], [p].[Estado], [p].[Fecha], [p].[IdSeguimiento], [p].[imagenPersonalizada], [p].[Notas], [p].[NumeroFactura], [p].[Total], [p].[UsuarioId], [u].[Id] AS [Id0], [u].[Contrasena], [u].[Correo], [u].[Estado] AS [Estado0], [u].[IDRol], [u].[Nombre], [u].[UltimoInicioSesion]
+    FROM [Pedidos] AS [p]
+    LEFT JOIN [Usuario] AS [u] ON [p].[UsuarioId] = [u].[Id]
+    WHERE [p].[Id] = @__id_0
+) AS [s]
+LEFT JOIN (
+    SELECT [d].[Id], [d].[Cantidad], [d].[Impuesto], [d].[Observacion], [d].[PedidoId], [d].[PrecioUnitario], [d].[ProductoId], [d].[SubTotal], [p0].[Id] AS [Id0], [p0].[AnioPublicacion], [p0].[ClasificacionEdad], [p0].[Descripcion], [p0].[Editorial], [p0].[EsPersonalizable], [p0].[Estado], [p0].[idAutor], [p0].[Nombre], [p0].[Precio], [p0].[PromedioValoracion], [p0].[Stock]
+    FROM [DetallePedido] AS [d]
+    LEFT JOIN [Productos] AS [p0] ON [d].[ProductoId] = [p0].[Id]
+) AS [s0] ON [s].[Id] = [s0].[PedidoId]
+LEFT JOIN [Pago] AS [p1] ON [s].[Id] = [p1].[PedidoId]
+LEFT JOIN (
+    SELECT [d0].[Id], [d0].[CostoBase], [d0].[PedidoId], [d0].[ProductoPersonalizadoId], [d0].[TotalPersonalizado], [p2].[Id] AS [Id0], [p2].[CostoBase] AS [CostoBase0], [p2].[Nombre], [p2].[TotalPersonalizado] AS [TotalPersonalizado0], [s1].[Id] AS [Id1], [s1].[CostoOpcion], [s1].[CriterioId], [s1].[DetallePedidoPersonalizadoId], [s1].[DetallePersonalizadoId], [s1].[OpcionSeleccionada], [s1].[Id0] AS [Id00], [s1].[Modificable], [s1].[NombreCriterio], [s1].[Obligatorio], [s1].[ProductoPersonalizadoId] AS [ProductoPersonalizadoId0]
+    FROM [DetallePedidoPersonalizado] AS [d0]
+    INNER JOIN [ProductoPersonalizado] AS [p2] ON [d0].[ProductoPersonalizadoId] = [p2].[Id]
+    LEFT JOIN (
+        SELECT [d1].[Id], [d1].[CostoOpcion], [d1].[CriterioId], [d1].[DetallePedidoPersonalizadoId], [d1].[DetallePersonalizadoId], [d1].[OpcionSeleccionada], [c].[Id] AS [Id0], [c].[Modificable], [c].[NombreCriterio], [c].[Obligatorio], [c].[ProductoPersonalizadoId]
+        FROM [DetallePersonalizacionOpcion] AS [d1]
+        INNER JOIN [CriterioPersonalizacion] AS [c] ON [d1].[CriterioId] = [c].[Id]
+    ) AS [s1] ON [d0].[Id] = [s1].[DetallePedidoPersonalizadoId]
+) AS [s2] ON [s].[Id] = [s2].[PedidoId]
+ORDER BY [s].[Id], [s].[Id0], [s0].[Id], [s0].[Id0], [p1].[Id], [s2].[Id], [s2].[Id0], [s2].[Id1]
+2025-06-29 14:20:36.703 -06:00 [ERR] An exception occurred while iterating over the results of a query for context type 'CultureOnline.Infraestructure.Data.CultureOnlineContext'.
+Microsoft.Data.SqlClient.SqlException (0x80131904): Invalid object name 'DetallePedidoPersonalizado'.
+   at Microsoft.Data.SqlClient.SqlCommand.<>c.<ExecuteDbDataReaderAsync>b__211_0(Task`1 result)
+   at System.Threading.Tasks.ContinuationResultTaskFromResultTask`2.InnerInvoke()
+   at System.Threading.ExecutionContext.RunInternal(ExecutionContext executionContext, ContextCallback callback, Object state)
+--- End of stack trace from previous location ---
+   at System.Threading.ExecutionContext.RunInternal(ExecutionContext executionContext, ContextCallback callback, Object state)
+   at System.Threading.Tasks.Task.ExecuteWithThreadLocal(Task& currentTaskSlot, Thread threadPoolThread)
+--- End of stack trace from previous location ---
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.AsyncEnumerator.InitializeReaderAsync(AsyncEnumerator enumerator, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.SqlServer.Storage.Internal.SqlServerExecutionStrategy.ExecuteAsync[TState,TResult](TState state, Func`4 operation, Func`4 verifySucceeded, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.AsyncEnumerator.MoveNextAsync()
+ClientConnectionId:3c8fe58d-35ec-4e1c-bca0-512ea56c87db
+Error Number:208,State:1,Class:16
+Microsoft.Data.SqlClient.SqlException (0x80131904): Invalid object name 'DetallePedidoPersonalizado'.
+   at Microsoft.Data.SqlClient.SqlCommand.<>c.<ExecuteDbDataReaderAsync>b__211_0(Task`1 result)
+   at System.Threading.Tasks.ContinuationResultTaskFromResultTask`2.InnerInvoke()
+   at System.Threading.ExecutionContext.RunInternal(ExecutionContext executionContext, ContextCallback callback, Object state)
+--- End of stack trace from previous location ---
+   at System.Threading.ExecutionContext.RunInternal(ExecutionContext executionContext, ContextCallback callback, Object state)
+   at System.Threading.Tasks.Task.ExecuteWithThreadLocal(Task& currentTaskSlot, Thread threadPoolThread)
+--- End of stack trace from previous location ---
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.AsyncEnumerator.InitializeReaderAsync(AsyncEnumerator enumerator, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.SqlServer.Storage.Internal.SqlServerExecutionStrategy.ExecuteAsync[TState,TResult](TState state, Func`4 operation, Func`4 verifySucceeded, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.AsyncEnumerator.MoveNextAsync()
+ClientConnectionId:3c8fe58d-35ec-4e1c-bca0-512ea56c87db
+Error Number:208,State:1,Class:16
+2025-06-29 14:25:34.883 -06:00 [ERR] Failed executing DbCommand (33ms) [Parameters=[@__id_0='2'], CommandType='"Text"', CommandTimeout='30']
+SELECT [s].[Id], [s].[CodigoDescuento], [s].[Direccion], [s].[Estado], [s].[Fecha], [s].[IdSeguimiento], [s].[imagenPersonalizada], [s].[Notas], [s].[NumeroFactura], [s].[Total], [s].[UsuarioId], [s].[Id0], [s].[Contrasena], [s].[Correo], [s].[Estado0], [s].[IDRol], [s].[Nombre], [s].[UltimoInicioSesion], [s0].[Id], [s0].[Cantidad], [s0].[Impuesto], [s0].[Observacion], [s0].[PedidoId], [s0].[PrecioUnitario], [s0].[ProductoId], [s0].[SubTotal], [s0].[Id0], [s0].[AnioPublicacion], [s0].[ClasificacionEdad], [s0].[Descripcion], [s0].[Editorial], [s0].[EsPersonalizable], [s0].[Estado], [s0].[idAutor], [s0].[Nombre], [s0].[Precio], [s0].[PromedioValoracion], [s0].[Stock], [p1].[Id], [p1].[CodigoAutorizacion], [p1].[descripcion], [p1].[FechaExpiracion], [p1].[FechaPago], [p1].[MetodoPago], [p1].[monto], [p1].[NombreTitular], [p1].[Numero], [p1].[PedidoId], [s2].[Id], [s2].[CostoBase], [s2].[PedidoId], [s2].[ProductoPersonalizadoId], [s2].[ProductoPersonalizadoId1], [s2].[TotalPersonalizado], [s2].[Id0], [s2].[CostoBase0], [s2].[Nombre], [s2].[TotalPersonalizado0], [s2].[Id1], [s2].[CostoOpcion], [s2].[CriterioId], [s2].[DetallePedidoPersonalizadoId], [s2].[DetallePersonalizadoId], [s2].[OpcionSeleccionada], [s2].[Id00], [s2].[Modificable], [s2].[NombreCriterio], [s2].[Obligatorio], [s2].[ProductoPersonalizadoId0]
+FROM (
+    SELECT TOP(1) [p].[Id], [p].[CodigoDescuento], [p].[Direccion], [p].[Estado], [p].[Fecha], [p].[IdSeguimiento], [p].[imagenPersonalizada], [p].[Notas], [p].[NumeroFactura], [p].[Total], [p].[UsuarioId], [u].[Id] AS [Id0], [u].[Contrasena], [u].[Correo], [u].[Estado] AS [Estado0], [u].[IDRol], [u].[Nombre], [u].[UltimoInicioSesion]
+    FROM [Pedidos] AS [p]
+    LEFT JOIN [Usuario] AS [u] ON [p].[UsuarioId] = [u].[Id]
+    WHERE [p].[Id] = @__id_0
+) AS [s]
+LEFT JOIN (
+    SELECT [d].[Id], [d].[Cantidad], [d].[Impuesto], [d].[Observacion], [d].[PedidoId], [d].[PrecioUnitario], [d].[ProductoId], [d].[SubTotal], [p0].[Id] AS [Id0], [p0].[AnioPublicacion], [p0].[ClasificacionEdad], [p0].[Descripcion], [p0].[Editorial], [p0].[EsPersonalizable], [p0].[Estado], [p0].[idAutor], [p0].[Nombre], [p0].[Precio], [p0].[PromedioValoracion], [p0].[Stock]
+    FROM [DetallePedido] AS [d]
+    LEFT JOIN [Productos] AS [p0] ON [d].[ProductoId] = [p0].[Id]
+) AS [s0] ON [s].[Id] = [s0].[PedidoId]
+LEFT JOIN [Pago] AS [p1] ON [s].[Id] = [p1].[PedidoId]
+LEFT JOIN (
+    SELECT [d0].[Id], [d0].[CostoBase], [d0].[PedidoId], [d0].[ProductoPersonalizadoId], [d0].[ProductoPersonalizadoId1], [d0].[TotalPersonalizado], [p2].[Id] AS [Id0], [p2].[CostoBase] AS [CostoBase0], [p2].[Nombre], [p2].[TotalPersonalizado] AS [TotalPersonalizado0], [s1].[Id] AS [Id1], [s1].[CostoOpcion], [s1].[CriterioId], [s1].[DetallePedidoPersonalizadoId], [s1].[DetallePersonalizadoId], [s1].[OpcionSeleccionada], [s1].[Id0] AS [Id00], [s1].[Modificable], [s1].[NombreCriterio], [s1].[Obligatorio], [s1].[ProductoPersonalizadoId] AS [ProductoPersonalizadoId0]
+    FROM [detalle_pedido_personalizado] AS [d0]
+    INNER JOIN [ProductoPersonalizado] AS [p2] ON [d0].[ProductoPersonalizadoId] = [p2].[Id]
+    LEFT JOIN (
+        SELECT [d1].[Id], [d1].[CostoOpcion], [d1].[CriterioId], [d1].[DetallePedidoPersonalizadoId], [d1].[DetallePersonalizadoId], [d1].[OpcionSeleccionada], [c].[Id] AS [Id0], [c].[Modificable], [c].[NombreCriterio], [c].[Obligatorio], [c].[ProductoPersonalizadoId]
+        FROM [DetallePersonalizacionOpcion] AS [d1]
+        INNER JOIN [CriterioPersonalizacion] AS [c] ON [d1].[CriterioId] = [c].[Id]
+    ) AS [s1] ON [d0].[Id] = [s1].[DetallePedidoPersonalizadoId]
+) AS [s2] ON [s].[Id] = [s2].[PedidoId]
+ORDER BY [s].[Id], [s].[Id0], [s0].[Id], [s0].[Id0], [p1].[Id], [s2].[Id], [s2].[Id0], [s2].[Id1]
+2025-06-29 14:25:34.982 -06:00 [ERR] An exception occurred while iterating over the results of a query for context type 'CultureOnline.Infraestructure.Data.CultureOnlineContext'.
+Microsoft.Data.SqlClient.SqlException (0x80131904): Invalid object name 'detalle_pedido_personalizado'.
+   at Microsoft.Data.SqlClient.SqlCommand.<>c.<ExecuteDbDataReaderAsync>b__211_0(Task`1 result)
+   at System.Threading.Tasks.ContinuationResultTaskFromResultTask`2.InnerInvoke()
+   at System.Threading.ExecutionContext.RunInternal(ExecutionContext executionContext, ContextCallback callback, Object state)
+--- End of stack trace from previous location ---
+   at System.Threading.ExecutionContext.RunInternal(ExecutionContext executionContext, ContextCallback callback, Object state)
+   at System.Threading.Tasks.Task.ExecuteWithThreadLocal(Task& currentTaskSlot, Thread threadPoolThread)
+--- End of stack trace from previous location ---
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.AsyncEnumerator.InitializeReaderAsync(AsyncEnumerator enumerator, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.SqlServer.Storage.Internal.SqlServerExecutionStrategy.ExecuteAsync[TState,TResult](TState state, Func`4 operation, Func`4 verifySucceeded, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.AsyncEnumerator.MoveNextAsync()
+ClientConnectionId:90e15392-7788-4a06-918e-deb4d46ae053
+Error Number:208,State:1,Class:16
+Microsoft.Data.SqlClient.SqlException (0x80131904): Invalid object name 'detalle_pedido_personalizado'.
+   at Microsoft.Data.SqlClient.SqlCommand.<>c.<ExecuteDbDataReaderAsync>b__211_0(Task`1 result)
+   at System.Threading.Tasks.ContinuationResultTaskFromResultTask`2.InnerInvoke()
+   at System.Threading.ExecutionContext.RunInternal(ExecutionContext executionContext, ContextCallback callback, Object state)
+--- End of stack trace from previous location ---
+   at System.Threading.ExecutionContext.RunInternal(ExecutionContext executionContext, ContextCallback callback, Object state)
+   at System.Threading.Tasks.Task.ExecuteWithThreadLocal(Task& currentTaskSlot, Thread threadPoolThread)
+--- End of stack trace from previous location ---
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.AsyncEnumerator.InitializeReaderAsync(AsyncEnumerator enumerator, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.SqlServer.Storage.Internal.SqlServerExecutionStrategy.ExecuteAsync[TState,TResult](TState state, Func`4 operation, Func`4 verifySucceeded, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.AsyncEnumerator.MoveNextAsync()
+ClientConnectionId:90e15392-7788-4a06-918e-deb4d46ae053
+Error Number:208,State:1,Class:16
+2025-06-29 14:27:25.235 -06:00 [ERR] Failed executing DbCommand (33ms) [Parameters=[@__id_0='2'], CommandType='"Text"', CommandTimeout='30']
+SELECT [s].[Id], [s].[CodigoDescuento], [s].[Direccion], [s].[Estado], [s].[Fecha], [s].[IdSeguimiento], [s].[imagenPersonalizada], [s].[Notas], [s].[NumeroFactura], [s].[Total], [s].[UsuarioId], [s].[Id0], [s].[Contrasena], [s].[Correo], [s].[Estado0], [s].[IDRol], [s].[Nombre], [s].[UltimoInicioSesion], [s0].[Id], [s0].[Cantidad], [s0].[Impuesto], [s0].[Observacion], [s0].[PedidoId], [s0].[PrecioUnitario], [s0].[ProductoId], [s0].[SubTotal], [s0].[Id0], [s0].[AnioPublicacion], [s0].[ClasificacionEdad], [s0].[Descripcion], [s0].[Editorial], [s0].[EsPersonalizable], [s0].[Estado], [s0].[idAutor], [s0].[Nombre], [s0].[Precio], [s0].[PromedioValoracion], [s0].[Stock], [p1].[Id], [p1].[CodigoAutorizacion], [p1].[descripcion], [p1].[FechaExpiracion], [p1].[FechaPago], [p1].[MetodoPago], [p1].[monto], [p1].[NombreTitular], [p1].[Numero], [p1].[PedidoId], [s2].[Id], [s2].[CostoBase], [s2].[PedidoId], [s2].[ProductoPersonalizadoId], [s2].[ProductoPersonalizadoId1], [s2].[TotalPersonalizado], [s2].[Id0], [s2].[CostoBase0], [s2].[Nombre], [s2].[TotalPersonalizado0], [s2].[Id1], [s2].[CostoOpcion], [s2].[CriterioId], [s2].[DetallePedidoPersonalizadoId], [s2].[DetallePersonalizadoId], [s2].[OpcionSeleccionada], [s2].[Id00], [s2].[Modificable], [s2].[NombreCriterio], [s2].[Obligatorio], [s2].[ProductoPersonalizadoId0]
+FROM (
+    SELECT TOP(1) [p].[Id], [p].[CodigoDescuento], [p].[Direccion], [p].[Estado], [p].[Fecha], [p].[IdSeguimiento], [p].[imagenPersonalizada], [p].[Notas], [p].[NumeroFactura], [p].[Total], [p].[UsuarioId], [u].[Id] AS [Id0], [u].[Contrasena], [u].[Correo], [u].[Estado] AS [Estado0], [u].[IDRol], [u].[Nombre], [u].[UltimoInicioSesion]
+    FROM [Pedidos] AS [p]
+    LEFT JOIN [Usuario] AS [u] ON [p].[UsuarioId] = [u].[Id]
+    WHERE [p].[Id] = @__id_0
+) AS [s]
+LEFT JOIN (
+    SELECT [d].[Id], [d].[Cantidad], [d].[Impuesto], [d].[Observacion], [d].[PedidoId], [d].[PrecioUnitario], [d].[ProductoId], [d].[SubTotal], [p0].[Id] AS [Id0], [p0].[AnioPublicacion], [p0].[ClasificacionEdad], [p0].[Descripcion], [p0].[Editorial], [p0].[EsPersonalizable], [p0].[Estado], [p0].[idAutor], [p0].[Nombre], [p0].[Precio], [p0].[PromedioValoracion], [p0].[Stock]
+    FROM [DetallePedido] AS [d]
+    LEFT JOIN [Productos] AS [p0] ON [d].[ProductoId] = [p0].[Id]
+) AS [s0] ON [s].[Id] = [s0].[PedidoId]
+LEFT JOIN [Pago] AS [p1] ON [s].[Id] = [p1].[PedidoId]
+LEFT JOIN (
+    SELECT [d0].[Id], [d0].[CostoBase], [d0].[PedidoId], [d0].[ProductoPersonalizadoId], [d0].[ProductoPersonalizadoId1], [d0].[TotalPersonalizado], [p2].[Id] AS [Id0], [p2].[CostoBase] AS [CostoBase0], [p2].[Nombre], [p2].[TotalPersonalizado] AS [TotalPersonalizado0], [s1].[Id] AS [Id1], [s1].[CostoOpcion], [s1].[CriterioId], [s1].[DetallePedidoPersonalizadoId], [s1].[DetallePersonalizadoId], [s1].[OpcionSeleccionada], [s1].[Id0] AS [Id00], [s1].[Modificable], [s1].[NombreCriterio], [s1].[Obligatorio], [s1].[ProductoPersonalizadoId] AS [ProductoPersonalizadoId0]
+    FROM [DetallePedidoPersonalizado] AS [d0]
+    INNER JOIN [ProductoPersonalizado] AS [p2] ON [d0].[ProductoPersonalizadoId] = [p2].[Id]
+    LEFT JOIN (
+        SELECT [d1].[Id], [d1].[CostoOpcion], [d1].[CriterioId], [d1].[DetallePedidoPersonalizadoId], [d1].[DetallePersonalizadoId], [d1].[OpcionSeleccionada], [c].[Id] AS [Id0], [c].[Modificable], [c].[NombreCriterio], [c].[Obligatorio], [c].[ProductoPersonalizadoId]
+        FROM [DetallePersonalizacionOpcion] AS [d1]
+        INNER JOIN [CriterioPersonalizacion] AS [c] ON [d1].[CriterioId] = [c].[Id]
+    ) AS [s1] ON [d0].[Id] = [s1].[DetallePedidoPersonalizadoId]
+) AS [s2] ON [s].[Id] = [s2].[PedidoId]
+ORDER BY [s].[Id], [s].[Id0], [s0].[Id], [s0].[Id0], [p1].[Id], [s2].[Id], [s2].[Id0], [s2].[Id1]
+2025-06-29 14:27:25.303 -06:00 [ERR] An exception occurred while iterating over the results of a query for context type 'CultureOnline.Infraestructure.Data.CultureOnlineContext'.
+Microsoft.Data.SqlClient.SqlException (0x80131904): Invalid object name 'DetallePedidoPersonalizado'.
+   at Microsoft.Data.SqlClient.SqlCommand.<>c.<ExecuteDbDataReaderAsync>b__211_0(Task`1 result)
+   at System.Threading.Tasks.ContinuationResultTaskFromResultTask`2.InnerInvoke()
+   at System.Threading.ExecutionContext.RunInternal(ExecutionContext executionContext, ContextCallback callback, Object state)
+--- End of stack trace from previous location ---
+   at System.Threading.ExecutionContext.RunInternal(ExecutionContext executionContext, ContextCallback callback, Object state)
+   at System.Threading.Tasks.Task.ExecuteWithThreadLocal(Task& currentTaskSlot, Thread threadPoolThread)
+--- End of stack trace from previous location ---
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.AsyncEnumerator.InitializeReaderAsync(AsyncEnumerator enumerator, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.SqlServer.Storage.Internal.SqlServerExecutionStrategy.ExecuteAsync[TState,TResult](TState state, Func`4 operation, Func`4 verifySucceeded, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.AsyncEnumerator.MoveNextAsync()
+ClientConnectionId:cf48f841-da19-46cf-8ba8-e2c9ad05aec5
+Error Number:208,State:1,Class:16
+Microsoft.Data.SqlClient.SqlException (0x80131904): Invalid object name 'DetallePedidoPersonalizado'.
+   at Microsoft.Data.SqlClient.SqlCommand.<>c.<ExecuteDbDataReaderAsync>b__211_0(Task`1 result)
+   at System.Threading.Tasks.ContinuationResultTaskFromResultTask`2.InnerInvoke()
+   at System.Threading.ExecutionContext.RunInternal(ExecutionContext executionContext, ContextCallback callback, Object state)
+--- End of stack trace from previous location ---
+   at System.Threading.ExecutionContext.RunInternal(ExecutionContext executionContext, ContextCallback callback, Object state)
+   at System.Threading.Tasks.Task.ExecuteWithThreadLocal(Task& currentTaskSlot, Thread threadPoolThread)
+--- End of stack trace from previous location ---
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.AsyncEnumerator.InitializeReaderAsync(AsyncEnumerator enumerator, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.SqlServer.Storage.Internal.SqlServerExecutionStrategy.ExecuteAsync[TState,TResult](TState state, Func`4 operation, Func`4 verifySucceeded, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.AsyncEnumerator.MoveNextAsync()
+ClientConnectionId:cf48f841-da19-46cf-8ba8-e2c9ad05aec5
+Error Number:208,State:1,Class:16
+2025-06-29 14:28:01.811 -06:00 [ERR] Failed executing DbCommand (11ms) [Parameters=[@__id_0='2'], CommandType='"Text"', CommandTimeout='30']
+SELECT [s].[Id], [s].[CodigoDescuento], [s].[Direccion], [s].[Estado], [s].[Fecha], [s].[IdSeguimiento], [s].[imagenPersonalizada], [s].[Notas], [s].[NumeroFactura], [s].[Total], [s].[UsuarioId], [s].[Id0], [s].[Contrasena], [s].[Correo], [s].[Estado0], [s].[IDRol], [s].[Nombre], [s].[UltimoInicioSesion], [s0].[Id], [s0].[Cantidad], [s0].[Impuesto], [s0].[Observacion], [s0].[PedidoId], [s0].[PrecioUnitario], [s0].[ProductoId], [s0].[SubTotal], [s0].[Id0], [s0].[AnioPublicacion], [s0].[ClasificacionEdad], [s0].[Descripcion], [s0].[Editorial], [s0].[EsPersonalizable], [s0].[Estado], [s0].[idAutor], [s0].[Nombre], [s0].[Precio], [s0].[PromedioValoracion], [s0].[Stock], [p1].[Id], [p1].[CodigoAutorizacion], [p1].[descripcion], [p1].[FechaExpiracion], [p1].[FechaPago], [p1].[MetodoPago], [p1].[monto], [p1].[NombreTitular], [p1].[Numero], [p1].[PedidoId], [s2].[Id], [s2].[CostoBase], [s2].[PedidoId], [s2].[ProductoPersonalizadoId], [s2].[ProductoPersonalizadoId1], [s2].[TotalPersonalizado], [s2].[Id0], [s2].[CostoBase0], [s2].[Nombre], [s2].[TotalPersonalizado0], [s2].[Id1], [s2].[CostoOpcion], [s2].[CriterioId], [s2].[DetallePedidoPersonalizadoId], [s2].[DetallePersonalizadoId], [s2].[OpcionSeleccionada], [s2].[Id00], [s2].[Modificable], [s2].[NombreCriterio], [s2].[Obligatorio], [s2].[ProductoPersonalizadoId0]
+FROM (
+    SELECT TOP(1) [p].[Id], [p].[CodigoDescuento], [p].[Direccion], [p].[Estado], [p].[Fecha], [p].[IdSeguimiento], [p].[imagenPersonalizada], [p].[Notas], [p].[NumeroFactura], [p].[Total], [p].[UsuarioId], [u].[Id] AS [Id0], [u].[Contrasena], [u].[Correo], [u].[Estado] AS [Estado0], [u].[IDRol], [u].[Nombre], [u].[UltimoInicioSesion]
+    FROM [Pedidos] AS [p]
+    LEFT JOIN [Usuario] AS [u] ON [p].[UsuarioId] = [u].[Id]
+    WHERE [p].[Id] = @__id_0
+) AS [s]
+LEFT JOIN (
+    SELECT [d].[Id], [d].[Cantidad], [d].[Impuesto], [d].[Observacion], [d].[PedidoId], [d].[PrecioUnitario], [d].[ProductoId], [d].[SubTotal], [p0].[Id] AS [Id0], [p0].[AnioPublicacion], [p0].[ClasificacionEdad], [p0].[Descripcion], [p0].[Editorial], [p0].[EsPersonalizable], [p0].[Estado], [p0].[idAutor], [p0].[Nombre], [p0].[Precio], [p0].[PromedioValoracion], [p0].[Stock]
+    FROM [DetallePedido] AS [d]
+    LEFT JOIN [Productos] AS [p0] ON [d].[ProductoId] = [p0].[Id]
+) AS [s0] ON [s].[Id] = [s0].[PedidoId]
+LEFT JOIN [Pago] AS [p1] ON [s].[Id] = [p1].[PedidoId]
+LEFT JOIN (
+    SELECT [d0].[Id], [d0].[CostoBase], [d0].[PedidoId], [d0].[ProductoPersonalizadoId], [d0].[ProductoPersonalizadoId1], [d0].[TotalPersonalizado], [p2].[Id] AS [Id0], [p2].[CostoBase] AS [CostoBase0], [p2].[Nombre], [p2].[TotalPersonalizado] AS [TotalPersonalizado0], [s1].[Id] AS [Id1], [s1].[CostoOpcion], [s1].[CriterioId], [s1].[DetallePedidoPersonalizadoId], [s1].[DetallePersonalizadoId], [s1].[OpcionSeleccionada], [s1].[Id0] AS [Id00], [s1].[Modificable], [s1].[NombreCriterio], [s1].[Obligatorio], [s1].[ProductoPersonalizadoId] AS [ProductoPersonalizadoId0]
+    FROM [DetallePedidoPersonalizado] AS [d0]
+    INNER JOIN [ProductoPersonalizado] AS [p2] ON [d0].[ProductoPersonalizadoId] = [p2].[Id]
+    LEFT JOIN (
+        SELECT [d1].[Id], [d1].[CostoOpcion], [d1].[CriterioId], [d1].[DetallePedidoPersonalizadoId], [d1].[DetallePersonalizadoId], [d1].[OpcionSeleccionada], [c].[Id] AS [Id0], [c].[Modificable], [c].[NombreCriterio], [c].[Obligatorio], [c].[ProductoPersonalizadoId]
+        FROM [DetallePersonalizacionOpcion] AS [d1]
+        INNER JOIN [CriterioPersonalizacion] AS [c] ON [d1].[CriterioId] = [c].[Id]
+    ) AS [s1] ON [d0].[Id] = [s1].[DetallePedidoPersonalizadoId]
+) AS [s2] ON [s].[Id] = [s2].[PedidoId]
+ORDER BY [s].[Id], [s].[Id0], [s0].[Id], [s0].[Id0], [p1].[Id], [s2].[Id], [s2].[Id0], [s2].[Id1]
+2025-06-29 14:28:01.852 -06:00 [ERR] An exception occurred while iterating over the results of a query for context type 'CultureOnline.Infraestructure.Data.CultureOnlineContext'.
+Microsoft.Data.SqlClient.SqlException (0x80131904): Invalid object name 'DetallePedidoPersonalizado'.
+   at Microsoft.Data.SqlClient.SqlCommand.<>c.<ExecuteDbDataReaderAsync>b__211_0(Task`1 result)
+   at System.Threading.Tasks.ContinuationResultTaskFromResultTask`2.InnerInvoke()
+   at System.Threading.ExecutionContext.RunInternal(ExecutionContext executionContext, ContextCallback callback, Object state)
+--- End of stack trace from previous location ---
+   at System.Threading.ExecutionContext.RunInternal(ExecutionContext executionContext, ContextCallback callback, Object state)
+   at System.Threading.Tasks.Task.ExecuteWithThreadLocal(Task& currentTaskSlot, Thread threadPoolThread)
+--- End of stack trace from previous location ---
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.AsyncEnumerator.InitializeReaderAsync(AsyncEnumerator enumerator, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.SqlServer.Storage.Internal.SqlServerExecutionStrategy.ExecuteAsync[TState,TResult](TState state, Func`4 operation, Func`4 verifySucceeded, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.AsyncEnumerator.MoveNextAsync()
+ClientConnectionId:cf48f841-da19-46cf-8ba8-e2c9ad05aec5
+Error Number:208,State:1,Class:16
+Microsoft.Data.SqlClient.SqlException (0x80131904): Invalid object name 'DetallePedidoPersonalizado'.
+   at Microsoft.Data.SqlClient.SqlCommand.<>c.<ExecuteDbDataReaderAsync>b__211_0(Task`1 result)
+   at System.Threading.Tasks.ContinuationResultTaskFromResultTask`2.InnerInvoke()
+   at System.Threading.ExecutionContext.RunInternal(ExecutionContext executionContext, ContextCallback callback, Object state)
+--- End of stack trace from previous location ---
+   at System.Threading.ExecutionContext.RunInternal(ExecutionContext executionContext, ContextCallback callback, Object state)
+   at System.Threading.Tasks.Task.ExecuteWithThreadLocal(Task& currentTaskSlot, Thread threadPoolThread)
+--- End of stack trace from previous location ---
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.AsyncEnumerator.InitializeReaderAsync(AsyncEnumerator enumerator, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.SqlServer.Storage.Internal.SqlServerExecutionStrategy.ExecuteAsync[TState,TResult](TState state, Func`4 operation, Func`4 verifySucceeded, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.AsyncEnumerator.MoveNextAsync()
+ClientConnectionId:cf48f841-da19-46cf-8ba8-e2c9ad05aec5
+Error Number:208,State:1,Class:16
+2025-06-29 14:28:01.855 -06:00 [ERR] Failed executing DbCommand (6ms) [Parameters=[@__id_0='2'], CommandType='"Text"', CommandTimeout='30']
+SELECT [s].[Id], [s].[CodigoDescuento], [s].[Direccion], [s].[Estado], [s].[Fecha], [s].[IdSeguimiento], [s].[imagenPersonalizada], [s].[Notas], [s].[NumeroFactura], [s].[Total], [s].[UsuarioId], [s].[Id0], [s].[Contrasena], [s].[Correo], [s].[Estado0], [s].[IDRol], [s].[Nombre], [s].[UltimoInicioSesion], [s0].[Id], [s0].[Cantidad], [s0].[Impuesto], [s0].[Observacion], [s0].[PedidoId], [s0].[PrecioUnitario], [s0].[ProductoId], [s0].[SubTotal], [s0].[Id0], [s0].[AnioPublicacion], [s0].[ClasificacionEdad], [s0].[Descripcion], [s0].[Editorial], [s0].[EsPersonalizable], [s0].[Estado], [s0].[idAutor], [s0].[Nombre], [s0].[Precio], [s0].[PromedioValoracion], [s0].[Stock], [p1].[Id], [p1].[CodigoAutorizacion], [p1].[descripcion], [p1].[FechaExpiracion], [p1].[FechaPago], [p1].[MetodoPago], [p1].[monto], [p1].[NombreTitular], [p1].[Numero], [p1].[PedidoId], [s2].[Id], [s2].[CostoBase], [s2].[PedidoId], [s2].[ProductoPersonalizadoId], [s2].[ProductoPersonalizadoId1], [s2].[TotalPersonalizado], [s2].[Id0], [s2].[CostoBase0], [s2].[Nombre], [s2].[TotalPersonalizado0], [s2].[Id1], [s2].[CostoOpcion], [s2].[CriterioId], [s2].[DetallePedidoPersonalizadoId], [s2].[DetallePersonalizadoId], [s2].[OpcionSeleccionada], [s2].[Id00], [s2].[Modificable], [s2].[NombreCriterio], [s2].[Obligatorio], [s2].[ProductoPersonalizadoId0]
+FROM (
+    SELECT TOP(1) [p].[Id], [p].[CodigoDescuento], [p].[Direccion], [p].[Estado], [p].[Fecha], [p].[IdSeguimiento], [p].[imagenPersonalizada], [p].[Notas], [p].[NumeroFactura], [p].[Total], [p].[UsuarioId], [u].[Id] AS [Id0], [u].[Contrasena], [u].[Correo], [u].[Estado] AS [Estado0], [u].[IDRol], [u].[Nombre], [u].[UltimoInicioSesion]
+    FROM [Pedidos] AS [p]
+    LEFT JOIN [Usuario] AS [u] ON [p].[UsuarioId] = [u].[Id]
+    WHERE [p].[Id] = @__id_0
+) AS [s]
+LEFT JOIN (
+    SELECT [d].[Id], [d].[Cantidad], [d].[Impuesto], [d].[Observacion], [d].[PedidoId], [d].[PrecioUnitario], [d].[ProductoId], [d].[SubTotal], [p0].[Id] AS [Id0], [p0].[AnioPublicacion], [p0].[ClasificacionEdad], [p0].[Descripcion], [p0].[Editorial], [p0].[EsPersonalizable], [p0].[Estado], [p0].[idAutor], [p0].[Nombre], [p0].[Precio], [p0].[PromedioValoracion], [p0].[Stock]
+    FROM [DetallePedido] AS [d]
+    LEFT JOIN [Productos] AS [p0] ON [d].[ProductoId] = [p0].[Id]
+) AS [s0] ON [s].[Id] = [s0].[PedidoId]
+LEFT JOIN [Pago] AS [p1] ON [s].[Id] = [p1].[PedidoId]
+LEFT JOIN (
+    SELECT [d0].[Id], [d0].[CostoBase], [d0].[PedidoId], [d0].[ProductoPersonalizadoId], [d0].[ProductoPersonalizadoId1], [d0].[TotalPersonalizado], [p2].[Id] AS [Id0], [p2].[CostoBase] AS [CostoBase0], [p2].[Nombre], [p2].[TotalPersonalizado] AS [TotalPersonalizado0], [s1].[Id] AS [Id1], [s1].[CostoOpcion], [s1].[CriterioId], [s1].[DetallePedidoPersonalizadoId], [s1].[DetallePersonalizadoId], [s1].[OpcionSeleccionada], [s1].[Id0] AS [Id00], [s1].[Modificable], [s1].[NombreCriterio], [s1].[Obligatorio], [s1].[ProductoPersonalizadoId] AS [ProductoPersonalizadoId0]
+    FROM [DetallePedidoPersonalizado] AS [d0]
+    INNER JOIN [ProductoPersonalizado] AS [p2] ON [d0].[ProductoPersonalizadoId] = [p2].[Id]
+    LEFT JOIN (
+        SELECT [d1].[Id], [d1].[CostoOpcion], [d1].[CriterioId], [d1].[DetallePedidoPersonalizadoId], [d1].[DetallePersonalizadoId], [d1].[OpcionSeleccionada], [c].[Id] AS [Id0], [c].[Modificable], [c].[NombreCriterio], [c].[Obligatorio], [c].[ProductoPersonalizadoId]
+        FROM [DetallePersonalizacionOpcion] AS [d1]
+        INNER JOIN [CriterioPersonalizacion] AS [c] ON [d1].[CriterioId] = [c].[Id]
+    ) AS [s1] ON [d0].[Id] = [s1].[DetallePedidoPersonalizadoId]
+) AS [s2] ON [s].[Id] = [s2].[PedidoId]
+ORDER BY [s].[Id], [s].[Id0], [s0].[Id], [s0].[Id0], [p1].[Id], [s2].[Id], [s2].[Id0], [s2].[Id1]
+2025-06-29 14:32:14.321 -06:00 [ERR] Failed executing DbCommand (30ms) [Parameters=[@__id_0='3'], CommandType='"Text"', CommandTimeout='30']
+SELECT [s].[Id], [s].[CodigoDescuento], [s].[Direccion], [s].[Estado], [s].[Fecha], [s].[IdSeguimiento], [s].[imagenPersonalizada], [s].[Notas], [s].[NumeroFactura], [s].[Total], [s].[UsuarioId], [s].[Id0], [s].[Contrasena], [s].[Correo], [s].[Estado0], [s].[IDRol], [s].[Nombre], [s].[UltimoInicioSesion], [s0].[Id], [s0].[Cantidad], [s0].[Impuesto], [s0].[Observacion], [s0].[PedidoId], [s0].[PrecioUnitario], [s0].[ProductoId], [s0].[SubTotal], [s0].[Id0], [s0].[AnioPublicacion], [s0].[ClasificacionEdad], [s0].[Descripcion], [s0].[Editorial], [s0].[EsPersonalizable], [s0].[Estado], [s0].[idAutor], [s0].[Nombre], [s0].[Precio], [s0].[PromedioValoracion], [s0].[Stock], [p1].[Id], [p1].[CodigoAutorizacion], [p1].[descripcion], [p1].[FechaExpiracion], [p1].[FechaPago], [p1].[MetodoPago], [p1].[monto], [p1].[NombreTitular], [p1].[Numero], [p1].[PedidoId], [s2].[Id], [s2].[CostoBase], [s2].[PedidoId], [s2].[ProductoPersonalizadoId], [s2].[ProductoPersonalizadoId1], [s2].[TotalPersonalizado], [s2].[Id0], [s2].[CostoBase0], [s2].[Nombre], [s2].[TotalPersonalizado0], [s2].[Id1], [s2].[CostoOpcion], [s2].[CriterioId], [s2].[DetallePedidoPersonalizadoId], [s2].[DetallePersonalizadoId], [s2].[OpcionSeleccionada], [s2].[Id00], [s2].[Modificable], [s2].[NombreCriterio], [s2].[Obligatorio], [s2].[ProductoPersonalizadoId0]
+FROM (
+    SELECT TOP(1) [p].[Id], [p].[CodigoDescuento], [p].[Direccion], [p].[Estado], [p].[Fecha], [p].[IdSeguimiento], [p].[imagenPersonalizada], [p].[Notas], [p].[NumeroFactura], [p].[Total], [p].[UsuarioId], [u].[Id] AS [Id0], [u].[Contrasena], [u].[Correo], [u].[Estado] AS [Estado0], [u].[IDRol], [u].[Nombre], [u].[UltimoInicioSesion]
+    FROM [Pedidos] AS [p]
+    LEFT JOIN [Usuario] AS [u] ON [p].[UsuarioId] = [u].[Id]
+    WHERE [p].[Id] = @__id_0
+) AS [s]
+LEFT JOIN (
+    SELECT [d].[Id], [d].[Cantidad], [d].[Impuesto], [d].[Observacion], [d].[PedidoId], [d].[PrecioUnitario], [d].[ProductoId], [d].[SubTotal], [p0].[Id] AS [Id0], [p0].[AnioPublicacion], [p0].[ClasificacionEdad], [p0].[Descripcion], [p0].[Editorial], [p0].[EsPersonalizable], [p0].[Estado], [p0].[idAutor], [p0].[Nombre], [p0].[Precio], [p0].[PromedioValoracion], [p0].[Stock]
+    FROM [DetallePedido] AS [d]
+    LEFT JOIN [Productos] AS [p0] ON [d].[ProductoId] = [p0].[Id]
+) AS [s0] ON [s].[Id] = [s0].[PedidoId]
+LEFT JOIN [Pago] AS [p1] ON [s].[Id] = [p1].[PedidoId]
+LEFT JOIN (
+    SELECT [d0].[Id], [d0].[CostoBase], [d0].[PedidoId], [d0].[ProductoPersonalizadoId], [d0].[ProductoPersonalizadoId1], [d0].[TotalPersonalizado], [p2].[Id] AS [Id0], [p2].[CostoBase] AS [CostoBase0], [p2].[Nombre], [p2].[TotalPersonalizado] AS [TotalPersonalizado0], [s1].[Id] AS [Id1], [s1].[CostoOpcion], [s1].[CriterioId], [s1].[DetallePedidoPersonalizadoId], [s1].[DetallePersonalizadoId], [s1].[OpcionSeleccionada], [s1].[Id0] AS [Id00], [s1].[Modificable], [s1].[NombreCriterio], [s1].[Obligatorio], [s1].[ProductoPersonalizadoId] AS [ProductoPersonalizadoId0]
+    FROM [detalle_pedido_personalizados] AS [d0]
+    INNER JOIN [ProductoPersonalizado] AS [p2] ON [d0].[ProductoPersonalizadoId] = [p2].[Id]
+    LEFT JOIN (
+        SELECT [d1].[Id], [d1].[CostoOpcion], [d1].[CriterioId], [d1].[DetallePedidoPersonalizadoId], [d1].[DetallePersonalizadoId], [d1].[OpcionSeleccionada], [c].[Id] AS [Id0], [c].[Modificable], [c].[NombreCriterio], [c].[Obligatorio], [c].[ProductoPersonalizadoId]
+        FROM [DetallePersonalizacionOpcion] AS [d1]
+        INNER JOIN [CriterioPersonalizacion] AS [c] ON [d1].[CriterioId] = [c].[Id]
+    ) AS [s1] ON [d0].[Id] = [s1].[DetallePedidoPersonalizadoId]
+) AS [s2] ON [s].[Id] = [s2].[PedidoId]
+ORDER BY [s].[Id], [s].[Id0], [s0].[Id], [s0].[Id0], [p1].[Id], [s2].[Id], [s2].[Id0], [s2].[Id1]
+2025-06-29 14:32:14.387 -06:00 [ERR] An exception occurred while iterating over the results of a query for context type 'CultureOnline.Infraestructure.Data.CultureOnlineContext'.
+Microsoft.Data.SqlClient.SqlException (0x80131904): Invalid object name 'ProductoPersonalizado'.
+   at Microsoft.Data.SqlClient.SqlCommand.<>c.<ExecuteDbDataReaderAsync>b__211_0(Task`1 result)
+   at System.Threading.Tasks.ContinuationResultTaskFromResultTask`2.InnerInvoke()
+   at System.Threading.ExecutionContext.RunInternal(ExecutionContext executionContext, ContextCallback callback, Object state)
+--- End of stack trace from previous location ---
+   at System.Threading.ExecutionContext.RunInternal(ExecutionContext executionContext, ContextCallback callback, Object state)
+   at System.Threading.Tasks.Task.ExecuteWithThreadLocal(Task& currentTaskSlot, Thread threadPoolThread)
+--- End of stack trace from previous location ---
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.AsyncEnumerator.InitializeReaderAsync(AsyncEnumerator enumerator, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.SqlServer.Storage.Internal.SqlServerExecutionStrategy.ExecuteAsync[TState,TResult](TState state, Func`4 operation, Func`4 verifySucceeded, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.AsyncEnumerator.MoveNextAsync()
+ClientConnectionId:7fb1dc41-3ced-4450-bc46-5fedbb277fb1
+Error Number:208,State:1,Class:16
+Microsoft.Data.SqlClient.SqlException (0x80131904): Invalid object name 'ProductoPersonalizado'.
+   at Microsoft.Data.SqlClient.SqlCommand.<>c.<ExecuteDbDataReaderAsync>b__211_0(Task`1 result)
+   at System.Threading.Tasks.ContinuationResultTaskFromResultTask`2.InnerInvoke()
+   at System.Threading.ExecutionContext.RunInternal(ExecutionContext executionContext, ContextCallback callback, Object state)
+--- End of stack trace from previous location ---
+   at System.Threading.ExecutionContext.RunInternal(ExecutionContext executionContext, ContextCallback callback, Object state)
+   at System.Threading.Tasks.Task.ExecuteWithThreadLocal(Task& currentTaskSlot, Thread threadPoolThread)
+--- End of stack trace from previous location ---
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.AsyncEnumerator.InitializeReaderAsync(AsyncEnumerator enumerator, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.SqlServer.Storage.Internal.SqlServerExecutionStrategy.ExecuteAsync[TState,TResult](TState state, Func`4 operation, Func`4 verifySucceeded, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.AsyncEnumerator.MoveNextAsync()
+ClientConnectionId:7fb1dc41-3ced-4450-bc46-5fedbb277fb1
+Error Number:208,State:1,Class:16
+2025-06-29 14:33:22.445 -06:00 [ERR] Failed executing DbCommand (30ms) [Parameters=[@__id_0='3'], CommandType='"Text"', CommandTimeout='30']
+SELECT [s].[Id], [s].[CodigoDescuento], [s].[Direccion], [s].[Estado], [s].[Fecha], [s].[IdSeguimiento], [s].[imagenPersonalizada], [s].[Notas], [s].[NumeroFactura], [s].[Total], [s].[UsuarioId], [s].[Id0], [s].[Contrasena], [s].[Correo], [s].[Estado0], [s].[IDRol], [s].[Nombre], [s].[UltimoInicioSesion], [s0].[Id], [s0].[Cantidad], [s0].[Impuesto], [s0].[Observacion], [s0].[PedidoId], [s0].[PrecioUnitario], [s0].[ProductoId], [s0].[SubTotal], [s0].[Id0], [s0].[AnioPublicacion], [s0].[ClasificacionEdad], [s0].[Descripcion], [s0].[Editorial], [s0].[EsPersonalizable], [s0].[Estado], [s0].[idAutor], [s0].[Nombre], [s0].[Precio], [s0].[PromedioValoracion], [s0].[Stock], [p1].[Id], [p1].[CodigoAutorizacion], [p1].[descripcion], [p1].[FechaExpiracion], [p1].[FechaPago], [p1].[MetodoPago], [p1].[monto], [p1].[NombreTitular], [p1].[Numero], [p1].[PedidoId], [s2].[Id], [s2].[CostoBase], [s2].[PedidoId], [s2].[ProductoPersonalizadoId], [s2].[ProductoPersonalizadoId1], [s2].[TotalPersonalizado], [s2].[Id0], [s2].[CostoBase0], [s2].[Nombre], [s2].[TotalPersonalizado0], [s2].[Id1], [s2].[CostoOpcion], [s2].[CriterioId], [s2].[DetallePedidoPersonalizadoId], [s2].[DetallePersonalizadoId], [s2].[OpcionSeleccionada], [s2].[Id00], [s2].[Modificable], [s2].[NombreCriterio], [s2].[Obligatorio], [s2].[ProductoPersonalizadoId0]
+FROM (
+    SELECT TOP(1) [p].[Id], [p].[CodigoDescuento], [p].[Direccion], [p].[Estado], [p].[Fecha], [p].[IdSeguimiento], [p].[imagenPersonalizada], [p].[Notas], [p].[NumeroFactura], [p].[Total], [p].[UsuarioId], [u].[Id] AS [Id0], [u].[Contrasena], [u].[Correo], [u].[Estado] AS [Estado0], [u].[IDRol], [u].[Nombre], [u].[UltimoInicioSesion]
+    FROM [Pedidos] AS [p]
+    LEFT JOIN [Usuario] AS [u] ON [p].[UsuarioId] = [u].[Id]
+    WHERE [p].[Id] = @__id_0
+) AS [s]
+LEFT JOIN (
+    SELECT [d].[Id], [d].[Cantidad], [d].[Impuesto], [d].[Observacion], [d].[PedidoId], [d].[PrecioUnitario], [d].[ProductoId], [d].[SubTotal], [p0].[Id] AS [Id0], [p0].[AnioPublicacion], [p0].[ClasificacionEdad], [p0].[Descripcion], [p0].[Editorial], [p0].[EsPersonalizable], [p0].[Estado], [p0].[idAutor], [p0].[Nombre], [p0].[Precio], [p0].[PromedioValoracion], [p0].[Stock]
+    FROM [DetallePedido] AS [d]
+    LEFT JOIN [Productos] AS [p0] ON [d].[ProductoId] = [p0].[Id]
+) AS [s0] ON [s].[Id] = [s0].[PedidoId]
+LEFT JOIN [Pago] AS [p1] ON [s].[Id] = [p1].[PedidoId]
+LEFT JOIN (
+    SELECT [d0].[Id], [d0].[CostoBase], [d0].[PedidoId], [d0].[ProductoPersonalizadoId], [d0].[ProductoPersonalizadoId1], [d0].[TotalPersonalizado], [p2].[Id] AS [Id0], [p2].[CostoBase] AS [CostoBase0], [p2].[Nombre], [p2].[TotalPersonalizado] AS [TotalPersonalizado0], [s1].[Id] AS [Id1], [s1].[CostoOpcion], [s1].[CriterioId], [s1].[DetallePedidoPersonalizadoId], [s1].[DetallePersonalizadoId], [s1].[OpcionSeleccionada], [s1].[Id0] AS [Id00], [s1].[Modificable], [s1].[NombreCriterio], [s1].[Obligatorio], [s1].[ProductoPersonalizadoId] AS [ProductoPersonalizadoId0]
+    FROM [detalle_pedido_personalizados] AS [d0]
+    INNER JOIN [ProductoPersonalizado] AS [p2] ON [d0].[ProductoPersonalizadoId] = [p2].[Id]
+    LEFT JOIN (
+        SELECT [d1].[Id], [d1].[CostoOpcion], [d1].[CriterioId], [d1].[DetallePedidoPersonalizadoId], [d1].[DetallePersonalizadoId], [d1].[OpcionSeleccionada], [c].[Id] AS [Id0], [c].[Modificable], [c].[NombreCriterio], [c].[Obligatorio], [c].[ProductoPersonalizadoId]
+        FROM [DetallePersonalizacionOpcion] AS [d1]
+        INNER JOIN [CriterioPersonalizacion] AS [c] ON [d1].[CriterioId] = [c].[Id]
+    ) AS [s1] ON [d0].[Id] = [s1].[DetallePedidoPersonalizadoId]
+) AS [s2] ON [s].[Id] = [s2].[PedidoId]
+ORDER BY [s].[Id], [s].[Id0], [s0].[Id], [s0].[Id0], [p1].[Id], [s2].[Id], [s2].[Id0], [s2].[Id1]
+2025-06-29 14:33:22.524 -06:00 [ERR] An exception occurred while iterating over the results of a query for context type 'CultureOnline.Infraestructure.Data.CultureOnlineContext'.
+Microsoft.Data.SqlClient.SqlException (0x80131904): Invalid object name 'ProductoPersonalizado'.
+   at Microsoft.Data.SqlClient.SqlCommand.<>c.<ExecuteDbDataReaderAsync>b__211_0(Task`1 result)
+   at System.Threading.Tasks.ContinuationResultTaskFromResultTask`2.InnerInvoke()
+   at System.Threading.ExecutionContext.RunInternal(ExecutionContext executionContext, ContextCallback callback, Object state)
+--- End of stack trace from previous location ---
+   at System.Threading.ExecutionContext.RunInternal(ExecutionContext executionContext, ContextCallback callback, Object state)
+   at System.Threading.Tasks.Task.ExecuteWithThreadLocal(Task& currentTaskSlot, Thread threadPoolThread)
+--- End of stack trace from previous location ---
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.AsyncEnumerator.InitializeReaderAsync(AsyncEnumerator enumerator, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.SqlServer.Storage.Internal.SqlServerExecutionStrategy.ExecuteAsync[TState,TResult](TState state, Func`4 operation, Func`4 verifySucceeded, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.AsyncEnumerator.MoveNextAsync()
+ClientConnectionId:0c88272d-8c52-46d6-8a42-43b13a1e717e
+Error Number:208,State:1,Class:16
+Microsoft.Data.SqlClient.SqlException (0x80131904): Invalid object name 'ProductoPersonalizado'.
+   at Microsoft.Data.SqlClient.SqlCommand.<>c.<ExecuteDbDataReaderAsync>b__211_0(Task`1 result)
+   at System.Threading.Tasks.ContinuationResultTaskFromResultTask`2.InnerInvoke()
+   at System.Threading.ExecutionContext.RunInternal(ExecutionContext executionContext, ContextCallback callback, Object state)
+--- End of stack trace from previous location ---
+   at System.Threading.ExecutionContext.RunInternal(ExecutionContext executionContext, ContextCallback callback, Object state)
+   at System.Threading.Tasks.Task.ExecuteWithThreadLocal(Task& currentTaskSlot, Thread threadPoolThread)
+--- End of stack trace from previous location ---
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.AsyncEnumerator.InitializeReaderAsync(AsyncEnumerator enumerator, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.SqlServer.Storage.Internal.SqlServerExecutionStrategy.ExecuteAsync[TState,TResult](TState state, Func`4 operation, Func`4 verifySucceeded, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.AsyncEnumerator.MoveNextAsync()
+ClientConnectionId:0c88272d-8c52-46d6-8a42-43b13a1e717e
+Error Number:208,State:1,Class:16
+2025-06-29 14:35:21.457 -06:00 [ERR] Failed executing DbCommand (33ms) [Parameters=[@__id_0='3'], CommandType='"Text"', CommandTimeout='30']
+SELECT [s].[Id], [s].[CodigoDescuento], [s].[Direccion], [s].[Estado], [s].[Fecha], [s].[IdSeguimiento], [s].[imagenPersonalizada], [s].[Notas], [s].[NumeroFactura], [s].[Total], [s].[UsuarioId], [s].[Id0], [s].[Contrasena], [s].[Correo], [s].[Estado0], [s].[IDRol], [s].[Nombre], [s].[UltimoInicioSesion], [s0].[Id], [s0].[Cantidad], [s0].[Impuesto], [s0].[Observacion], [s0].[PedidoId], [s0].[PrecioUnitario], [s0].[ProductoId], [s0].[SubTotal], [s0].[Id0], [s0].[AnioPublicacion], [s0].[ClasificacionEdad], [s0].[Descripcion], [s0].[Editorial], [s0].[EsPersonalizable], [s0].[Estado], [s0].[idAutor], [s0].[Nombre], [s0].[Precio], [s0].[PromedioValoracion], [s0].[Stock], [p1].[Id], [p1].[CodigoAutorizacion], [p1].[descripcion], [p1].[FechaExpiracion], [p1].[FechaPago], [p1].[MetodoPago], [p1].[monto], [p1].[NombreTitular], [p1].[Numero], [p1].[PedidoId], [s2].[Id], [s2].[CostoBase], [s2].[PedidoId], [s2].[ProductoPersonalizadoId], [s2].[ProductoPersonalizadoId1], [s2].[TotalPersonalizado], [s2].[Id0], [s2].[CostoBase0], [s2].[Nombre], [s2].[TotalPersonalizado0], [s2].[Id1], [s2].[CostoOpcion], [s2].[CriterioId], [s2].[DetallePedidoPersonalizadoId], [s2].[DetallePersonalizadoId], [s2].[OpcionSeleccionada], [s2].[Id00], [s2].[Modificable], [s2].[NombreCriterio], [s2].[Obligatorio], [s2].[ProductoPersonalizadoId0]
+FROM (
+    SELECT TOP(1) [p].[Id], [p].[CodigoDescuento], [p].[Direccion], [p].[Estado], [p].[Fecha], [p].[IdSeguimiento], [p].[imagenPersonalizada], [p].[Notas], [p].[NumeroFactura], [p].[Total], [p].[UsuarioId], [u].[Id] AS [Id0], [u].[Contrasena], [u].[Correo], [u].[Estado] AS [Estado0], [u].[IDRol], [u].[Nombre], [u].[UltimoInicioSesion]
+    FROM [Pedidos] AS [p]
+    LEFT JOIN [Usuario] AS [u] ON [p].[UsuarioId] = [u].[Id]
+    WHERE [p].[Id] = @__id_0
+) AS [s]
+LEFT JOIN (
+    SELECT [d].[Id], [d].[Cantidad], [d].[Impuesto], [d].[Observacion], [d].[PedidoId], [d].[PrecioUnitario], [d].[ProductoId], [d].[SubTotal], [p0].[Id] AS [Id0], [p0].[AnioPublicacion], [p0].[ClasificacionEdad], [p0].[Descripcion], [p0].[Editorial], [p0].[EsPersonalizable], [p0].[Estado], [p0].[idAutor], [p0].[Nombre], [p0].[Precio], [p0].[PromedioValoracion], [p0].[Stock]
+    FROM [DetallePedido] AS [d]
+    LEFT JOIN [Productos] AS [p0] ON [d].[ProductoId] = [p0].[Id]
+) AS [s0] ON [s].[Id] = [s0].[PedidoId]
+LEFT JOIN [Pago] AS [p1] ON [s].[Id] = [p1].[PedidoId]
+LEFT JOIN (
+    SELECT [d0].[Id], [d0].[CostoBase], [d0].[PedidoId], [d0].[ProductoPersonalizadoId], [d0].[ProductoPersonalizadoId1], [d0].[TotalPersonalizado], [p2].[Id] AS [Id0], [p2].[CostoBase] AS [CostoBase0], [p2].[Nombre], [p2].[TotalPersonalizado] AS [TotalPersonalizado0], [s1].[Id] AS [Id1], [s1].[CostoOpcion], [s1].[CriterioId], [s1].[DetallePedidoPersonalizadoId], [s1].[DetallePersonalizadoId], [s1].[OpcionSeleccionada], [s1].[Id0] AS [Id00], [s1].[Modificable], [s1].[NombreCriterio], [s1].[Obligatorio], [s1].[ProductoPersonalizadoId] AS [ProductoPersonalizadoId0]
+    FROM [detalle_pedido_personalizados] AS [d0]
+    INNER JOIN [productos_personalizados] AS [p2] ON [d0].[ProductoPersonalizadoId] = [p2].[Id]
+    LEFT JOIN (
+        SELECT [d1].[Id], [d1].[CostoOpcion], [d1].[CriterioId], [d1].[DetallePedidoPersonalizadoId], [d1].[DetallePersonalizadoId], [d1].[OpcionSeleccionada], [c].[Id] AS [Id0], [c].[Modificable], [c].[NombreCriterio], [c].[Obligatorio], [c].[ProductoPersonalizadoId]
+        FROM [DetallePersonalizacionOpcion] AS [d1]
+        INNER JOIN [CriterioPersonalizacion] AS [c] ON [d1].[CriterioId] = [c].[Id]
+    ) AS [s1] ON [d0].[Id] = [s1].[DetallePedidoPersonalizadoId]
+) AS [s2] ON [s].[Id] = [s2].[PedidoId]
+ORDER BY [s].[Id], [s].[Id0], [s0].[Id], [s0].[Id0], [p1].[Id], [s2].[Id], [s2].[Id0], [s2].[Id1]
+2025-06-29 14:35:21.554 -06:00 [ERR] An exception occurred while iterating over the results of a query for context type 'CultureOnline.Infraestructure.Data.CultureOnlineContext'.
+Microsoft.Data.SqlClient.SqlException (0x80131904): Invalid column name 'ProductoPersonalizadoId'.
+   at Microsoft.Data.SqlClient.SqlCommand.<>c.<ExecuteDbDataReaderAsync>b__211_0(Task`1 result)
+   at System.Threading.Tasks.ContinuationResultTaskFromResultTask`2.InnerInvoke()
+   at System.Threading.ExecutionContext.RunInternal(ExecutionContext executionContext, ContextCallback callback, Object state)
+--- End of stack trace from previous location ---
+   at System.Threading.ExecutionContext.RunInternal(ExecutionContext executionContext, ContextCallback callback, Object state)
+   at System.Threading.Tasks.Task.ExecuteWithThreadLocal(Task& currentTaskSlot, Thread threadPoolThread)
+--- End of stack trace from previous location ---
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.AsyncEnumerator.InitializeReaderAsync(AsyncEnumerator enumerator, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.SqlServer.Storage.Internal.SqlServerExecutionStrategy.ExecuteAsync[TState,TResult](TState state, Func`4 operation, Func`4 verifySucceeded, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.AsyncEnumerator.MoveNextAsync()
+ClientConnectionId:10d95a3a-39e5-4d1b-8c6d-4269da5de28f
+Error Number:207,State:1,Class:16
+Microsoft.Data.SqlClient.SqlException (0x80131904): Invalid column name 'ProductoPersonalizadoId'.
+   at Microsoft.Data.SqlClient.SqlCommand.<>c.<ExecuteDbDataReaderAsync>b__211_0(Task`1 result)
+   at System.Threading.Tasks.ContinuationResultTaskFromResultTask`2.InnerInvoke()
+   at System.Threading.ExecutionContext.RunInternal(ExecutionContext executionContext, ContextCallback callback, Object state)
+--- End of stack trace from previous location ---
+   at System.Threading.ExecutionContext.RunInternal(ExecutionContext executionContext, ContextCallback callback, Object state)
+   at System.Threading.Tasks.Task.ExecuteWithThreadLocal(Task& currentTaskSlot, Thread threadPoolThread)
+--- End of stack trace from previous location ---
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.AsyncEnumerator.InitializeReaderAsync(AsyncEnumerator enumerator, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.SqlServer.Storage.Internal.SqlServerExecutionStrategy.ExecuteAsync[TState,TResult](TState state, Func`4 operation, Func`4 verifySucceeded, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.AsyncEnumerator.MoveNextAsync()
+ClientConnectionId:10d95a3a-39e5-4d1b-8c6d-4269da5de28f
+Error Number:207,State:1,Class:16
+2025-06-29 14:38:45.415 -06:00 [ERR] Failed executing DbCommand (36ms) [Parameters=[@__id_0='3'], CommandType='"Text"', CommandTimeout='30']
+SELECT [s].[Id], [s].[CodigoDescuento], [s].[Direccion], [s].[Estado], [s].[Fecha], [s].[IdSeguimiento], [s].[imagenPersonalizada], [s].[Notas], [s].[NumeroFactura], [s].[Total], [s].[UsuarioId], [s].[Id0], [s].[Contrasena], [s].[Correo], [s].[Estado0], [s].[IDRol], [s].[Nombre], [s].[UltimoInicioSesion], [s0].[Id], [s0].[Cantidad], [s0].[Impuesto], [s0].[Observacion], [s0].[PedidoId], [s0].[PrecioUnitario], [s0].[ProductoId], [s0].[SubTotal], [s0].[Id0], [s0].[AnioPublicacion], [s0].[ClasificacionEdad], [s0].[Descripcion], [s0].[Editorial], [s0].[EsPersonalizable], [s0].[Estado], [s0].[idAutor], [s0].[Nombre], [s0].[Precio], [s0].[PromedioValoracion], [s0].[Stock], [p1].[Id], [p1].[CodigoAutorizacion], [p1].[descripcion], [p1].[FechaExpiracion], [p1].[FechaPago], [p1].[MetodoPago], [p1].[monto], [p1].[NombreTitular], [p1].[Numero], [p1].[PedidoId], [s2].[Id], [s2].[CostoBase], [s2].[PedidoId], [s2].[producto_personalizado_id], [s2].[ProductoPersonalizadoId1], [s2].[TotalPersonalizado], [s2].[Id0], [s2].[CostoBase0], [s2].[Nombre], [s2].[TotalPersonalizado0], [s2].[Id1], [s2].[CostoOpcion], [s2].[CriterioId], [s2].[DetallePedidoPersonalizadoId], [s2].[DetallePersonalizadoId], [s2].[OpcionSeleccionada], [s2].[Id00], [s2].[Modificable], [s2].[NombreCriterio], [s2].[Obligatorio], [s2].[ProductoPersonalizadoId]
+FROM (
+    SELECT TOP(1) [p].[Id], [p].[CodigoDescuento], [p].[Direccion], [p].[Estado], [p].[Fecha], [p].[IdSeguimiento], [p].[imagenPersonalizada], [p].[Notas], [p].[NumeroFactura], [p].[Total], [p].[UsuarioId], [u].[Id] AS [Id0], [u].[Contrasena], [u].[Correo], [u].[Estado] AS [Estado0], [u].[IDRol], [u].[Nombre], [u].[UltimoInicioSesion]
+    FROM [Pedidos] AS [p]
+    LEFT JOIN [Usuario] AS [u] ON [p].[UsuarioId] = [u].[Id]
+    WHERE [p].[Id] = @__id_0
+) AS [s]
+LEFT JOIN (
+    SELECT [d].[Id], [d].[Cantidad], [d].[Impuesto], [d].[Observacion], [d].[PedidoId], [d].[PrecioUnitario], [d].[ProductoId], [d].[SubTotal], [p0].[Id] AS [Id0], [p0].[AnioPublicacion], [p0].[ClasificacionEdad], [p0].[Descripcion], [p0].[Editorial], [p0].[EsPersonalizable], [p0].[Estado], [p0].[idAutor], [p0].[Nombre], [p0].[Precio], [p0].[PromedioValoracion], [p0].[Stock]
+    FROM [DetallePedido] AS [d]
+    LEFT JOIN [Productos] AS [p0] ON [d].[ProductoId] = [p0].[Id]
+) AS [s0] ON [s].[Id] = [s0].[PedidoId]
+LEFT JOIN [Pago] AS [p1] ON [s].[Id] = [p1].[PedidoId]
+LEFT JOIN (
+    SELECT [d0].[Id], [d0].[CostoBase], [d0].[PedidoId], [d0].[producto_personalizado_id], [d0].[ProductoPersonalizadoId1], [d0].[TotalPersonalizado], [p2].[Id] AS [Id0], [p2].[CostoBase] AS [CostoBase0], [p2].[Nombre], [p2].[TotalPersonalizado] AS [TotalPersonalizado0], [s1].[Id] AS [Id1], [s1].[CostoOpcion], [s1].[CriterioId], [s1].[DetallePedidoPersonalizadoId], [s1].[DetallePersonalizadoId], [s1].[OpcionSeleccionada], [s1].[Id0] AS [Id00], [s1].[Modificable], [s1].[NombreCriterio], [s1].[Obligatorio], [s1].[ProductoPersonalizadoId]
+    FROM [detalle_pedido_personalizados] AS [d0]
+    INNER JOIN [productos_personalizados] AS [p2] ON [d0].[producto_personalizado_id] = [p2].[Id]
+    LEFT JOIN (
+        SELECT [d1].[Id], [d1].[CostoOpcion], [d1].[CriterioId], [d1].[DetallePedidoPersonalizadoId], [d1].[DetallePersonalizadoId], [d1].[OpcionSeleccionada], [c].[Id] AS [Id0], [c].[Modificable], [c].[NombreCriterio], [c].[Obligatorio], [c].[ProductoPersonalizadoId]
+        FROM [DetallePersonalizacionOpcion] AS [d1]
+        INNER JOIN [CriterioPersonalizacion] AS [c] ON [d1].[CriterioId] = [c].[Id]
+    ) AS [s1] ON [d0].[Id] = [s1].[DetallePedidoPersonalizadoId]
+) AS [s2] ON [s].[Id] = [s2].[PedidoId]
+ORDER BY [s].[Id], [s].[Id0], [s0].[Id], [s0].[Id0], [p1].[Id], [s2].[Id], [s2].[Id0], [s2].[Id1]
+2025-06-29 14:38:45.508 -06:00 [ERR] An exception occurred while iterating over the results of a query for context type 'CultureOnline.Infraestructure.Data.CultureOnlineContext'.
+Microsoft.Data.SqlClient.SqlException (0x80131904): Invalid object name 'DetallePersonalizacionOpcion'.
+   at Microsoft.Data.SqlClient.SqlCommand.<>c.<ExecuteDbDataReaderAsync>b__211_0(Task`1 result)
+   at System.Threading.Tasks.ContinuationResultTaskFromResultTask`2.InnerInvoke()
+   at System.Threading.ExecutionContext.RunInternal(ExecutionContext executionContext, ContextCallback callback, Object state)
+--- End of stack trace from previous location ---
+   at System.Threading.ExecutionContext.RunInternal(ExecutionContext executionContext, ContextCallback callback, Object state)
+   at System.Threading.Tasks.Task.ExecuteWithThreadLocal(Task& currentTaskSlot, Thread threadPoolThread)
+--- End of stack trace from previous location ---
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.AsyncEnumerator.InitializeReaderAsync(AsyncEnumerator enumerator, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.SqlServer.Storage.Internal.SqlServerExecutionStrategy.ExecuteAsync[TState,TResult](TState state, Func`4 operation, Func`4 verifySucceeded, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.AsyncEnumerator.MoveNextAsync()
+ClientConnectionId:0022da0b-bcd9-4768-852e-d4eff8755cd7
+Error Number:208,State:1,Class:16
+Microsoft.Data.SqlClient.SqlException (0x80131904): Invalid object name 'DetallePersonalizacionOpcion'.
+   at Microsoft.Data.SqlClient.SqlCommand.<>c.<ExecuteDbDataReaderAsync>b__211_0(Task`1 result)
+   at System.Threading.Tasks.ContinuationResultTaskFromResultTask`2.InnerInvoke()
+   at System.Threading.ExecutionContext.RunInternal(ExecutionContext executionContext, ContextCallback callback, Object state)
+--- End of stack trace from previous location ---
+   at System.Threading.ExecutionContext.RunInternal(ExecutionContext executionContext, ContextCallback callback, Object state)
+   at System.Threading.Tasks.Task.ExecuteWithThreadLocal(Task& currentTaskSlot, Thread threadPoolThread)
+--- End of stack trace from previous location ---
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.AsyncEnumerator.InitializeReaderAsync(AsyncEnumerator enumerator, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.SqlServer.Storage.Internal.SqlServerExecutionStrategy.ExecuteAsync[TState,TResult](TState state, Func`4 operation, Func`4 verifySucceeded, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.AsyncEnumerator.MoveNextAsync()
+ClientConnectionId:0022da0b-bcd9-4768-852e-d4eff8755cd7
+Error Number:208,State:1,Class:16
+2025-06-29 14:42:40.306 -06:00 [ERR] Failed executing DbCommand (32ms) [Parameters=[@__id_0='3'], CommandType='"Text"', CommandTimeout='30']
+SELECT [s].[Id], [s].[CodigoDescuento], [s].[Direccion], [s].[Estado], [s].[Fecha], [s].[IdSeguimiento], [s].[imagenPersonalizada], [s].[Notas], [s].[NumeroFactura], [s].[Total], [s].[UsuarioId], [s].[Id0], [s].[Contrasena], [s].[Correo], [s].[Estado0], [s].[IDRol], [s].[Nombre], [s].[UltimoInicioSesion], [s0].[Id], [s0].[Cantidad], [s0].[Impuesto], [s0].[Observacion], [s0].[PedidoId], [s0].[PrecioUnitario], [s0].[ProductoId], [s0].[SubTotal], [s0].[Id0], [s0].[AnioPublicacion], [s0].[ClasificacionEdad], [s0].[Descripcion], [s0].[Editorial], [s0].[EsPersonalizable], [s0].[Estado], [s0].[idAutor], [s0].[Nombre], [s0].[Precio], [s0].[PromedioValoracion], [s0].[Stock], [p1].[Id], [p1].[CodigoAutorizacion], [p1].[descripcion], [p1].[FechaExpiracion], [p1].[FechaPago], [p1].[MetodoPago], [p1].[monto], [p1].[NombreTitular], [p1].[Numero], [p1].[PedidoId], [s2].[Id], [s2].[CostoBase], [s2].[PedidoId], [s2].[producto_personalizado_id], [s2].[ProductoPersonalizadoId1], [s2].[TotalPersonalizado], [s2].[Id0], [s2].[CostoBase0], [s2].[Nombre], [s2].[TotalPersonalizado0], [s2].[id1], [s2].[costo_opcion], [s2].[criterio_id], [s2].[CriterioPersonalizacionId], [s2].[detalle_personalizado_id], [s2].[opcion_seleccionada], [s2].[Id00], [s2].[Modificable], [s2].[NombreCriterio], [s2].[Obligatorio], [s2].[ProductoPersonalizadoId]
+FROM (
+    SELECT TOP(1) [p].[Id], [p].[CodigoDescuento], [p].[Direccion], [p].[Estado], [p].[Fecha], [p].[IdSeguimiento], [p].[imagenPersonalizada], [p].[Notas], [p].[NumeroFactura], [p].[Total], [p].[UsuarioId], [u].[Id] AS [Id0], [u].[Contrasena], [u].[Correo], [u].[Estado] AS [Estado0], [u].[IDRol], [u].[Nombre], [u].[UltimoInicioSesion]
+    FROM [Pedidos] AS [p]
+    LEFT JOIN [Usuario] AS [u] ON [p].[UsuarioId] = [u].[Id]
+    WHERE [p].[Id] = @__id_0
+) AS [s]
+LEFT JOIN (
+    SELECT [d].[Id], [d].[Cantidad], [d].[Impuesto], [d].[Observacion], [d].[PedidoId], [d].[PrecioUnitario], [d].[ProductoId], [d].[SubTotal], [p0].[Id] AS [Id0], [p0].[AnioPublicacion], [p0].[ClasificacionEdad], [p0].[Descripcion], [p0].[Editorial], [p0].[EsPersonalizable], [p0].[Estado], [p0].[idAutor], [p0].[Nombre], [p0].[Precio], [p0].[PromedioValoracion], [p0].[Stock]
+    FROM [DetallePedido] AS [d]
+    LEFT JOIN [Productos] AS [p0] ON [d].[ProductoId] = [p0].[Id]
+) AS [s0] ON [s].[Id] = [s0].[PedidoId]
+LEFT JOIN [Pago] AS [p1] ON [s].[Id] = [p1].[PedidoId]
+LEFT JOIN (
+    SELECT [d0].[Id], [d0].[CostoBase], [d0].[PedidoId], [d0].[producto_personalizado_id], [d0].[ProductoPersonalizadoId1], [d0].[TotalPersonalizado], [p2].[Id] AS [Id0], [p2].[CostoBase] AS [CostoBase0], [p2].[Nombre], [p2].[TotalPersonalizado] AS [TotalPersonalizado0], [s1].[id] AS [id1], [s1].[costo_opcion], [s1].[criterio_id], [s1].[CriterioPersonalizacionId], [s1].[detalle_personalizado_id], [s1].[opcion_seleccionada], [s1].[Id0] AS [Id00], [s1].[Modificable], [s1].[NombreCriterio], [s1].[Obligatorio], [s1].[ProductoPersonalizadoId]
+    FROM [detalle_pedido_personalizados] AS [d0]
+    INNER JOIN [productos_personalizados] AS [p2] ON [d0].[producto_personalizado_id] = [p2].[Id]
+    LEFT JOIN (
+        SELECT [d1].[id], [d1].[costo_opcion], [d1].[criterio_id], [d1].[CriterioPersonalizacionId], [d1].[detalle_personalizado_id], [d1].[opcion_seleccionada], [c].[Id] AS [Id0], [c].[Modificable], [c].[NombreCriterio], [c].[Obligatorio], [c].[ProductoPersonalizadoId]
+        FROM [detalle_personalizacion_opciones] AS [d1]
+        INNER JOIN [CriterioPersonalizacion] AS [c] ON [d1].[criterio_id] = [c].[Id]
+    ) AS [s1] ON [d0].[Id] = [s1].[detalle_personalizado_id]
+) AS [s2] ON [s].[Id] = [s2].[PedidoId]
+ORDER BY [s].[Id], [s].[Id0], [s0].[Id], [s0].[Id0], [p1].[Id], [s2].[Id], [s2].[Id0], [s2].[id1]
+2025-06-29 14:42:40.391 -06:00 [ERR] An exception occurred while iterating over the results of a query for context type 'CultureOnline.Infraestructure.Data.CultureOnlineContext'.
+Microsoft.Data.SqlClient.SqlException (0x80131904): Invalid object name 'CriterioPersonalizacion'.
+   at Microsoft.Data.SqlClient.SqlCommand.<>c.<ExecuteDbDataReaderAsync>b__211_0(Task`1 result)
+   at System.Threading.Tasks.ContinuationResultTaskFromResultTask`2.InnerInvoke()
+   at System.Threading.ExecutionContext.RunInternal(ExecutionContext executionContext, ContextCallback callback, Object state)
+--- End of stack trace from previous location ---
+   at System.Threading.ExecutionContext.RunInternal(ExecutionContext executionContext, ContextCallback callback, Object state)
+   at System.Threading.Tasks.Task.ExecuteWithThreadLocal(Task& currentTaskSlot, Thread threadPoolThread)
+--- End of stack trace from previous location ---
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.AsyncEnumerator.InitializeReaderAsync(AsyncEnumerator enumerator, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.SqlServer.Storage.Internal.SqlServerExecutionStrategy.ExecuteAsync[TState,TResult](TState state, Func`4 operation, Func`4 verifySucceeded, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.AsyncEnumerator.MoveNextAsync()
+ClientConnectionId:bec67db1-4626-457f-a3fa-106588236e60
+Error Number:208,State:1,Class:16
+Microsoft.Data.SqlClient.SqlException (0x80131904): Invalid object name 'CriterioPersonalizacion'.
+   at Microsoft.Data.SqlClient.SqlCommand.<>c.<ExecuteDbDataReaderAsync>b__211_0(Task`1 result)
+   at System.Threading.Tasks.ContinuationResultTaskFromResultTask`2.InnerInvoke()
+   at System.Threading.ExecutionContext.RunInternal(ExecutionContext executionContext, ContextCallback callback, Object state)
+--- End of stack trace from previous location ---
+   at System.Threading.ExecutionContext.RunInternal(ExecutionContext executionContext, ContextCallback callback, Object state)
+   at System.Threading.Tasks.Task.ExecuteWithThreadLocal(Task& currentTaskSlot, Thread threadPoolThread)
+--- End of stack trace from previous location ---
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.AsyncEnumerator.InitializeReaderAsync(AsyncEnumerator enumerator, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.SqlServer.Storage.Internal.SqlServerExecutionStrategy.ExecuteAsync[TState,TResult](TState state, Func`4 operation, Func`4 verifySucceeded, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.AsyncEnumerator.MoveNextAsync()
+ClientConnectionId:bec67db1-4626-457f-a3fa-106588236e60
+Error Number:208,State:1,Class:16
+2025-06-29 14:45:57.129 -06:00 [ERR] Failed executing DbCommand (32ms) [Parameters=[@__id_0='3'], CommandType='"Text"', CommandTimeout='30']
+SELECT [s].[Id], [s].[CodigoDescuento], [s].[Direccion], [s].[Estado], [s].[Fecha], [s].[IdSeguimiento], [s].[imagenPersonalizada], [s].[Notas], [s].[NumeroFactura], [s].[Total], [s].[UsuarioId], [s].[Id0], [s].[Contrasena], [s].[Correo], [s].[Estado0], [s].[IDRol], [s].[Nombre], [s].[UltimoInicioSesion], [s0].[Id], [s0].[Cantidad], [s0].[Impuesto], [s0].[Observacion], [s0].[PedidoId], [s0].[PrecioUnitario], [s0].[ProductoId], [s0].[SubTotal], [s0].[Id0], [s0].[AnioPublicacion], [s0].[ClasificacionEdad], [s0].[Descripcion], [s0].[Editorial], [s0].[EsPersonalizable], [s0].[Estado], [s0].[idAutor], [s0].[Nombre], [s0].[Precio], [s0].[PromedioValoracion], [s0].[Stock], [p1].[Id], [p1].[CodigoAutorizacion], [p1].[descripcion], [p1].[FechaExpiracion], [p1].[FechaPago], [p1].[MetodoPago], [p1].[monto], [p1].[NombreTitular], [p1].[Numero], [p1].[PedidoId], [s2].[Id], [s2].[CostoBase], [s2].[PedidoId], [s2].[producto_personalizado_id], [s2].[ProductoPersonalizadoId1], [s2].[TotalPersonalizado], [s2].[Id0], [s2].[CostoBase0], [s2].[Nombre], [s2].[TotalPersonalizado0], [s2].[id1], [s2].[costo_opcion], [s2].[criterio_id], [s2].[detalle_personalizado_id], [s2].[opcion_seleccionada], [s2].[id00], [s2].[modificable], [s2].[nombre_criterio], [s2].[obligatorio], [s2].[producto_personalizado_id0], [s2].[ProductoPersonalizadoId10]
+FROM (
+    SELECT TOP(1) [p].[Id], [p].[CodigoDescuento], [p].[Direccion], [p].[Estado], [p].[Fecha], [p].[IdSeguimiento], [p].[imagenPersonalizada], [p].[Notas], [p].[NumeroFactura], [p].[Total], [p].[UsuarioId], [u].[Id] AS [Id0], [u].[Contrasena], [u].[Correo], [u].[Estado] AS [Estado0], [u].[IDRol], [u].[Nombre], [u].[UltimoInicioSesion]
+    FROM [Pedidos] AS [p]
+    LEFT JOIN [Usuario] AS [u] ON [p].[UsuarioId] = [u].[Id]
+    WHERE [p].[Id] = @__id_0
+) AS [s]
+LEFT JOIN (
+    SELECT [d].[Id], [d].[Cantidad], [d].[Impuesto], [d].[Observacion], [d].[PedidoId], [d].[PrecioUnitario], [d].[ProductoId], [d].[SubTotal], [p0].[Id] AS [Id0], [p0].[AnioPublicacion], [p0].[ClasificacionEdad], [p0].[Descripcion], [p0].[Editorial], [p0].[EsPersonalizable], [p0].[Estado], [p0].[idAutor], [p0].[Nombre], [p0].[Precio], [p0].[PromedioValoracion], [p0].[Stock]
+    FROM [DetallePedido] AS [d]
+    LEFT JOIN [Productos] AS [p0] ON [d].[ProductoId] = [p0].[Id]
+) AS [s0] ON [s].[Id] = [s0].[PedidoId]
+LEFT JOIN [Pago] AS [p1] ON [s].[Id] = [p1].[PedidoId]
+LEFT JOIN (
+    SELECT [d0].[Id], [d0].[CostoBase], [d0].[PedidoId], [d0].[producto_personalizado_id], [d0].[ProductoPersonalizadoId1], [d0].[TotalPersonalizado], [p2].[Id] AS [Id0], [p2].[CostoBase] AS [CostoBase0], [p2].[Nombre], [p2].[TotalPersonalizado] AS [TotalPersonalizado0], [s1].[id] AS [id1], [s1].[costo_opcion], [s1].[criterio_id], [s1].[detalle_personalizado_id], [s1].[opcion_seleccionada], [s1].[id0] AS [id00], [s1].[modificable], [s1].[nombre_criterio], [s1].[obligatorio], [s1].[producto_personalizado_id] AS [producto_personalizado_id0], [s1].[ProductoPersonalizadoId1] AS [ProductoPersonalizadoId10]
+    FROM [detalle_pedido_personalizados] AS [d0]
+    INNER JOIN [productos_personalizados] AS [p2] ON [d0].[producto_personalizado_id] = [p2].[Id]
+    LEFT JOIN (
+        SELECT [d1].[id], [d1].[costo_opcion], [d1].[criterio_id], [d1].[detalle_personalizado_id], [d1].[opcion_seleccionada], [c].[id] AS [id0], [c].[modificable], [c].[nombre_criterio], [c].[obligatorio], [c].[producto_personalizado_id], [c].[ProductoPersonalizadoId1]
+        FROM [detalle_personalizacion_opciones] AS [d1]
+        INNER JOIN [criterios_personalizacion] AS [c] ON [d1].[criterio_id] = [c].[id]
+    ) AS [s1] ON [d0].[Id] = [s1].[detalle_personalizado_id]
+) AS [s2] ON [s].[Id] = [s2].[PedidoId]
+ORDER BY [s].[Id], [s].[Id0], [s0].[Id], [s0].[Id0], [p1].[Id], [s2].[Id], [s2].[Id0], [s2].[id1]
+2025-06-29 14:45:57.223 -06:00 [ERR] An exception occurred while iterating over the results of a query for context type 'CultureOnline.Infraestructure.Data.CultureOnlineContext'.
+Microsoft.Data.SqlClient.SqlException (0x80131904): Invalid column name 'ProductoPersonalizadoId1'.
+Invalid column name 'CostoBase'.
+Invalid column name 'PedidoId'.
+Invalid column name 'ProductoPersonalizadoId1'.
+Invalid column name 'TotalPersonalizado'.
+Invalid column name 'CostoBase'.
+Invalid column name 'Nombre'.
+Invalid column name 'TotalPersonalizado'.
+   at Microsoft.Data.SqlClient.SqlCommand.<>c.<ExecuteDbDataReaderAsync>b__211_0(Task`1 result)
+   at System.Threading.Tasks.ContinuationResultTaskFromResultTask`2.InnerInvoke()
+   at System.Threading.ExecutionContext.RunInternal(ExecutionContext executionContext, ContextCallback callback, Object state)
+--- End of stack trace from previous location ---
+   at System.Threading.ExecutionContext.RunInternal(ExecutionContext executionContext, ContextCallback callback, Object state)
+   at System.Threading.Tasks.Task.ExecuteWithThreadLocal(Task& currentTaskSlot, Thread threadPoolThread)
+--- End of stack trace from previous location ---
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.AsyncEnumerator.InitializeReaderAsync(AsyncEnumerator enumerator, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.SqlServer.Storage.Internal.SqlServerExecutionStrategy.ExecuteAsync[TState,TResult](TState state, Func`4 operation, Func`4 verifySucceeded, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.AsyncEnumerator.MoveNextAsync()
+ClientConnectionId:dcff28f9-2631-420f-ba9c-04496dbf1adc
+Error Number:207,State:1,Class:16
+Microsoft.Data.SqlClient.SqlException (0x80131904): Invalid column name 'ProductoPersonalizadoId1'.
+Invalid column name 'CostoBase'.
+Invalid column name 'PedidoId'.
+Invalid column name 'ProductoPersonalizadoId1'.
+Invalid column name 'TotalPersonalizado'.
+Invalid column name 'CostoBase'.
+Invalid column name 'Nombre'.
+Invalid column name 'TotalPersonalizado'.
+   at Microsoft.Data.SqlClient.SqlCommand.<>c.<ExecuteDbDataReaderAsync>b__211_0(Task`1 result)
+   at System.Threading.Tasks.ContinuationResultTaskFromResultTask`2.InnerInvoke()
+   at System.Threading.ExecutionContext.RunInternal(ExecutionContext executionContext, ContextCallback callback, Object state)
+--- End of stack trace from previous location ---
+   at System.Threading.ExecutionContext.RunInternal(ExecutionContext executionContext, ContextCallback callback, Object state)
+   at System.Threading.Tasks.Task.ExecuteWithThreadLocal(Task& currentTaskSlot, Thread threadPoolThread)
+--- End of stack trace from previous location ---
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.AsyncEnumerator.InitializeReaderAsync(AsyncEnumerator enumerator, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.SqlServer.Storage.Internal.SqlServerExecutionStrategy.ExecuteAsync[TState,TResult](TState state, Func`4 operation, Func`4 verifySucceeded, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.AsyncEnumerator.MoveNextAsync()
+ClientConnectionId:dcff28f9-2631-420f-ba9c-04496dbf1adc
+Error Number:207,State:1,Class:16
+2025-06-29 14:48:07.900 -06:00 [ERR] Failed executing DbCommand (28ms) [Parameters=[@__id_0='3'], CommandType='"Text"', CommandTimeout='30']
+SELECT [s].[Id], [s].[CodigoDescuento], [s].[Direccion], [s].[Estado], [s].[Fecha], [s].[IdSeguimiento], [s].[imagenPersonalizada], [s].[Notas], [s].[NumeroFactura], [s].[Total], [s].[UsuarioId], [s].[Id0], [s].[Contrasena], [s].[Correo], [s].[Estado0], [s].[IDRol], [s].[Nombre], [s].[UltimoInicioSesion], [s0].[Id], [s0].[Cantidad], [s0].[Impuesto], [s0].[Observacion], [s0].[PedidoId], [s0].[PrecioUnitario], [s0].[ProductoId], [s0].[SubTotal], [s0].[Id0], [s0].[AnioPublicacion], [s0].[ClasificacionEdad], [s0].[Descripcion], [s0].[Editorial], [s0].[EsPersonalizable], [s0].[Estado], [s0].[idAutor], [s0].[Nombre], [s0].[Precio], [s0].[PromedioValoracion], [s0].[Stock], [p1].[Id], [p1].[CodigoAutorizacion], [p1].[descripcion], [p1].[FechaExpiracion], [p1].[FechaPago], [p1].[MetodoPago], [p1].[monto], [p1].[NombreTitular], [p1].[Numero], [p1].[PedidoId], [s2].[Id], [s2].[CostoBase], [s2].[PedidoId], [s2].[producto_personalizado_id], [s2].[ProductoPersonalizadoId1], [s2].[TotalPersonalizado], [s2].[Id0], [s2].[CostoBase0], [s2].[Nombre], [s2].[TotalPersonalizado0], [s2].[id1], [s2].[costo_opcion], [s2].[criterio_id], [s2].[detalle_personalizado_id], [s2].[opcion_seleccionada], [s2].[id00], [s2].[modificable], [s2].[nombre_criterio], [s2].[obligatorio], [s2].[producto_personalizado_id0], [s2].[ProductoPersonalizadoId10]
+FROM (
+    SELECT TOP(1) [p].[Id], [p].[CodigoDescuento], [p].[Direccion], [p].[Estado], [p].[Fecha], [p].[IdSeguimiento], [p].[imagenPersonalizada], [p].[Notas], [p].[NumeroFactura], [p].[Total], [p].[UsuarioId], [u].[Id] AS [Id0], [u].[Contrasena], [u].[Correo], [u].[Estado] AS [Estado0], [u].[IDRol], [u].[Nombre], [u].[UltimoInicioSesion]
+    FROM [Pedidos] AS [p]
+    LEFT JOIN [Usuario] AS [u] ON [p].[UsuarioId] = [u].[Id]
+    WHERE [p].[Id] = @__id_0
+) AS [s]
+LEFT JOIN (
+    SELECT [d].[Id], [d].[Cantidad], [d].[Impuesto], [d].[Observacion], [d].[PedidoId], [d].[PrecioUnitario], [d].[ProductoId], [d].[SubTotal], [p0].[Id] AS [Id0], [p0].[AnioPublicacion], [p0].[ClasificacionEdad], [p0].[Descripcion], [p0].[Editorial], [p0].[EsPersonalizable], [p0].[Estado], [p0].[idAutor], [p0].[Nombre], [p0].[Precio], [p0].[PromedioValoracion], [p0].[Stock]
+    FROM [DetallePedido] AS [d]
+    LEFT JOIN [Productos] AS [p0] ON [d].[ProductoId] = [p0].[Id]
+) AS [s0] ON [s].[Id] = [s0].[PedidoId]
+LEFT JOIN [Pago] AS [p1] ON [s].[Id] = [p1].[PedidoId]
+LEFT JOIN (
+    SELECT [d0].[Id], [d0].[CostoBase], [d0].[PedidoId], [d0].[producto_personalizado_id], [d0].[ProductoPersonalizadoId1], [d0].[TotalPersonalizado], [p2].[Id] AS [Id0], [p2].[CostoBase] AS [CostoBase0], [p2].[Nombre], [p2].[TotalPersonalizado] AS [TotalPersonalizado0], [s1].[id] AS [id1], [s1].[costo_opcion], [s1].[criterio_id], [s1].[detalle_personalizado_id], [s1].[opcion_seleccionada], [s1].[id0] AS [id00], [s1].[modificable], [s1].[nombre_criterio], [s1].[obligatorio], [s1].[producto_personalizado_id] AS [producto_personalizado_id0], [s1].[ProductoPersonalizadoId1] AS [ProductoPersonalizadoId10]
+    FROM [detalle_pedido_personalizados] AS [d0]
+    INNER JOIN [productos_personalizados] AS [p2] ON [d0].[producto_personalizado_id] = [p2].[Id]
+    LEFT JOIN (
+        SELECT [d1].[id], [d1].[costo_opcion], [d1].[criterio_id], [d1].[detalle_personalizado_id], [d1].[opcion_seleccionada], [c].[id] AS [id0], [c].[modificable], [c].[nombre_criterio], [c].[obligatorio], [c].[producto_personalizado_id], [c].[ProductoPersonalizadoId1]
+        FROM [detalle_personalizacion_opciones] AS [d1]
+        INNER JOIN [criterios_personalizacion] AS [c] ON [d1].[criterio_id] = [c].[id]
+    ) AS [s1] ON [d0].[Id] = [s1].[detalle_personalizado_id]
+) AS [s2] ON [s].[Id] = [s2].[PedidoId]
+ORDER BY [s].[Id], [s].[Id0], [s0].[Id], [s0].[Id0], [p1].[Id], [s2].[Id], [s2].[Id0], [s2].[id1]
+2025-06-29 14:48:07.970 -06:00 [ERR] An exception occurred while iterating over the results of a query for context type 'CultureOnline.Infraestructure.Data.CultureOnlineContext'.
+Microsoft.Data.SqlClient.SqlException (0x80131904): Invalid column name 'ProductoPersonalizadoId1'.
+Invalid column name 'CostoBase'.
+Invalid column name 'PedidoId'.
+Invalid column name 'ProductoPersonalizadoId1'.
+Invalid column name 'TotalPersonalizado'.
+Invalid column name 'CostoBase'.
+Invalid column name 'Nombre'.
+Invalid column name 'TotalPersonalizado'.
+   at Microsoft.Data.SqlClient.SqlCommand.<>c.<ExecuteDbDataReaderAsync>b__211_0(Task`1 result)
+   at System.Threading.Tasks.ContinuationResultTaskFromResultTask`2.InnerInvoke()
+   at System.Threading.ExecutionContext.RunInternal(ExecutionContext executionContext, ContextCallback callback, Object state)
+--- End of stack trace from previous location ---
+   at System.Threading.ExecutionContext.RunInternal(ExecutionContext executionContext, ContextCallback callback, Object state)
+   at System.Threading.Tasks.Task.ExecuteWithThreadLocal(Task& currentTaskSlot, Thread threadPoolThread)
+--- End of stack trace from previous location ---
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.AsyncEnumerator.InitializeReaderAsync(AsyncEnumerator enumerator, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.SqlServer.Storage.Internal.SqlServerExecutionStrategy.ExecuteAsync[TState,TResult](TState state, Func`4 operation, Func`4 verifySucceeded, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.AsyncEnumerator.MoveNextAsync()
+ClientConnectionId:83469b7b-a51e-430d-b732-5ac8ab4589f7
+Error Number:207,State:1,Class:16
+Microsoft.Data.SqlClient.SqlException (0x80131904): Invalid column name 'ProductoPersonalizadoId1'.
+Invalid column name 'CostoBase'.
+Invalid column name 'PedidoId'.
+Invalid column name 'ProductoPersonalizadoId1'.
+Invalid column name 'TotalPersonalizado'.
+Invalid column name 'CostoBase'.
+Invalid column name 'Nombre'.
+Invalid column name 'TotalPersonalizado'.
+   at Microsoft.Data.SqlClient.SqlCommand.<>c.<ExecuteDbDataReaderAsync>b__211_0(Task`1 result)
+   at System.Threading.Tasks.ContinuationResultTaskFromResultTask`2.InnerInvoke()
+   at System.Threading.ExecutionContext.RunInternal(ExecutionContext executionContext, ContextCallback callback, Object state)
+--- End of stack trace from previous location ---
+   at System.Threading.ExecutionContext.RunInternal(ExecutionContext executionContext, ContextCallback callback, Object state)
+   at System.Threading.Tasks.Task.ExecuteWithThreadLocal(Task& currentTaskSlot, Thread threadPoolThread)
+--- End of stack trace from previous location ---
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.AsyncEnumerator.InitializeReaderAsync(AsyncEnumerator enumerator, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.SqlServer.Storage.Internal.SqlServerExecutionStrategy.ExecuteAsync[TState,TResult](TState state, Func`4 operation, Func`4 verifySucceeded, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.AsyncEnumerator.MoveNextAsync()
+ClientConnectionId:83469b7b-a51e-430d-b732-5ac8ab4589f7
+Error Number:207,State:1,Class:16
+2025-06-29 14:59:30.482 -06:00 [ERR] Failed executing DbCommand (47ms) [Parameters=[@__id_0='3'], CommandType='"Text"', CommandTimeout='30']
+SELECT [s].[Id], [s].[CodigoDescuento], [s].[Direccion], [s].[Estado], [s].[Fecha], [s].[IdSeguimiento], [s].[imagenPersonalizada], [s].[Notas], [s].[NumeroFactura], [s].[Total], [s].[UsuarioId], [s].[Id0], [s].[Contrasena], [s].[Correo], [s].[Estado0], [s].[IDRol], [s].[Nombre], [s].[UltimoInicioSesion], [s0].[Id], [s0].[Cantidad], [s0].[Impuesto], [s0].[Observacion], [s0].[PedidoId], [s0].[PrecioUnitario], [s0].[ProductoId], [s0].[SubTotal], [s0].[Id0], [s0].[AnioPublicacion], [s0].[ClasificacionEdad], [s0].[Descripcion], [s0].[Editorial], [s0].[EsPersonalizable], [s0].[Estado], [s0].[idAutor], [s0].[Nombre], [s0].[Precio], [s0].[PromedioValoracion], [s0].[Stock], [p1].[Id], [p1].[CodigoAutorizacion], [p1].[descripcion], [p1].[FechaExpiracion], [p1].[FechaPago], [p1].[MetodoPago], [p1].[monto], [p1].[NombreTitular], [p1].[Numero], [p1].[PedidoId], [s2].[id], [s2].[costo_base], [s2].[pedido_id], [s2].[producto_personalizado_id], [s2].[ProductoPersonalizadoId1], [s2].[total_personalizado], [s2].[id0], [s2].[costo_base0], [s2].[nombre_producto], [s2].[tamano], [s2].[TotalPersonalizado], [s2].[id1], [s2].[costo_opcion], [s2].[criterio_id], [s2].[detalle_personalizado_id], [s2].[opcion_seleccionada], [s2].[id00], [s2].[modificable], [s2].[nombre_criterio], [s2].[obligatorio], [s2].[producto_personalizado_id0]
+FROM (
+    SELECT TOP(1) [p].[Id], [p].[CodigoDescuento], [p].[Direccion], [p].[Estado], [p].[Fecha], [p].[IdSeguimiento], [p].[imagenPersonalizada], [p].[Notas], [p].[NumeroFactura], [p].[Total], [p].[UsuarioId], [u].[Id] AS [Id0], [u].[Contrasena], [u].[Correo], [u].[Estado] AS [Estado0], [u].[IDRol], [u].[Nombre], [u].[UltimoInicioSesion]
+    FROM [Pedidos] AS [p]
+    LEFT JOIN [Usuario] AS [u] ON [p].[UsuarioId] = [u].[Id]
+    WHERE [p].[Id] = @__id_0
+) AS [s]
+LEFT JOIN (
+    SELECT [d].[Id], [d].[Cantidad], [d].[Impuesto], [d].[Observacion], [d].[PedidoId], [d].[PrecioUnitario], [d].[ProductoId], [d].[SubTotal], [p0].[Id] AS [Id0], [p0].[AnioPublicacion], [p0].[ClasificacionEdad], [p0].[Descripcion], [p0].[Editorial], [p0].[EsPersonalizable], [p0].[Estado], [p0].[idAutor], [p0].[Nombre], [p0].[Precio], [p0].[PromedioValoracion], [p0].[Stock]
+    FROM [DetallePedido] AS [d]
+    LEFT JOIN [Productos] AS [p0] ON [d].[ProductoId] = [p0].[Id]
+) AS [s0] ON [s].[Id] = [s0].[PedidoId]
+LEFT JOIN [Pago] AS [p1] ON [s].[Id] = [p1].[PedidoId]
+LEFT JOIN (
+    SELECT [d0].[id], [d0].[costo_base], [d0].[pedido_id], [d0].[producto_personalizado_id], [d0].[ProductoPersonalizadoId1], [d0].[total_personalizado], [p2].[id] AS [id0], [p2].[costo_base] AS [costo_base0], [p2].[nombre_producto], [p2].[tamano], [p2].[TotalPersonalizado], [s1].[id] AS [id1], [s1].[costo_opcion], [s1].[criterio_id], [s1].[detalle_personalizado_id], [s1].[opcion_seleccionada], [s1].[id0] AS [id00], [s1].[modificable], [s1].[nombre_criterio], [s1].[obligatorio], [s1].[producto_personalizado_id] AS [producto_personalizado_id0]
+    FROM [detalle_pedido_personalizados] AS [d0]
+    INNER JOIN [productos_personalizados] AS [p2] ON [d0].[producto_personalizado_id] = [p2].[id]
+    LEFT JOIN (
+        SELECT [d1].[id], [d1].[costo_opcion], [d1].[criterio_id], [d1].[detalle_personalizado_id], [d1].[opcion_seleccionada], [c].[id] AS [id0], [c].[modificable], [c].[nombre_criterio], [c].[obligatorio], [c].[producto_personalizado_id]
+        FROM [detalle_personalizacion_opciones] AS [d1]
+        INNER JOIN [criterios_personalizacion] AS [c] ON [d1].[criterio_id] = [c].[id]
+    ) AS [s1] ON [d0].[id] = [s1].[detalle_personalizado_id]
+) AS [s2] ON [s].[Id] = [s2].[pedido_id]
+ORDER BY [s].[Id], [s].[Id0], [s0].[Id], [s0].[Id0], [p1].[Id], [s2].[id], [s2].[id0], [s2].[id1]
+2025-06-29 14:59:30.583 -06:00 [ERR] An exception occurred while iterating over the results of a query for context type 'CultureOnline.Infraestructure.Data.CultureOnlineContext'.
+Microsoft.Data.SqlClient.SqlException (0x80131904): Invalid column name 'ProductoPersonalizadoId1'.
+Invalid column name 'TotalPersonalizado'.
+   at Microsoft.Data.SqlClient.SqlCommand.<>c.<ExecuteDbDataReaderAsync>b__211_0(Task`1 result)
+   at System.Threading.Tasks.ContinuationResultTaskFromResultTask`2.InnerInvoke()
+   at System.Threading.ExecutionContext.RunInternal(ExecutionContext executionContext, ContextCallback callback, Object state)
+--- End of stack trace from previous location ---
+   at System.Threading.ExecutionContext.RunInternal(ExecutionContext executionContext, ContextCallback callback, Object state)
+   at System.Threading.Tasks.Task.ExecuteWithThreadLocal(Task& currentTaskSlot, Thread threadPoolThread)
+--- End of stack trace from previous location ---
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.AsyncEnumerator.InitializeReaderAsync(AsyncEnumerator enumerator, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.SqlServer.Storage.Internal.SqlServerExecutionStrategy.ExecuteAsync[TState,TResult](TState state, Func`4 operation, Func`4 verifySucceeded, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.AsyncEnumerator.MoveNextAsync()
+ClientConnectionId:e19be71e-5a1b-4803-be53-431635be3a88
+Error Number:207,State:1,Class:16
+Microsoft.Data.SqlClient.SqlException (0x80131904): Invalid column name 'ProductoPersonalizadoId1'.
+Invalid column name 'TotalPersonalizado'.
+   at Microsoft.Data.SqlClient.SqlCommand.<>c.<ExecuteDbDataReaderAsync>b__211_0(Task`1 result)
+   at System.Threading.Tasks.ContinuationResultTaskFromResultTask`2.InnerInvoke()
+   at System.Threading.ExecutionContext.RunInternal(ExecutionContext executionContext, ContextCallback callback, Object state)
+--- End of stack trace from previous location ---
+   at System.Threading.ExecutionContext.RunInternal(ExecutionContext executionContext, ContextCallback callback, Object state)
+   at System.Threading.Tasks.Task.ExecuteWithThreadLocal(Task& currentTaskSlot, Thread threadPoolThread)
+--- End of stack trace from previous location ---
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.AsyncEnumerator.InitializeReaderAsync(AsyncEnumerator enumerator, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.SqlServer.Storage.Internal.SqlServerExecutionStrategy.ExecuteAsync[TState,TResult](TState state, Func`4 operation, Func`4 verifySucceeded, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.AsyncEnumerator.MoveNextAsync()
+ClientConnectionId:e19be71e-5a1b-4803-be53-431635be3a88
+Error Number:207,State:1,Class:16
+2025-06-29 15:08:43.608 -06:00 [ERR] Failed executing DbCommand (51ms) [Parameters=[@__id_0='3'], CommandType='"Text"', CommandTimeout='30']
+SELECT [s].[Id], [s].[CodigoDescuento], [s].[Direccion], [s].[Estado], [s].[Fecha], [s].[IdSeguimiento], [s].[imagenPersonalizada], [s].[Notas], [s].[NumeroFactura], [s].[Total], [s].[UsuarioId], [s].[Id0], [s].[Contrasena], [s].[Correo], [s].[Estado0], [s].[IDRol], [s].[Nombre], [s].[UltimoInicioSesion], [s0].[Id], [s0].[Cantidad], [s0].[Impuesto], [s0].[Observacion], [s0].[PedidoId], [s0].[PrecioUnitario], [s0].[ProductoId], [s0].[SubTotal], [s0].[Id0], [s0].[AnioPublicacion], [s0].[ClasificacionEdad], [s0].[Descripcion], [s0].[Editorial], [s0].[EsPersonalizable], [s0].[Estado], [s0].[idAutor], [s0].[Nombre], [s0].[Precio], [s0].[PromedioValoracion], [s0].[Stock], [p1].[Id], [p1].[CodigoAutorizacion], [p1].[descripcion], [p1].[FechaExpiracion], [p1].[FechaPago], [p1].[MetodoPago], [p1].[monto], [p1].[NombreTitular], [p1].[Numero], [p1].[PedidoId], [s2].[id], [s2].[costo_base], [s2].[pedido_id], [s2].[producto_personalizado_id], [s2].[ProductoPersonalizadoId1], [s2].[total_personalizado], [s2].[id0], [s2].[costo_base0], [s2].[nombre_producto], [s2].[tamano], [s2].[TotalPersonalizado], [s2].[id1], [s2].[costo_opcion], [s2].[criterio_id], [s2].[detalle_personalizado_id], [s2].[opcion_seleccionada], [s2].[id00], [s2].[modificable], [s2].[nombre_criterio], [s2].[obligatorio], [s2].[producto_personalizado_id0]
+FROM (
+    SELECT TOP(1) [p].[Id], [p].[CodigoDescuento], [p].[Direccion], [p].[Estado], [p].[Fecha], [p].[IdSeguimiento], [p].[imagenPersonalizada], [p].[Notas], [p].[NumeroFactura], [p].[Total], [p].[UsuarioId], [u].[Id] AS [Id0], [u].[Contrasena], [u].[Correo], [u].[Estado] AS [Estado0], [u].[IDRol], [u].[Nombre], [u].[UltimoInicioSesion]
+    FROM [Pedidos] AS [p]
+    LEFT JOIN [Usuario] AS [u] ON [p].[UsuarioId] = [u].[Id]
+    WHERE [p].[Id] = @__id_0
+) AS [s]
+LEFT JOIN (
+    SELECT [d].[Id], [d].[Cantidad], [d].[Impuesto], [d].[Observacion], [d].[PedidoId], [d].[PrecioUnitario], [d].[ProductoId], [d].[SubTotal], [p0].[Id] AS [Id0], [p0].[AnioPublicacion], [p0].[ClasificacionEdad], [p0].[Descripcion], [p0].[Editorial], [p0].[EsPersonalizable], [p0].[Estado], [p0].[idAutor], [p0].[Nombre], [p0].[Precio], [p0].[PromedioValoracion], [p0].[Stock]
+    FROM [DetallePedido] AS [d]
+    LEFT JOIN [Productos] AS [p0] ON [d].[ProductoId] = [p0].[Id]
+) AS [s0] ON [s].[Id] = [s0].[PedidoId]
+LEFT JOIN [Pago] AS [p1] ON [s].[Id] = [p1].[PedidoId]
+LEFT JOIN (
+    SELECT [d0].[id], [d0].[costo_base], [d0].[pedido_id], [d0].[producto_personalizado_id], [d0].[ProductoPersonalizadoId1], [d0].[total_personalizado], [p2].[id] AS [id0], [p2].[costo_base] AS [costo_base0], [p2].[nombre_producto], [p2].[tamano], [p2].[TotalPersonalizado], [s1].[id] AS [id1], [s1].[costo_opcion], [s1].[criterio_id], [s1].[detalle_personalizado_id], [s1].[opcion_seleccionada], [s1].[id0] AS [id00], [s1].[modificable], [s1].[nombre_criterio], [s1].[obligatorio], [s1].[producto_personalizado_id] AS [producto_personalizado_id0]
+    FROM [detalle_pedido_personalizados] AS [d0]
+    INNER JOIN [productos_personalizados] AS [p2] ON [d0].[producto_personalizado_id] = [p2].[id]
+    LEFT JOIN (
+        SELECT [d1].[id], [d1].[costo_opcion], [d1].[criterio_id], [d1].[detalle_personalizado_id], [d1].[opcion_seleccionada], [c].[id] AS [id0], [c].[modificable], [c].[nombre_criterio], [c].[obligatorio], [c].[producto_personalizado_id]
+        FROM [detalle_personalizacion_opciones] AS [d1]
+        INNER JOIN [criterios_personalizacion] AS [c] ON [d1].[criterio_id] = [c].[id]
+    ) AS [s1] ON [d0].[id] = [s1].[detalle_personalizado_id]
+) AS [s2] ON [s].[Id] = [s2].[pedido_id]
+ORDER BY [s].[Id], [s].[Id0], [s0].[Id], [s0].[Id0], [p1].[Id], [s2].[id], [s2].[id0], [s2].[id1]
+2025-06-29 15:08:43.702 -06:00 [ERR] An exception occurred while iterating over the results of a query for context type 'CultureOnline.Infraestructure.Data.CultureOnlineContext'.
+Microsoft.Data.SqlClient.SqlException (0x80131904): Invalid column name 'ProductoPersonalizadoId1'.
+Invalid column name 'TotalPersonalizado'.
+   at Microsoft.Data.SqlClient.SqlCommand.<>c.<ExecuteDbDataReaderAsync>b__211_0(Task`1 result)
+   at System.Threading.Tasks.ContinuationResultTaskFromResultTask`2.InnerInvoke()
+   at System.Threading.ExecutionContext.RunInternal(ExecutionContext executionContext, ContextCallback callback, Object state)
+--- End of stack trace from previous location ---
+   at System.Threading.ExecutionContext.RunInternal(ExecutionContext executionContext, ContextCallback callback, Object state)
+   at System.Threading.Tasks.Task.ExecuteWithThreadLocal(Task& currentTaskSlot, Thread threadPoolThread)
+--- End of stack trace from previous location ---
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.AsyncEnumerator.InitializeReaderAsync(AsyncEnumerator enumerator, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.SqlServer.Storage.Internal.SqlServerExecutionStrategy.ExecuteAsync[TState,TResult](TState state, Func`4 operation, Func`4 verifySucceeded, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.AsyncEnumerator.MoveNextAsync()
+ClientConnectionId:5438ced2-a81b-4463-82b0-db867c7f9ad0
+Error Number:207,State:1,Class:16
+Microsoft.Data.SqlClient.SqlException (0x80131904): Invalid column name 'ProductoPersonalizadoId1'.
+Invalid column name 'TotalPersonalizado'.
+   at Microsoft.Data.SqlClient.SqlCommand.<>c.<ExecuteDbDataReaderAsync>b__211_0(Task`1 result)
+   at System.Threading.Tasks.ContinuationResultTaskFromResultTask`2.InnerInvoke()
+   at System.Threading.ExecutionContext.RunInternal(ExecutionContext executionContext, ContextCallback callback, Object state)
+--- End of stack trace from previous location ---
+   at System.Threading.ExecutionContext.RunInternal(ExecutionContext executionContext, ContextCallback callback, Object state)
+   at System.Threading.Tasks.Task.ExecuteWithThreadLocal(Task& currentTaskSlot, Thread threadPoolThread)
+--- End of stack trace from previous location ---
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.AsyncEnumerator.InitializeReaderAsync(AsyncEnumerator enumerator, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.SqlServer.Storage.Internal.SqlServerExecutionStrategy.ExecuteAsync[TState,TResult](TState state, Func`4 operation, Func`4 verifySucceeded, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.AsyncEnumerator.MoveNextAsync()
+ClientConnectionId:5438ced2-a81b-4463-82b0-db867c7f9ad0
+Error Number:207,State:1,Class:16
+2025-06-29 15:10:21.095 -06:00 [ERR] Failed executing DbCommand (26ms) [Parameters=[@__id_0='3'], CommandType='"Text"', CommandTimeout='30']
+SELECT [s].[Id], [s].[CodigoDescuento], [s].[Direccion], [s].[Estado], [s].[Fecha], [s].[IdSeguimiento], [s].[imagenPersonalizada], [s].[Notas], [s].[NumeroFactura], [s].[Total], [s].[UsuarioId], [s].[Id0], [s].[Contrasena], [s].[Correo], [s].[Estado0], [s].[IDRol], [s].[Nombre], [s].[UltimoInicioSesion], [s0].[Id], [s0].[Cantidad], [s0].[Impuesto], [s0].[Observacion], [s0].[PedidoId], [s0].[PrecioUnitario], [s0].[ProductoId], [s0].[SubTotal], [s0].[Id0], [s0].[AnioPublicacion], [s0].[ClasificacionEdad], [s0].[Descripcion], [s0].[Editorial], [s0].[EsPersonalizable], [s0].[Estado], [s0].[idAutor], [s0].[Nombre], [s0].[Precio], [s0].[PromedioValoracion], [s0].[Stock], [p1].[Id], [p1].[CodigoAutorizacion], [p1].[descripcion], [p1].[FechaExpiracion], [p1].[FechaPago], [p1].[MetodoPago], [p1].[monto], [p1].[NombreTitular], [p1].[Numero], [p1].[PedidoId], [s2].[id], [s2].[costo_base], [s2].[pedido_id], [s2].[producto_personalizado_id], [s2].[ProductoPersonalizadoId1], [s2].[total_personalizado], [s2].[id0], [s2].[costo_base0], [s2].[nombre_producto], [s2].[tamano], [s2].[TotalPersonalizado], [s2].[id1], [s2].[costo_opcion], [s2].[criterio_id], [s2].[detalle_personalizado_id], [s2].[opcion_seleccionada], [s2].[id00], [s2].[modificable], [s2].[nombre_criterio], [s2].[obligatorio], [s2].[producto_personalizado_id0]
+FROM (
+    SELECT TOP(1) [p].[Id], [p].[CodigoDescuento], [p].[Direccion], [p].[Estado], [p].[Fecha], [p].[IdSeguimiento], [p].[imagenPersonalizada], [p].[Notas], [p].[NumeroFactura], [p].[Total], [p].[UsuarioId], [u].[Id] AS [Id0], [u].[Contrasena], [u].[Correo], [u].[Estado] AS [Estado0], [u].[IDRol], [u].[Nombre], [u].[UltimoInicioSesion]
+    FROM [Pedidos] AS [p]
+    LEFT JOIN [Usuario] AS [u] ON [p].[UsuarioId] = [u].[Id]
+    WHERE [p].[Id] = @__id_0
+) AS [s]
+LEFT JOIN (
+    SELECT [d].[Id], [d].[Cantidad], [d].[Impuesto], [d].[Observacion], [d].[PedidoId], [d].[PrecioUnitario], [d].[ProductoId], [d].[SubTotal], [p0].[Id] AS [Id0], [p0].[AnioPublicacion], [p0].[ClasificacionEdad], [p0].[Descripcion], [p0].[Editorial], [p0].[EsPersonalizable], [p0].[Estado], [p0].[idAutor], [p0].[Nombre], [p0].[Precio], [p0].[PromedioValoracion], [p0].[Stock]
+    FROM [DetallePedido] AS [d]
+    LEFT JOIN [Productos] AS [p0] ON [d].[ProductoId] = [p0].[Id]
+) AS [s0] ON [s].[Id] = [s0].[PedidoId]
+LEFT JOIN [Pago] AS [p1] ON [s].[Id] = [p1].[PedidoId]
+LEFT JOIN (
+    SELECT [d0].[id], [d0].[costo_base], [d0].[pedido_id], [d0].[producto_personalizado_id], [d0].[ProductoPersonalizadoId1], [d0].[total_personalizado], [p2].[id] AS [id0], [p2].[costo_base] AS [costo_base0], [p2].[nombre_producto], [p2].[tamano], [p2].[TotalPersonalizado], [s1].[id] AS [id1], [s1].[costo_opcion], [s1].[criterio_id], [s1].[detalle_personalizado_id], [s1].[opcion_seleccionada], [s1].[id0] AS [id00], [s1].[modificable], [s1].[nombre_criterio], [s1].[obligatorio], [s1].[producto_personalizado_id] AS [producto_personalizado_id0]
+    FROM [detalle_pedido_personalizados] AS [d0]
+    INNER JOIN [productos_personalizados] AS [p2] ON [d0].[producto_personalizado_id] = [p2].[id]
+    LEFT JOIN (
+        SELECT [d1].[id], [d1].[costo_opcion], [d1].[criterio_id], [d1].[detalle_personalizado_id], [d1].[opcion_seleccionada], [c].[id] AS [id0], [c].[modificable], [c].[nombre_criterio], [c].[obligatorio], [c].[producto_personalizado_id]
+        FROM [detalle_personalizacion_opciones] AS [d1]
+        INNER JOIN [criterios_personalizacion] AS [c] ON [d1].[criterio_id] = [c].[id]
+    ) AS [s1] ON [d0].[id] = [s1].[detalle_personalizado_id]
+) AS [s2] ON [s].[Id] = [s2].[pedido_id]
+ORDER BY [s].[Id], [s].[Id0], [s0].[Id], [s0].[Id0], [p1].[Id], [s2].[id], [s2].[id0], [s2].[id1]
+2025-06-29 15:10:21.167 -06:00 [ERR] An exception occurred while iterating over the results of a query for context type 'CultureOnline.Infraestructure.Data.CultureOnlineContext'.
+Microsoft.Data.SqlClient.SqlException (0x80131904): Invalid column name 'ProductoPersonalizadoId1'.
+Invalid column name 'TotalPersonalizado'.
+   at Microsoft.Data.SqlClient.SqlCommand.<>c.<ExecuteDbDataReaderAsync>b__211_0(Task`1 result)
+   at System.Threading.Tasks.ContinuationResultTaskFromResultTask`2.InnerInvoke()
+   at System.Threading.ExecutionContext.RunInternal(ExecutionContext executionContext, ContextCallback callback, Object state)
+--- End of stack trace from previous location ---
+   at System.Threading.ExecutionContext.RunInternal(ExecutionContext executionContext, ContextCallback callback, Object state)
+   at System.Threading.Tasks.Task.ExecuteWithThreadLocal(Task& currentTaskSlot, Thread threadPoolThread)
+--- End of stack trace from previous location ---
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.AsyncEnumerator.InitializeReaderAsync(AsyncEnumerator enumerator, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.SqlServer.Storage.Internal.SqlServerExecutionStrategy.ExecuteAsync[TState,TResult](TState state, Func`4 operation, Func`4 verifySucceeded, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.AsyncEnumerator.MoveNextAsync()
+ClientConnectionId:cc6b234a-d42d-4450-a501-c6c0297c25ea
+Error Number:207,State:1,Class:16
+Microsoft.Data.SqlClient.SqlException (0x80131904): Invalid column name 'ProductoPersonalizadoId1'.
+Invalid column name 'TotalPersonalizado'.
+   at Microsoft.Data.SqlClient.SqlCommand.<>c.<ExecuteDbDataReaderAsync>b__211_0(Task`1 result)
+   at System.Threading.Tasks.ContinuationResultTaskFromResultTask`2.InnerInvoke()
+   at System.Threading.ExecutionContext.RunInternal(ExecutionContext executionContext, ContextCallback callback, Object state)
+--- End of stack trace from previous location ---
+   at System.Threading.ExecutionContext.RunInternal(ExecutionContext executionContext, ContextCallback callback, Object state)
+   at System.Threading.Tasks.Task.ExecuteWithThreadLocal(Task& currentTaskSlot, Thread threadPoolThread)
+--- End of stack trace from previous location ---
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.AsyncEnumerator.InitializeReaderAsync(AsyncEnumerator enumerator, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.SqlServer.Storage.Internal.SqlServerExecutionStrategy.ExecuteAsync[TState,TResult](TState state, Func`4 operation, Func`4 verifySucceeded, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.AsyncEnumerator.MoveNextAsync()
+ClientConnectionId:cc6b234a-d42d-4450-a501-c6c0297c25ea
+Error Number:207,State:1,Class:16
+2025-06-29 15:25:56.746 -06:00 [ERR] Failed executing DbCommand (66ms) [Parameters=[@__id_0='3'], CommandType='"Text"', CommandTimeout='30']
+SELECT [s].[Id], [s].[CodigoDescuento], [s].[Direccion], [s].[Estado], [s].[Fecha], [s].[IdSeguimiento], [s].[imagenPersonalizada], [s].[Notas], [s].[NumeroFactura], [s].[Total], [s].[UsuarioId], [s].[Id0], [s].[Contrasena], [s].[Correo], [s].[Estado0], [s].[IDRol], [s].[Nombre], [s].[UltimoInicioSesion], [s0].[Id], [s0].[Cantidad], [s0].[Impuesto], [s0].[Observacion], [s0].[PedidoId], [s0].[PrecioUnitario], [s0].[ProductoId], [s0].[SubTotal], [s0].[Id0], [s0].[AnioPublicacion], [s0].[ClasificacionEdad], [s0].[Descripcion], [s0].[Editorial], [s0].[EsPersonalizable], [s0].[Estado], [s0].[idAutor], [s0].[Nombre], [s0].[Precio], [s0].[PromedioValoracion], [s0].[Stock], [p1].[Id], [p1].[CodigoAutorizacion], [p1].[descripcion], [p1].[FechaExpiracion], [p1].[FechaPago], [p1].[MetodoPago], [p1].[monto], [p1].[NombreTitular], [p1].[Numero], [p1].[PedidoId], [s2].[id], [s2].[costo_base], [s2].[pedido_id], [s2].[producto_personalizado_id], [s2].[total_personalizado], [s2].[id0], [s2].[costo_base0], [s2].[nombre_producto], [s2].[tamano], [s2].[TotalPersonalizado], [s2].[id1], [s2].[costo_opcion], [s2].[criterio_id], [s2].[detalle_personalizado_id], [s2].[opcion_seleccionada], [s2].[id00], [s2].[modificable], [s2].[nombre_criterio], [s2].[obligatorio], [s2].[producto_personalizado_id0]
+FROM (
+    SELECT TOP(1) [p].[Id], [p].[CodigoDescuento], [p].[Direccion], [p].[Estado], [p].[Fecha], [p].[IdSeguimiento], [p].[imagenPersonalizada], [p].[Notas], [p].[NumeroFactura], [p].[Total], [p].[UsuarioId], [u].[Id] AS [Id0], [u].[Contrasena], [u].[Correo], [u].[Estado] AS [Estado0], [u].[IDRol], [u].[Nombre], [u].[UltimoInicioSesion]
+    FROM [Pedidos] AS [p]
+    LEFT JOIN [Usuario] AS [u] ON [p].[UsuarioId] = [u].[Id]
+    WHERE [p].[Id] = @__id_0
+) AS [s]
+LEFT JOIN (
+    SELECT [d].[Id], [d].[Cantidad], [d].[Impuesto], [d].[Observacion], [d].[PedidoId], [d].[PrecioUnitario], [d].[ProductoId], [d].[SubTotal], [p0].[Id] AS [Id0], [p0].[AnioPublicacion], [p0].[ClasificacionEdad], [p0].[Descripcion], [p0].[Editorial], [p0].[EsPersonalizable], [p0].[Estado], [p0].[idAutor], [p0].[Nombre], [p0].[Precio], [p0].[PromedioValoracion], [p0].[Stock]
+    FROM [DetallePedido] AS [d]
+    LEFT JOIN [Productos] AS [p0] ON [d].[ProductoId] = [p0].[Id]
+) AS [s0] ON [s].[Id] = [s0].[PedidoId]
+LEFT JOIN [Pago] AS [p1] ON [s].[Id] = [p1].[PedidoId]
+LEFT JOIN (
+    SELECT [d0].[id], [d0].[costo_base], [d0].[pedido_id], [d0].[producto_personalizado_id], [d0].[total_personalizado], [p2].[id] AS [id0], [p2].[costo_base] AS [costo_base0], [p2].[nombre_producto], [p2].[tamano], [p2].[TotalPersonalizado], [s1].[id] AS [id1], [s1].[costo_opcion], [s1].[criterio_id], [s1].[detalle_personalizado_id], [s1].[opcion_seleccionada], [s1].[id0] AS [id00], [s1].[modificable], [s1].[nombre_criterio], [s1].[obligatorio], [s1].[producto_personalizado_id] AS [producto_personalizado_id0]
+    FROM [detalle_pedido_personalizados] AS [d0]
+    INNER JOIN [productos_personalizados] AS [p2] ON [d0].[producto_personalizado_id] = [p2].[id]
+    LEFT JOIN (
+        SELECT [d1].[id], [d1].[costo_opcion], [d1].[criterio_id], [d1].[detalle_personalizado_id], [d1].[opcion_seleccionada], [c].[id] AS [id0], [c].[modificable], [c].[nombre_criterio], [c].[obligatorio], [c].[producto_personalizado_id]
+        FROM [detalle_personalizacion_opciones] AS [d1]
+        INNER JOIN [criterios_personalizacion] AS [c] ON [d1].[criterio_id] = [c].[id]
+    ) AS [s1] ON [d0].[id] = [s1].[detalle_personalizado_id]
+) AS [s2] ON [s].[Id] = [s2].[pedido_id]
+ORDER BY [s].[Id], [s].[Id0], [s0].[Id], [s0].[Id0], [p1].[Id], [s2].[id], [s2].[id0], [s2].[id1]
+2025-06-29 15:25:56.836 -06:00 [ERR] An exception occurred while iterating over the results of a query for context type 'CultureOnline.Infraestructure.Data.CultureOnlineContext'.
+Microsoft.Data.SqlClient.SqlException (0x80131904): Invalid column name 'TotalPersonalizado'.
+   at Microsoft.Data.SqlClient.SqlCommand.<>c.<ExecuteDbDataReaderAsync>b__211_0(Task`1 result)
+   at System.Threading.Tasks.ContinuationResultTaskFromResultTask`2.InnerInvoke()
+   at System.Threading.ExecutionContext.RunInternal(ExecutionContext executionContext, ContextCallback callback, Object state)
+--- End of stack trace from previous location ---
+   at System.Threading.ExecutionContext.RunInternal(ExecutionContext executionContext, ContextCallback callback, Object state)
+   at System.Threading.Tasks.Task.ExecuteWithThreadLocal(Task& currentTaskSlot, Thread threadPoolThread)
+--- End of stack trace from previous location ---
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.AsyncEnumerator.InitializeReaderAsync(AsyncEnumerator enumerator, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.SqlServer.Storage.Internal.SqlServerExecutionStrategy.ExecuteAsync[TState,TResult](TState state, Func`4 operation, Func`4 verifySucceeded, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.AsyncEnumerator.MoveNextAsync()
+ClientConnectionId:fcb87561-ab69-4767-9f35-aa115c54a5cc
+Error Number:207,State:1,Class:16
+Microsoft.Data.SqlClient.SqlException (0x80131904): Invalid column name 'TotalPersonalizado'.
+   at Microsoft.Data.SqlClient.SqlCommand.<>c.<ExecuteDbDataReaderAsync>b__211_0(Task`1 result)
+   at System.Threading.Tasks.ContinuationResultTaskFromResultTask`2.InnerInvoke()
+   at System.Threading.ExecutionContext.RunInternal(ExecutionContext executionContext, ContextCallback callback, Object state)
+--- End of stack trace from previous location ---
+   at System.Threading.ExecutionContext.RunInternal(ExecutionContext executionContext, ContextCallback callback, Object state)
+   at System.Threading.Tasks.Task.ExecuteWithThreadLocal(Task& currentTaskSlot, Thread threadPoolThread)
+--- End of stack trace from previous location ---
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.AsyncEnumerator.InitializeReaderAsync(AsyncEnumerator enumerator, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.SqlServer.Storage.Internal.SqlServerExecutionStrategy.ExecuteAsync[TState,TResult](TState state, Func`4 operation, Func`4 verifySucceeded, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.AsyncEnumerator.MoveNextAsync()
+ClientConnectionId:fcb87561-ab69-4767-9f35-aa115c54a5cc
+Error Number:207,State:1,Class:16
+2025-06-29 15:28:41.264 -06:00 [ERR] 
+EventId    :4296-250629032841
+ErrorList  :Invalid column name 'TotalPersonalizado'.
+StackTrace :   at Microsoft.Data.SqlClient.SqlCommand.<>c.<ExecuteDbDataReaderAsync>b__211_0(Task`1 result)
+   at System.Threading.Tasks.ContinuationResultTaskFromResultTask`2.InnerInvoke()
+   at System.Threading.ExecutionContext.RunInternal(ExecutionContext executionContext, ContextCallback callback, Object state)
+--- End of stack trace from previous location ---
+   at System.Threading.ExecutionContext.RunInternal(ExecutionContext executionContext, ContextCallback callback, Object state)
+   at System.Threading.Tasks.Task.ExecuteWithThreadLocal(Task& currentTaskSlot, Thread threadPoolThread)
+--- End of stack trace from previous location ---
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.AsyncEnumerator.InitializeReaderAsync(AsyncEnumerator enumerator, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.SqlServer.Storage.Internal.SqlServerExecutionStrategy.ExecuteAsync[TState,TResult](TState state, Func`4 operation, Func`4 verifySucceeded, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.AsyncEnumerator.MoveNextAsync()
+   at Microsoft.EntityFrameworkCore.Query.ShapedQueryCompilingExpressionVisitor.SingleOrDefaultAsync[TSource](IAsyncEnumerable`1 asyncEnumerable, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Query.ShapedQueryCompilingExpressionVisitor.SingleOrDefaultAsync[TSource](IAsyncEnumerable`1 asyncEnumerable, CancellationToken cancellationToken)
+   at CultureOnline.Infraestructure.Repository.Implementations.RepositoryPedido.FindByIdAsync(Int32 id)
+   at CultureOnline.Application.Services.Implementations.ServicePedido.FindByIdAsync(Int32 id) in C:\Users\jenni\Videos\Proyecto CultureOnline1\Proyecto CultureOnline\CultureOnline.Application\Services\Implementations\ServicePedido.cs:line 33
+   at MVCCultureOnline.Controllers.PedidoController.Detalle(Int32 id) in C:\Users\jenni\Videos\Proyecto CultureOnline1\Proyecto CultureOnline\MVCCultureOnline\Controllers\PedidoController.cs:line 26
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ActionMethodExecutor.TaskOfIActionResultExecutor.Execute(ActionContext actionContext, IActionResultTypeMapper mapper, ObjectMethodExecutor executor, Object controller, Object[] arguments)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeActionMethodAsync>g__Logged|12_1(ControllerActionInvoker invoker)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeNextActionFilterAsync>g__Awaited|10_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Rethrow(ActionExecutedContextSealed context)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeInnerFilterAsync>g__Awaited|13_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeNextResourceFilter>g__Awaited|25_0(ResourceInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.Rethrow(ResourceExecutedContextSealed context)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeFilterPipelineAsync>g__Awaited|20_0(ResourceInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Logged|17_1(ResourceInvoker invoker)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Logged|17_1(ResourceInvoker invoker)
+   at Microsoft.AspNetCore.Authorization.AuthorizationMiddleware.Invoke(HttpContext context)
+   at Serilog.AspNetCore.RequestLoggingMiddleware.Invoke(HttpContext httpContext)
+   at Libreria.Web.Middleware.ErrorHandlingMiddleware.Invoke(HttpContext context) in C:\Users\jenni\Videos\Proyecto CultureOnline1\Proyecto CultureOnline\MVCCultureOnline\Middleware\ErrorHandlingMiddleware.cs:line 23
+
+2025-06-29 15:28:45.393 -06:00 [ERR] Failed executing DbCommand (8ms) [Parameters=[@__id_0='3'], CommandType='"Text"', CommandTimeout='30']
+SELECT [s].[Id], [s].[CodigoDescuento], [s].[Direccion], [s].[Estado], [s].[Fecha], [s].[IdSeguimiento], [s].[imagenPersonalizada], [s].[Notas], [s].[NumeroFactura], [s].[Total], [s].[UsuarioId], [s].[Id0], [s].[Contrasena], [s].[Correo], [s].[Estado0], [s].[IDRol], [s].[Nombre], [s].[UltimoInicioSesion], [s0].[Id], [s0].[Cantidad], [s0].[Impuesto], [s0].[Observacion], [s0].[PedidoId], [s0].[PrecioUnitario], [s0].[ProductoId], [s0].[SubTotal], [s0].[Id0], [s0].[AnioPublicacion], [s0].[ClasificacionEdad], [s0].[Descripcion], [s0].[Editorial], [s0].[EsPersonalizable], [s0].[Estado], [s0].[idAutor], [s0].[Nombre], [s0].[Precio], [s0].[PromedioValoracion], [s0].[Stock], [p1].[Id], [p1].[CodigoAutorizacion], [p1].[descripcion], [p1].[FechaExpiracion], [p1].[FechaPago], [p1].[MetodoPago], [p1].[monto], [p1].[NombreTitular], [p1].[Numero], [p1].[PedidoId], [s2].[id], [s2].[costo_base], [s2].[pedido_id], [s2].[producto_personalizado_id], [s2].[total_personalizado], [s2].[id0], [s2].[costo_base0], [s2].[nombre_producto], [s2].[tamano], [s2].[TotalPersonalizado], [s2].[id1], [s2].[costo_opcion], [s2].[criterio_id], [s2].[detalle_personalizado_id], [s2].[opcion_seleccionada], [s2].[id00], [s2].[modificable], [s2].[nombre_criterio], [s2].[obligatorio], [s2].[producto_personalizado_id0]
+FROM (
+    SELECT TOP(1) [p].[Id], [p].[CodigoDescuento], [p].[Direccion], [p].[Estado], [p].[Fecha], [p].[IdSeguimiento], [p].[imagenPersonalizada], [p].[Notas], [p].[NumeroFactura], [p].[Total], [p].[UsuarioId], [u].[Id] AS [Id0], [u].[Contrasena], [u].[Correo], [u].[Estado] AS [Estado0], [u].[IDRol], [u].[Nombre], [u].[UltimoInicioSesion]
+    FROM [Pedidos] AS [p]
+    LEFT JOIN [Usuario] AS [u] ON [p].[UsuarioId] = [u].[Id]
+    WHERE [p].[Id] = @__id_0
+) AS [s]
+LEFT JOIN (
+    SELECT [d].[Id], [d].[Cantidad], [d].[Impuesto], [d].[Observacion], [d].[PedidoId], [d].[PrecioUnitario], [d].[ProductoId], [d].[SubTotal], [p0].[Id] AS [Id0], [p0].[AnioPublicacion], [p0].[ClasificacionEdad], [p0].[Descripcion], [p0].[Editorial], [p0].[EsPersonalizable], [p0].[Estado], [p0].[idAutor], [p0].[Nombre], [p0].[Precio], [p0].[PromedioValoracion], [p0].[Stock]
+    FROM [DetallePedido] AS [d]
+    LEFT JOIN [Productos] AS [p0] ON [d].[ProductoId] = [p0].[Id]
+) AS [s0] ON [s].[Id] = [s0].[PedidoId]
+LEFT JOIN [Pago] AS [p1] ON [s].[Id] = [p1].[PedidoId]
+LEFT JOIN (
+    SELECT [d0].[id], [d0].[costo_base], [d0].[pedido_id], [d0].[producto_personalizado_id], [d0].[total_personalizado], [p2].[id] AS [id0], [p2].[costo_base] AS [costo_base0], [p2].[nombre_producto], [p2].[tamano], [p2].[TotalPersonalizado], [s1].[id] AS [id1], [s1].[costo_opcion], [s1].[criterio_id], [s1].[detalle_personalizado_id], [s1].[opcion_seleccionada], [s1].[id0] AS [id00], [s1].[modificable], [s1].[nombre_criterio], [s1].[obligatorio], [s1].[producto_personalizado_id] AS [producto_personalizado_id0]
+    FROM [detalle_pedido_personalizados] AS [d0]
+    INNER JOIN [productos_personalizados] AS [p2] ON [d0].[producto_personalizado_id] = [p2].[id]
+    LEFT JOIN (
+        SELECT [d1].[id], [d1].[costo_opcion], [d1].[criterio_id], [d1].[detalle_personalizado_id], [d1].[opcion_seleccionada], [c].[id] AS [id0], [c].[modificable], [c].[nombre_criterio], [c].[obligatorio], [c].[producto_personalizado_id]
+        FROM [detalle_personalizacion_opciones] AS [d1]
+        INNER JOIN [criterios_personalizacion] AS [c] ON [d1].[criterio_id] = [c].[id]
+    ) AS [s1] ON [d0].[id] = [s1].[detalle_personalizado_id]
+) AS [s2] ON [s].[Id] = [s2].[pedido_id]
+ORDER BY [s].[Id], [s].[Id0], [s0].[Id], [s0].[Id0], [p1].[Id], [s2].[id], [s2].[id0], [s2].[id1]
+2025-06-29 15:28:45.399 -06:00 [ERR] An exception occurred while iterating over the results of a query for context type 'CultureOnline.Infraestructure.Data.CultureOnlineContext'.
+Microsoft.Data.SqlClient.SqlException (0x80131904): Invalid column name 'TotalPersonalizado'.
+   at Microsoft.Data.SqlClient.SqlCommand.<>c.<ExecuteDbDataReaderAsync>b__211_0(Task`1 result)
+   at System.Threading.Tasks.ContinuationResultTaskFromResultTask`2.InnerInvoke()
+   at System.Threading.ExecutionContext.RunInternal(ExecutionContext executionContext, ContextCallback callback, Object state)
+--- End of stack trace from previous location ---
+   at System.Threading.ExecutionContext.RunInternal(ExecutionContext executionContext, ContextCallback callback, Object state)
+   at System.Threading.Tasks.Task.ExecuteWithThreadLocal(Task& currentTaskSlot, Thread threadPoolThread)
+--- End of stack trace from previous location ---
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.AsyncEnumerator.InitializeReaderAsync(AsyncEnumerator enumerator, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.SqlServer.Storage.Internal.SqlServerExecutionStrategy.ExecuteAsync[TState,TResult](TState state, Func`4 operation, Func`4 verifySucceeded, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.AsyncEnumerator.MoveNextAsync()
+ClientConnectionId:fcb87561-ab69-4767-9f35-aa115c54a5cc
+Error Number:207,State:1,Class:16
+Microsoft.Data.SqlClient.SqlException (0x80131904): Invalid column name 'TotalPersonalizado'.
+   at Microsoft.Data.SqlClient.SqlCommand.<>c.<ExecuteDbDataReaderAsync>b__211_0(Task`1 result)
+   at System.Threading.Tasks.ContinuationResultTaskFromResultTask`2.InnerInvoke()
+   at System.Threading.ExecutionContext.RunInternal(ExecutionContext executionContext, ContextCallback callback, Object state)
+--- End of stack trace from previous location ---
+   at System.Threading.ExecutionContext.RunInternal(ExecutionContext executionContext, ContextCallback callback, Object state)
+   at System.Threading.Tasks.Task.ExecuteWithThreadLocal(Task& currentTaskSlot, Thread threadPoolThread)
+--- End of stack trace from previous location ---
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.AsyncEnumerator.InitializeReaderAsync(AsyncEnumerator enumerator, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.SqlServer.Storage.Internal.SqlServerExecutionStrategy.ExecuteAsync[TState,TResult](TState state, Func`4 operation, Func`4 verifySucceeded, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.AsyncEnumerator.MoveNextAsync()
+ClientConnectionId:fcb87561-ab69-4767-9f35-aa115c54a5cc
+Error Number:207,State:1,Class:16
+2025-06-29 15:30:16.705 -06:00 [ERR] Failed executing DbCommand (32ms) [Parameters=[@__id_0='3'], CommandType='"Text"', CommandTimeout='30']
+SELECT [s].[Id], [s].[CodigoDescuento], [s].[Direccion], [s].[Estado], [s].[Fecha], [s].[IdSeguimiento], [s].[imagenPersonalizada], [s].[Notas], [s].[NumeroFactura], [s].[Total], [s].[UsuarioId], [s].[Id0], [s].[Contrasena], [s].[Correo], [s].[Estado0], [s].[IDRol], [s].[Nombre], [s].[UltimoInicioSesion], [s0].[Id], [s0].[Cantidad], [s0].[Impuesto], [s0].[Observacion], [s0].[PedidoId], [s0].[PrecioUnitario], [s0].[ProductoId], [s0].[SubTotal], [s0].[Id0], [s0].[AnioPublicacion], [s0].[ClasificacionEdad], [s0].[Descripcion], [s0].[Editorial], [s0].[EsPersonalizable], [s0].[Estado], [s0].[idAutor], [s0].[Nombre], [s0].[Precio], [s0].[PromedioValoracion], [s0].[Stock], [p1].[Id], [p1].[CodigoAutorizacion], [p1].[descripcion], [p1].[FechaExpiracion], [p1].[FechaPago], [p1].[MetodoPago], [p1].[monto], [p1].[NombreTitular], [p1].[Numero], [p1].[PedidoId], [s2].[id], [s2].[costo_base], [s2].[pedido_id], [s2].[producto_personalizado_id], [s2].[total_personalizado], [s2].[id0], [s2].[costo_base0], [s2].[nombre_producto], [s2].[tamano], [s2].[TotalPersonalizado], [s2].[id1], [s2].[costo_opcion], [s2].[criterio_id], [s2].[detalle_personalizado_id], [s2].[opcion_seleccionada], [s2].[id00], [s2].[modificable], [s2].[nombre_criterio], [s2].[obligatorio], [s2].[producto_personalizado_id0]
+FROM (
+    SELECT TOP(1) [p].[Id], [p].[CodigoDescuento], [p].[Direccion], [p].[Estado], [p].[Fecha], [p].[IdSeguimiento], [p].[imagenPersonalizada], [p].[Notas], [p].[NumeroFactura], [p].[Total], [p].[UsuarioId], [u].[Id] AS [Id0], [u].[Contrasena], [u].[Correo], [u].[Estado] AS [Estado0], [u].[IDRol], [u].[Nombre], [u].[UltimoInicioSesion]
+    FROM [Pedidos] AS [p]
+    LEFT JOIN [Usuario] AS [u] ON [p].[UsuarioId] = [u].[Id]
+    WHERE [p].[Id] = @__id_0
+) AS [s]
+LEFT JOIN (
+    SELECT [d].[Id], [d].[Cantidad], [d].[Impuesto], [d].[Observacion], [d].[PedidoId], [d].[PrecioUnitario], [d].[ProductoId], [d].[SubTotal], [p0].[Id] AS [Id0], [p0].[AnioPublicacion], [p0].[ClasificacionEdad], [p0].[Descripcion], [p0].[Editorial], [p0].[EsPersonalizable], [p0].[Estado], [p0].[idAutor], [p0].[Nombre], [p0].[Precio], [p0].[PromedioValoracion], [p0].[Stock]
+    FROM [DetallePedido] AS [d]
+    LEFT JOIN [Productos] AS [p0] ON [d].[ProductoId] = [p0].[Id]
+) AS [s0] ON [s].[Id] = [s0].[PedidoId]
+LEFT JOIN [Pago] AS [p1] ON [s].[Id] = [p1].[PedidoId]
+LEFT JOIN (
+    SELECT [d0].[id], [d0].[costo_base], [d0].[pedido_id], [d0].[producto_personalizado_id], [d0].[total_personalizado], [p2].[id] AS [id0], [p2].[costo_base] AS [costo_base0], [p2].[nombre_producto], [p2].[tamano], [p2].[TotalPersonalizado], [s1].[id] AS [id1], [s1].[costo_opcion], [s1].[criterio_id], [s1].[detalle_personalizado_id], [s1].[opcion_seleccionada], [s1].[id0] AS [id00], [s1].[modificable], [s1].[nombre_criterio], [s1].[obligatorio], [s1].[producto_personalizado_id] AS [producto_personalizado_id0]
+    FROM [detalle_pedido_personalizados] AS [d0]
+    INNER JOIN [productos_personalizados] AS [p2] ON [d0].[producto_personalizado_id] = [p2].[id]
+    LEFT JOIN (
+        SELECT [d1].[id], [d1].[costo_opcion], [d1].[criterio_id], [d1].[detalle_personalizado_id], [d1].[opcion_seleccionada], [c].[id] AS [id0], [c].[modificable], [c].[nombre_criterio], [c].[obligatorio], [c].[producto_personalizado_id]
+        FROM [detalle_personalizacion_opciones] AS [d1]
+        INNER JOIN [criterios_personalizacion] AS [c] ON [d1].[criterio_id] = [c].[id]
+    ) AS [s1] ON [d0].[id] = [s1].[detalle_personalizado_id]
+) AS [s2] ON [s].[Id] = [s2].[pedido_id]
+ORDER BY [s].[Id], [s].[Id0], [s0].[Id], [s0].[Id0], [p1].[Id], [s2].[id], [s2].[id0], [s2].[id1]
+2025-06-29 15:30:16.806 -06:00 [ERR] An exception occurred while iterating over the results of a query for context type 'CultureOnline.Infraestructure.Data.CultureOnlineContext'.
+Microsoft.Data.SqlClient.SqlException (0x80131904): Invalid column name 'TotalPersonalizado'.
+   at Microsoft.Data.SqlClient.SqlCommand.<>c.<ExecuteDbDataReaderAsync>b__211_0(Task`1 result)
+   at System.Threading.Tasks.ContinuationResultTaskFromResultTask`2.InnerInvoke()
+   at System.Threading.ExecutionContext.RunInternal(ExecutionContext executionContext, ContextCallback callback, Object state)
+--- End of stack trace from previous location ---
+   at System.Threading.ExecutionContext.RunInternal(ExecutionContext executionContext, ContextCallback callback, Object state)
+   at System.Threading.Tasks.Task.ExecuteWithThreadLocal(Task& currentTaskSlot, Thread threadPoolThread)
+--- End of stack trace from previous location ---
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.AsyncEnumerator.InitializeReaderAsync(AsyncEnumerator enumerator, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.SqlServer.Storage.Internal.SqlServerExecutionStrategy.ExecuteAsync[TState,TResult](TState state, Func`4 operation, Func`4 verifySucceeded, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.AsyncEnumerator.MoveNextAsync()
+ClientConnectionId:42c250a6-a561-47fb-94e1-9324c2ff0908
+Error Number:207,State:1,Class:16
+Microsoft.Data.SqlClient.SqlException (0x80131904): Invalid column name 'TotalPersonalizado'.
+   at Microsoft.Data.SqlClient.SqlCommand.<>c.<ExecuteDbDataReaderAsync>b__211_0(Task`1 result)
+   at System.Threading.Tasks.ContinuationResultTaskFromResultTask`2.InnerInvoke()
+   at System.Threading.ExecutionContext.RunInternal(ExecutionContext executionContext, ContextCallback callback, Object state)
+--- End of stack trace from previous location ---
+   at System.Threading.ExecutionContext.RunInternal(ExecutionContext executionContext, ContextCallback callback, Object state)
+   at System.Threading.Tasks.Task.ExecuteWithThreadLocal(Task& currentTaskSlot, Thread threadPoolThread)
+--- End of stack trace from previous location ---
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.AsyncEnumerator.InitializeReaderAsync(AsyncEnumerator enumerator, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.SqlServer.Storage.Internal.SqlServerExecutionStrategy.ExecuteAsync[TState,TResult](TState state, Func`4 operation, Func`4 verifySucceeded, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.AsyncEnumerator.MoveNextAsync()
+ClientConnectionId:42c250a6-a561-47fb-94e1-9324c2ff0908
+Error Number:207,State:1,Class:16
+2025-06-29 15:44:37.059 -06:00 [ERR] 
+EventId    :645-250629034436
+ErrorList  :Error mapping types.
+
+Mapping types:
+Pedidos -> PedidoDTO
+CultureOnline.Infraestructure.Models.Pedidos -> CultureOnline.Application.DTOs.PedidoDTO
+
+Type Map configuration:
+Pedidos -> PedidoDTO
+CultureOnline.Infraestructure.Models.Pedidos -> CultureOnline.Application.DTOs.PedidoDTO
+
+Destination Member:
+DetallePedido
+
+StackTrace :   at lambda_method556(Closure, Object, PedidoDTO, ResolutionContext)
+   at CultureOnline.Application.Services.Implementations.ServicePedido.FindByIdAsync(Int32 id) in C:\Users\jenni\Videos\Proyecto CultureOnline1\Proyecto CultureOnline\CultureOnline.Application\Services\Implementations\ServicePedido.cs:line 34
+   at MVCCultureOnline.Controllers.PedidoController.Detalle(Int32 id) in C:\Users\jenni\Videos\Proyecto CultureOnline1\Proyecto CultureOnline\MVCCultureOnline\Controllers\PedidoController.cs:line 26
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ActionMethodExecutor.TaskOfIActionResultExecutor.Execute(ActionContext actionContext, IActionResultTypeMapper mapper, ObjectMethodExecutor executor, Object controller, Object[] arguments)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeActionMethodAsync>g__Logged|12_1(ControllerActionInvoker invoker)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeNextActionFilterAsync>g__Awaited|10_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Rethrow(ActionExecutedContextSealed context)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeInnerFilterAsync>g__Awaited|13_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeNextResourceFilter>g__Awaited|25_0(ResourceInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.Rethrow(ResourceExecutedContextSealed context)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeFilterPipelineAsync>g__Awaited|20_0(ResourceInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Logged|17_1(ResourceInvoker invoker)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Logged|17_1(ResourceInvoker invoker)
+   at Microsoft.AspNetCore.Authorization.AuthorizationMiddleware.Invoke(HttpContext context)
+   at Serilog.AspNetCore.RequestLoggingMiddleware.Invoke(HttpContext httpContext)
+   at Libreria.Web.Middleware.ErrorHandlingMiddleware.Invoke(HttpContext context) in C:\Users\jenni\Videos\Proyecto CultureOnline1\Proyecto CultureOnline\MVCCultureOnline\Middleware\ErrorHandlingMiddleware.cs:line 23
+
+2025-06-29 15:48:05.978 -06:00 [ERR] 
+EventId    :1808-250629034805
+ErrorList  :Error mapping types.
+
+Mapping types:
+Pedidos -> PedidoDTO
+CultureOnline.Infraestructure.Models.Pedidos -> CultureOnline.Application.DTOs.PedidoDTO
+
+Type Map configuration:
+Pedidos -> PedidoDTO
+CultureOnline.Infraestructure.Models.Pedidos -> CultureOnline.Application.DTOs.PedidoDTO
+
+Destination Member:
+DetallePedido
+
+StackTrace :   at lambda_method556(Closure, Object, PedidoDTO, ResolutionContext)
+   at CultureOnline.Application.Services.Implementations.ServicePedido.FindByIdAsync(Int32 id) in C:\Users\jenni\Videos\Proyecto CultureOnline1\Proyecto CultureOnline\CultureOnline.Application\Services\Implementations\ServicePedido.cs:line 34
+   at MVCCultureOnline.Controllers.PedidoController.Detalle(Int32 id) in C:\Users\jenni\Videos\Proyecto CultureOnline1\Proyecto CultureOnline\MVCCultureOnline\Controllers\PedidoController.cs:line 26
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ActionMethodExecutor.TaskOfIActionResultExecutor.Execute(ActionContext actionContext, IActionResultTypeMapper mapper, ObjectMethodExecutor executor, Object controller, Object[] arguments)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeActionMethodAsync>g__Logged|12_1(ControllerActionInvoker invoker)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeNextActionFilterAsync>g__Awaited|10_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Rethrow(ActionExecutedContextSealed context)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeInnerFilterAsync>g__Awaited|13_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeNextResourceFilter>g__Awaited|25_0(ResourceInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.Rethrow(ResourceExecutedContextSealed context)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeFilterPipelineAsync>g__Awaited|20_0(ResourceInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Logged|17_1(ResourceInvoker invoker)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Logged|17_1(ResourceInvoker invoker)
+   at Microsoft.AspNetCore.Authorization.AuthorizationMiddleware.Invoke(HttpContext context)
+   at Serilog.AspNetCore.RequestLoggingMiddleware.Invoke(HttpContext httpContext)
+   at Libreria.Web.Middleware.ErrorHandlingMiddleware.Invoke(HttpContext context) in C:\Users\jenni\Videos\Proyecto CultureOnline1\Proyecto CultureOnline\MVCCultureOnline\Middleware\ErrorHandlingMiddleware.cs:line 23
+
+2025-06-29 16:51:43.607 -06:00 [ERR] Failed executing DbCommand (61ms) [Parameters=[@__id_0='1'], CommandType='"Text"', CommandTimeout='30']
+SELECT [s].[Id], [s].[CodigoDescuento], [s].[Direccion], [s].[Estado], [s].[Fecha], [s].[IdSeguimiento], [s].[imagenPersonalizada], [s].[Notas], [s].[NumeroFactura], [s].[Total], [s].[UsuarioId], [s].[Id0], [s].[Contrasena], [s].[Correo], [s].[Estado0], [s].[IDRol], [s].[Nombre], [s].[UltimoInicioSesion], [s0].[Id], [s0].[Cantidad], [s0].[Impuesto], [s0].[Observacion], [s0].[PedidoId], [s0].[PrecioUnitario], [s0].[ProductoId], [s0].[SubTotal], [s0].[Id0], [s0].[AnioPublicacion], [s0].[ClasificacionEdad], [s0].[Descripcion], [s0].[Editorial], [s0].[EsPersonalizable], [s0].[Estado], [s0].[idAutor], [s0].[Nombre], [s0].[Precio], [s0].[PromedioValoracion], [s0].[Stock], [p1].[Id], [p1].[CodigoAutorizacion], [p1].[descripcion], [p1].[FechaExpiracion], [p1].[FechaPago], [p1].[MetodoPago], [p1].[monto], [p1].[NombreTitular], [p1].[Numero], [p1].[PedidoId], [s1].[Id], [s1].[Cantidad], [s1].[CostoImagen], [s1].[CostoMaterial], [s1].[CostoTexto], [s1].[ImagenPersonalizada], [s1].[MaterialPersonalizado], [s1].[PedidoId], [s1].[ProductoId], [s1].[TextoPersonalizado], [s1].[Id0], [s1].[AnioPublicacion], [s1].[ClasificacionEdad], [s1].[Descripcion], [s1].[Editorial], [s1].[EsPersonalizable], [s1].[Estado], [s1].[idAutor], [s1].[Nombre], [s1].[Precio], [s1].[PromedioValoracion], [s1].[Stock]
+FROM (
+    SELECT TOP(1) [p].[Id], [p].[CodigoDescuento], [p].[Direccion], [p].[Estado], [p].[Fecha], [p].[IdSeguimiento], [p].[imagenPersonalizada], [p].[Notas], [p].[NumeroFactura], [p].[Total], [p].[UsuarioId], [u].[Id] AS [Id0], [u].[Contrasena], [u].[Correo], [u].[Estado] AS [Estado0], [u].[IDRol], [u].[Nombre], [u].[UltimoInicioSesion]
+    FROM [Pedidos] AS [p]
+    LEFT JOIN [Usuario] AS [u] ON [p].[UsuarioId] = [u].[Id]
+    WHERE [p].[Id] = @__id_0
+) AS [s]
+LEFT JOIN (
+    SELECT [d].[Id], [d].[Cantidad], [d].[Impuesto], [d].[Observacion], [d].[PedidoId], [d].[PrecioUnitario], [d].[ProductoId], [d].[SubTotal], [p0].[Id] AS [Id0], [p0].[AnioPublicacion], [p0].[ClasificacionEdad], [p0].[Descripcion], [p0].[Editorial], [p0].[EsPersonalizable], [p0].[Estado], [p0].[idAutor], [p0].[Nombre], [p0].[Precio], [p0].[PromedioValoracion], [p0].[Stock]
+    FROM [DetallePedido] AS [d]
+    LEFT JOIN [Productos] AS [p0] ON [d].[ProductoId] = [p0].[Id]
+) AS [s0] ON [s].[Id] = [s0].[PedidoId]
+LEFT JOIN [Pago] AS [p1] ON [s].[Id] = [p1].[PedidoId]
+LEFT JOIN (
+    SELECT [p2].[Id], [p2].[Cantidad], [p2].[CostoImagen], [p2].[CostoMaterial], [p2].[CostoTexto], [p2].[ImagenPersonalizada], [p2].[MaterialPersonalizado], [p2].[PedidoId], [p2].[ProductoId], [p2].[TextoPersonalizado], [p3].[Id] AS [Id0], [p3].[AnioPublicacion], [p3].[ClasificacionEdad], [p3].[Descripcion], [p3].[Editorial], [p3].[EsPersonalizable], [p3].[Estado], [p3].[idAutor], [p3].[Nombre], [p3].[Precio], [p3].[PromedioValoracion], [p3].[Stock]
+    FROM [ProductoPersonalizado] AS [p2]
+    INNER JOIN [Productos] AS [p3] ON [p2].[ProductoId] = [p3].[Id]
+) AS [s1] ON [s].[Id] = [s1].[PedidoId]
+ORDER BY [s].[Id], [s].[Id0], [s0].[Id], [s0].[Id0], [p1].[Id], [s1].[Id]
+2025-06-29 16:51:43.717 -06:00 [ERR] An exception occurred while iterating over the results of a query for context type 'CultureOnline.Infraestructure.Data.CultureOnlineContext'.
+Microsoft.Data.SqlClient.SqlException (0x80131904): Invalid object name 'ProductoPersonalizado'.
+   at Microsoft.Data.SqlClient.SqlCommand.<>c.<ExecuteDbDataReaderAsync>b__211_0(Task`1 result)
+   at System.Threading.Tasks.ContinuationResultTaskFromResultTask`2.InnerInvoke()
+   at System.Threading.ExecutionContext.RunInternal(ExecutionContext executionContext, ContextCallback callback, Object state)
+--- End of stack trace from previous location ---
+   at System.Threading.ExecutionContext.RunInternal(ExecutionContext executionContext, ContextCallback callback, Object state)
+   at System.Threading.Tasks.Task.ExecuteWithThreadLocal(Task& currentTaskSlot, Thread threadPoolThread)
+--- End of stack trace from previous location ---
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.AsyncEnumerator.InitializeReaderAsync(AsyncEnumerator enumerator, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.SqlServer.Storage.Internal.SqlServerExecutionStrategy.ExecuteAsync[TState,TResult](TState state, Func`4 operation, Func`4 verifySucceeded, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.AsyncEnumerator.MoveNextAsync()
+ClientConnectionId:6e36aac8-d1b8-4063-b179-0c0d4e22543c
+Error Number:208,State:1,Class:16
+Microsoft.Data.SqlClient.SqlException (0x80131904): Invalid object name 'ProductoPersonalizado'.
+   at Microsoft.Data.SqlClient.SqlCommand.<>c.<ExecuteDbDataReaderAsync>b__211_0(Task`1 result)
+   at System.Threading.Tasks.ContinuationResultTaskFromResultTask`2.InnerInvoke()
+   at System.Threading.ExecutionContext.RunInternal(ExecutionContext executionContext, ContextCallback callback, Object state)
+--- End of stack trace from previous location ---
+   at System.Threading.ExecutionContext.RunInternal(ExecutionContext executionContext, ContextCallback callback, Object state)
+   at System.Threading.Tasks.Task.ExecuteWithThreadLocal(Task& currentTaskSlot, Thread threadPoolThread)
+--- End of stack trace from previous location ---
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.AsyncEnumerator.InitializeReaderAsync(AsyncEnumerator enumerator, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.SqlServer.Storage.Internal.SqlServerExecutionStrategy.ExecuteAsync[TState,TResult](TState state, Func`4 operation, Func`4 verifySucceeded, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.AsyncEnumerator.MoveNextAsync()
+ClientConnectionId:6e36aac8-d1b8-4063-b179-0c0d4e22543c
+Error Number:208,State:1,Class:16

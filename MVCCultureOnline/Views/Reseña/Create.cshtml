@@ -1,0 +1,114 @@
+﻿@model CultureOnline.Application.DTOs.ReseñaDTO  
+@{  
+    ViewData["Title"] = "Crear Reseña";  
+    var pedidos = ViewBag.ListPedidos as List<CultureOnline.Application.DTOs.PedidoDTO> ?? new List<CultureOnline.Application.DTOs.PedidoDTO>();  
+    var productoId = ViewBag.ProductoId;  
+    bool tienePedidos = pedidos != null && pedidos.Any();  
+}  
+<div class="container mt-5" style="max-width: 600px;">  
+    <h2 class="mb-4 text-center">Nueva Reseña</h2>  
+    @if (!ViewData.ModelState.IsValid)
+    {
+        <div class="alert alert-danger">
+            <ul>
+                @foreach (var error in ViewData.ModelState.Values.SelectMany(v => v.Errors))
+                {
+                    <li>@error.ErrorMessage</li>
+                }
+            </ul>
+        </div>
+    }
+    <form id="formReseña" asp-action="Create" method="post" class="border rounded p-4 shadow-sm bg-light">  
+        <input type="hidden" asp-for="ProductoId" />  
+
+        <div class="mb-3">  
+            <label asp-for="PedidoId" class="form-label">Pedido asociado</label>  
+            <select asp-for="PedidoId" class="form-select" asp-items="@(new SelectList(pedidos, "Id", "NumeroFactura"))">  
+                <option value="">Seleccione un pedido</option>  
+            </select>  
+            <span asp-validation-for="PedidoId" class="text-danger"></span>  
+        </div>  
+
+        <div class="mb-3">  
+            <label asp-for="Comentario" class="form-label">Comentario</label>  
+            <textarea asp-for="Comentario" class="form-control"></textarea>  
+            <span asp-validation-for="Comentario" class="text-danger"></span>  
+        </div>  
+
+        <div class="mb-3">  
+            <label asp-for="Valoracion" class="form-label">Valoración</label>  
+            <div id="star-rating" class="mb-2">  
+                @for (int i = 1; i <= 5; i++)  
+                {  
+                    <span class="star" data-value="@i" style="font-size:2rem; cursor:pointer; color:#ccc;">&#9733;</span>  
+                }  
+            </div>  
+            <input type="hidden" asp-for="Valoracion" />  
+            <span asp-validation-for="Valoracion" class="text-danger"></span>  
+        </div>  
+
+        <div class="d-flex justify-content-between mt-4">  
+            <button type="submit" class="btn btn-dark">Guardar</button>  
+            <a asp-action="Index" class="btn btn-outline-secondary">Cancelar</a>  
+        </div>  
+    </form>  
+</div>  
+
+@section Scripts {  
+    <script>  
+        const stars = document.querySelectorAll('#star-rating .star');  
+        const valoracionInput = document.getElementById('Valoracion');  
+        let currentRating = 0;  
+
+        stars.forEach(star => {  
+            star.addEventListener('mouseover', function () {  
+                const val = parseInt(this.getAttribute('data-value'));  
+                highlightStars(val);  
+            });  
+            star.addEventListener('mouseout', function () {  
+                highlightStars(currentRating);  
+            });  
+            star.addEventListener('click', function () {  
+                currentRating = parseInt(this.getAttribute('data-value'));  
+                valoracionInput.value = currentRating;  
+                highlightStars(currentRating);  
+            });  
+        });  
+
+        function highlightStars(rating) {  
+            stars.forEach(star => {  
+                const val = parseInt(star.getAttribute('data-value'));  
+                star.style.color = val <= rating ? '#ffc107' : '#ccc';  
+            });  
+        }  
+    </script>  
+
+    <script>
+        document.getElementById('formReseña').addEventListener('submit', async function (e) {
+            e.preventDefault();
+            const form = e.target;
+            const data = new FormData(form);
+            const response = await fetch(form.action, {
+                method: 'POST',
+                body: data,
+                headers: { 'X-Requested-With': 'XMLHttpRequest' }
+            });
+            if (response.ok) {
+                const result = await response.json();
+                if (result.success) {
+                    // Cargar el HTML actualizado de las reseñas
+                    fetch(`/Producto/ReseñasParcial?productoId=${result.productoId}`)
+                        .then(r => r.text())
+                        .then(html => {
+                            document.getElementById('reseñas-container').innerHTML = html;
+                        });
+                    // Opcional: cerrar modal, mostrar mensaje, etc.
+                }
+            } else {
+                // Manejar errores de validación
+                const html = await response.text();
+                document.getElementById('formReseña').outerHTML = html;
+            }
+        });
+    </script>
+}

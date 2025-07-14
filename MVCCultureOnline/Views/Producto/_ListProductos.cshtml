@@ -1,0 +1,120 @@
+﻿@model IEnumerable<CultureOnline.Application.DTOs.ProductoDTO>
+
+@foreach (var item in Model)
+{
+    var imagen = item.Imagenes?.FirstOrDefault()?.Ruta ?? "Defaul.jpg";
+
+    <div class="col-md-4 mb-4">
+        <div class="card shadow-sm h-100">
+
+            
+            <img class="card-img-top"
+                 style="height: 460px; object-fit: cover;"
+                 src="@Url.Content($"/images/{imagen}")"
+                 alt="Imagen de @item.Nombre" />
+
+            <h4 class="card-title text-center mt-2">@item.Nombre</h4>
+            <div class="card-body">
+                <h6 class="card-text">@item.Descripcion</h6><br />
+
+                <!-- BLOQUE DE PRECIO Y PROMOCIÓN -->
+                <h6>
+                    <strong>Precio:</strong>
+                    @if (item.PrecioPromocional.HasValue && item.PrecioPromocional.Value < item.Precio)
+                    {
+                        <span style="color: #28a745; font-weight: bold;">
+                            @item.PrecioPromocional.Value.ToString("C")
+                        </span>
+
+                        <span style="text-decoration: line-through; color: #888; margin-left:8px;">
+                            @item.Precio.ToString("C")
+                        </span>
+                        <span class="badge bg-danger ms-2">
+                            ¡Oferta!
+                            @if (!string.IsNullOrEmpty(item.NombrePromocion))
+                            {
+                                <span>— @item.NombrePromocion</span>
+                            }
+
+                        </span>
+                        <br />
+                
+                        <br />
+                        @if (item.PrecioPromocional.HasValue && item.PrecioPromocional.Value < item.Precio)
+                        {
+                            <div class="promo-tag">
+                                <span class="badge bg-danger">
+                                    <strong>
+                                        -@item.DescuentoPorcentajePromocion%
+                                    </strong>
+                                    @if (item.NombresPromociones?.Any() == true)
+                                    {
+                                        @foreach (var nombre in item.NombresPromociones)
+                                        {
+                                            <span>  <strong>| @nombre | <br /> </strong></span>
+                                        }
+                                    }
+                                </span>
+                            </div>
+                        }
+                    }
+                    else
+                    {
+                        <span>@item.Precio.ToString("C")</span>
+                    }
+                </h6>
+                <!-- FIN BLOQUE PRECIO Y PROMOCIÓN -->
+                @if (!string.IsNullOrEmpty(item.IdAutorNavigation?.Descripcion))
+                {
+                    <h6><strong>@Html.DisplayNameFor(modelItem => item.IdAutorNavigation):</strong> @item.IdAutorNavigation.Descripcion</h6>
+                }
+                @if (!string.IsNullOrEmpty(item.Editorial))
+                {
+                    <h6><strong>@Html.DisplayNameFor(modelItem => item.Editorial):</strong> @item.Editorial</h6>
+                }
+                @if (!string.IsNullOrWhiteSpace(item.ClasificacionEdad))
+                {
+                    <h6><strong>@Html.DisplayNameFor(modelItem => item.ClasificacionEdad):</strong> @item.ClasificacionEdad</h6>
+                }
+
+                @{
+                    var valoracion = item.PromedioValoracion ?? 0;
+                    var enteras = (int)Math.Floor(valoracion);
+                    var tieneMedia = (valoracion % 1) > 0;
+                    var vacias = 5 - enteras - (tieneMedia ? 1 : 0);
+                }
+
+                <h6>
+                    <span class="text-warning">
+                        @for (int i = 0; i < enteras; i++)
+                        {
+                            <i class="fas fa-star"></i>
+                        }
+                        @if (tieneMedia)
+                        {
+                            <i class="fas fa-star-half-alt"></i>
+                        }
+                        @for (int i = 0; i < vacias; i++)
+                        {
+                            <i class="far fa-star"></i>
+                        }
+                    </span>
+                    <span class="ms-2 text-muted">(@valoracion.ToString("0.0"))</span>
+                </h6>
+
+            </div>
+            <div class="card-footer text-center bg-white border-0">
+                <a class="animated-button"
+                   asp-action="Detalle"
+                   asp-controller="Producto"
+                   asp-route-id="@item.Id">
+                    <span class="text">Ver Detalle</span>
+                    <span class="circle"></span>
+                    <svg viewBox="0 0 24 24" class="arr-1" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M16.1716 10.9999L10.8076 5.63589L12.2218 4.22168L20 11.9999L12.2218 19.778L10.8076 18.3638L16.1716 12.9999H4V10.9999H16.1716Z"></path>
+                    </svg>
+                </a>
+            </div>
+        </div>
+    </div>
+}
