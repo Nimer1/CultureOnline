@@ -14,7 +14,10 @@ namespace CultureOnline.Application.Profiles
         public PromocionProfile()
         {
 
-            CreateMap<PromocionDTO, Promociones>().ReverseMap();
+            CreateMap<Promociones, PromocionDTO>()
+     .ForMember(dest => dest.CategoriaId, opt => opt.MapFrom(src => src.CategoriaId))
+     // ...otros mapeos
+     .ReverseMap();
         }
     }
 }

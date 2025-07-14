@@ -20,16 +20,20 @@ namespace CultureOnline.Application.DTOs
         [Required(ErrorMessage = "{0} es un dato requerido")]
         public int TipoPromocionId { get; set; }
 
-        [Display(Name = "Producto Asociado")]
-        public int ProductoId { get; set; }
+        /*[Display(Name = "Producto Asociado")]
+        public int? ProductoId { get; set; }
 
         [Display(Name = "Categoria Asociada")]
-        public int CategoriaId { get; set; }
+        public int? CategoriaId { get; set; }*/
+        public int? ProductoId { get; set; }
+
+        public int? CategoriaId { get; set; }
+
 
         [Display(Name = "Porcentaje de descuento")]
         [Required(ErrorMessage = "{0} es un dato requerido")]
         [Range(0, 100, ErrorMessage = "El porcentaje de descuento debe ser un valor entre 0 y 100")]
-        public decimal DescuentoPorcentaje { get; set; }
+        public int DescuentoPorcentaje { get; set; }
 
         [Display(Name = "Fecha de Inicio")]
         [DataType(DataType.Date)]
@@ -40,10 +44,21 @@ namespace CultureOnline.Application.DTOs
         public DateTime FechaFin { get; set; }
 
         [Display(Name = "Estado")]
-        public string? Estado { get; set; }
+
+        public string Estado
+        {
+            get
+            {
+                var now = DateTime.Now;
+                if (now < FechaInicio) return "Pendiente";
+                if (now > FechaFin) return "Aplicado";
+                return "Vigente";
+            }
+        }
 
         public List<CategoriaDTO> Categorias { get; set; } = new();
         public ProductoDTO? Producto { get; set; }
         public TipoPromocionDTO TipoPromocion { get; set; } = null!;
+        public CategoriaDTO? Categoria { get; set; }
     }
 }

@@ -1,26 +1,44 @@
 ﻿@model CultureOnline.Application.DTOs.ProductoDTO
+@using System.Security.Claims
 
 @{
     ViewData["Title"] = "Detalle del Producto";
+    var mensajeError = TempData["MensajeError"] as string;
+    int usuarioId = 0;
+    if (User.Identity.IsAuthenticated)
+    {
+        var claim = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier);
+        if (claim != null)
+        {
+            int.TryParse(claim.Value, out usuarioId);
+        }
+    }
+    var reseñaUsuario = Model.Reseñas?.FirstOrDefault(r => r.UsuarioId == usuarioId);
+}
+
+@if (!string.IsNullOrEmpty(mensajeError))
+{
+    <div class="alert alert-warning alert-dismissible fade show" role="alert">
+        <strong>Atención:</strong> @mensajeError
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
 }
 
 <h3 class="text-center mt-4 mb-4">Detalle del Producto</h3>
 
-<div class="card mx-auto" style="max-width: 800px;">
+<div class="card mx-auto" style="max-width: 820px;">
     <div class="row g-0">
-        <!-- Imagen / carrusel -->
+
         <div class="col-md-6">
             @if (Model.Imagenes != null && Model.Imagenes.Any())
             {
                 <div id="carouselDetalle" class="carousel slide h-100" data-bs-ride="carousel">
-
                     <div class="carousel-indicators">
                         @for (int i = 0; i < Model.Imagenes.Count; i++)
                         {
                             <button type="button" data-bs-target="#carouselDetalle" data-bs-slide-to="@i" class="@(i == 0 ? "active" : "")" aria-current="@(i == 0 ? "true" : "false")" aria-label="Slide @(i + 1)"></button>
                         }
                     </div>
-
                     <div class="carousel-inner">
                         @for (int i = 0; i < Model.Imagenes.Count; i++)
                         {
@@ -33,7 +51,6 @@
                             </div>
                         }
                     </div>
-                   
                 </div>
             }
             else
@@ -48,9 +65,41 @@
         <!-- Información del producto -->
         <div class="col-md-6">
             <div class="card-body">
-                <h4 class="card-title">@Model.Nombre</h4>
-                <p class="card-text"></b> @Model.Descripcion</p>
-                <p class="card-text"><b>@Html.DisplayNameFor(m => m.Precio):</b> &cent; @Model.Precio</p>
+                <h2 class="card-title">@Model.Nombre</h2>
+                <p class="card-text">@Model.Descripcion</p>
+
+                @* PROMOCIÓN *@
+                @if (Model.PrecioPromocional.HasValue && Model.PrecioPromocional.Value < Model.Precio)
+                {
+                    <div class="alert alert-success text-center mb-3">
+                        <strong>¡Oferta especial!</strong>
+                        @if (!string.IsNullOrEmpty(Model.NombrePromocion))
+                        {
+                            <span>— <b>@Model.NombrePromocion</b></span>
+                        }
+                        @if (Model.DescuentoPorcentajePromocion.HasValue)
+                        {
+                            <span> (-@Model.DescuentoPorcentajePromocion.Value%)</span>
+                        }
+                    </div>
+                }
+
+                <p class="card-text">
+                    <b>@Html.DisplayNameFor(m => m.Precio):</b>
+                    @if (Model.PrecioPromocional.HasValue && Model.PrecioPromocional.Value < Model.Precio)
+                    {
+                        <span style="color: #28a745; font-weight: bold;">
+                            &cent; @Model.PrecioPromocional.Value.ToString("N2")
+                        </span>
+                        <span style="text-decoration: line-through; color: #888; margin-left:8px;">
+                            &cent; @Model.Precio.ToString("N2")
+                        </span>
+                    }
+                    else
+                    {
+                        <span>&cent; @Model.Precio.ToString("N2")</span>
+                    }
+                </p>
 
                 @if (!string.IsNullOrEmpty(Model.IdAutorNavigation?.Descripcion))
                 {
@@ -80,6 +129,20 @@
                     </p>
                 }
 
+                @*Etiquetas*@
+                @if (Model.Etiquetas?.Any() == true)
+                {
+                    <div class="card-text mb-2">
+                        <b>Etiquetas:</b>
+                        <div class="d-flex flex-wrap gap-2 mt-2">
+                            @foreach (var etiqueta in Model.Etiquetas)
+                            {
+                                <span class="badge etiqueta-pill">@etiqueta.Descripcion</span>
+                            }
+                        </div>
+                    </div>
+                }
+
                 @* Valoración *@
                 @{
                     var valoracion = Model.PromedioValoracion ?? 0;
@@ -88,9 +151,9 @@
                     var vacias = 5 - enteras - (tieneMedia ? 1 : 0);
                 }
 
-                <p class="card-text">
-                    <b>Valoración:</b>
-                    <span class="text-warning ms-2">
+                <p class="mt-3 card-text">
+                    <br />
+                    <span class="text-warning">
                         @for (int i = 0; i < enteras; i++)
                         {
                             <i class="fas fa-star"></i>
@@ -106,28 +169,117 @@
                     </span>
                     <span class="ms-2 text-muted">(@valoracion.ToString("0.0"))</span>
                 </p>
-                
-                <p class="card-text">
-                    <b>@Html.DisplayNameFor(m => m.EsPersonalizable):</b>
-                    @(Model.EsPersonalizable ? "Sí" : "No")
-                </p>
 
-                @if (Model.Etiquetas?.Any() == true)
+                @if (Model.Categorias != null && Model.Categorias.Any(c => c.Nombre.Equals("Marcapáginas", StringComparison.OrdinalIgnoreCase)))
                 {
                     <p class="card-text">
-                        <b>Etiquetas:</b>
-                        <ul>
-                            @foreach (var et in Model.Etiquetas)
-                            {
-                                <li>@et.Descripcion</li>
-                            }
-                        </ul>
+                        <b>@Html.DisplayNameFor(m => m.EsPersonalizable):</b>
+                        @(Model.EsPersonalizable ? "Si" : "No")
                     </p>
                 }
-
-                <a asp-action="Index" class="btn custom-hover rounded-pill px-5 py-2 fw-semibold shadow-sm btn-detalle-largo mt-3">Volver al listado</a>
             </div>
         </div>
     </div>
-</div>
 
+    <h4 class="mt-5 mb-3 ms-3">Reseñas de clientes</h4>
+
+
+    <div id="reseñas-container">
+        @if (Model.Reseñas != null && Model.Reseñas.Any())
+        {
+            <div id="reseñas-list" style="display:flex; flex-wrap: nowrap; gap: 1rem; max-width: 820px; margin: auto;">
+                @for (int i = 0; i < Model.Reseñas.Count; i++)
+                {
+                    var reseña = Model.Reseñas[i];
+                    <div class="card reseña-item" data-index="@i" style="flex: 0 0 48%; display:none;">
+                        <div class="card-header d-flex align-items-center">
+                            <div class="avatar me-2">
+                                @reseña.Usuario?.Nombre?.Substring(0, 2).ToUpper()
+                            </div>
+                            <div class="user-info">
+                                <div class="user-name">@reseña.Usuario?.Nombre</div>
+                                <div class="user-role">@reseña.Fecha?.ToString("dd/MM/yyyy")</div>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <div class="rating text-warning mb-2">
+                                @{
+                                    int estrellas = reseña.Valoracion;
+                                    int pvacias = 5 - estrellas;
+                                }
+                                @for (int j = 0; j < estrellas; j++)
+                                {
+                                    <i class="fas fa-star"></i>
+                                }
+                                @for (int j = 0; j < pvacias; j++)
+                                {
+                                    <i class="far fa-star"></i>
+                                }
+                            </div>
+                            <p class="card-text">@reseña.Comentario</p>
+                        </div>
+                    </div>
+                }
+            </div>
+
+            <div id="paginacion-reseñas" class="text-center my-4">
+                <button id="btnAnterior" class="btn btn-cereza me-2" disabled>
+                    <i class="fas fa-arrow-left me-1"></i> Anterior
+                </button>
+                <span id="paginaActual" class="mx-2 fw-semibold">1</span> /
+                <span id="totalPaginas">@Math.Ceiling((double)Model.Reseñas.Count / 2)</span>
+                <button id="btnSiguiente" class="btn btn-cereza ms-2">
+                    Siguiente <i class="fas fa-arrow-right ms-1"></i>
+                </button>
+            </div>
+
+        }
+        else
+        {
+            <h6 class="mt-4" style="margin-left: 15px;">*Este producto aún no tiene reseñas.</h6>
+        }
+
+        <div class="text-start mb-4 ms-3">
+            @if (User.Identity.IsAuthenticated)
+            {
+                if (reseñaUsuario != null)
+                {
+                    <a href="@Url.Action("Edit", "Reseña", new { id = reseñaUsuario.Id })" class="menu__link">
+                        <i class="fas fa-edit me-2"></i> Editar mi reseña
+                    </a>
+                }
+                else
+                {
+                    <a href="@Url.Action("Create", "Reseña", new { productoId = Model.Id })" class="menu__link">
+                        <i class="fas fa-plus me-2"></i> Agregar un comentario
+                    </a>
+                }
+            }
+            else
+            {
+                <a href="@Url.Action("Create", "Reseña", new { productoId = Model.Id })" class="menu__link">
+                    <i class="fas fa-plus me-2"></i> Agregar un comentario
+                </a>
+            }
+        </div>
+
+    </div>
+
+    <div class="card-footer text-center bg-white border-0 mt-3">
+        <a class="animated-button"
+           asp-action="Index">
+            <svg viewBox="0 0 24 24" class="arr-2" xmlns="http://www.w3.org/2000/svg">
+                <path d="M7.8284 10.9999L13.1924 5.63589L11.7782 4.22168L4 11.9999L11.7782 19.778L13.1924 18.3638L7.8284 12.9999H20V10.9999H7.8284Z"></path>
+            </svg>
+            <span class="text">Volver al listado</span>
+            <span class="circle"></span>
+            <svg viewBox="0 0 24 24" class="arr-1" xmlns="http://www.w3.org/2000/svg">
+                <path d="M7.8284 10.9999L13.1924 5.63589L11.7782 4.22168L4 11.9999L11.7782 19.778L13.1924 18.3638L7.8284 12.9999H20V10.9999H7.8284Z"></path>
+            </svg>
+        </a>
+    </div>
+
+
+@section Scripts {
+    <script src="~/js/producto.js"></script>
+}

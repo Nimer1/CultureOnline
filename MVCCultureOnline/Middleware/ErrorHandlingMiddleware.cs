@@ -21,7 +21,7 @@ namespace Libreria.Web.Middleware
             try
             {
                 await _next(context);
-            }
+             }
             catch (Exception ex)
             {
                 routeWhereExceptionOccured = context.Request.Path;

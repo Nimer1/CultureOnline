@@ -13,8 +13,9 @@ namespace CultureOnline.Application.Profiles
     {
         public PedidoProfile()
         {
-
-            CreateMap<PedidoDTO, Pedidos>().ReverseMap();
+            CreateMap<Pedidos, PedidoDTO>()
+                .ForMember(dest => dest.DetallePedido, opt => opt.MapFrom(src => src.DetallePedido))
+                .ReverseMap();
         }
     }
 }

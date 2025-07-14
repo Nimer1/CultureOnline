@@ -1,15 +1,19 @@
+using CultureOnline.Application.Config;
 using CultureOnline.Application.Profiles;
 using CultureOnline.Application.Services.Implementations;
 using CultureOnline.Application.Services.Interfaces;
 using CultureOnline.Infraestructure.Data;
+using CultureOnline.Infraestructure.Models;
 using CultureOnline.Infraestructure.Repository.Implementations;
 using CultureOnline.Infraestructure.Repository.Interfaces;
 using Libreria.Web.Middleware;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Builder;
+using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using Serilog;
 using Serilog.Events;
 using System.Text;
-using Microsoft.AspNetCore.Builder;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -20,10 +24,41 @@ builder.Services.AddControllersWithViews();
 builder.Services.AddTransient<IRepositoryAutor, RepositoryAutor>();
 builder.Services.AddTransient<IRepositoryCategoria, RepositoryCategoria>();
 builder.Services.AddTransient<IRepositoryProducto, RepositoryProducto>();
+builder.Services.AddTransient<IRepositoryReseña, RepositoryReseña>();
+builder.Services.AddTransient<IRepositoryDetalleCarrito, RepositoryDetalleCarrito>();
+builder.Services.AddTransient<IRepositoryEtiqueta, RepositoryEtiqueta>();
+builder.Services.AddTransient<IRepositoryGeneroProducto, RepositoryGeneroProducto>();
+builder.Services.AddTransient<IRepositoryPago, RepositoryPago>();
+builder.Services.AddTransient<IRepositoryPedido, RepositoryPedido>();
+builder.Services.AddTransient<IRepositoryProductoEtiqueta, RepositoryProductoEtiqueta>();
+builder.Services.AddTransient<IRepositoryProductoImagen, RepositoryProductoImagenes>();
+builder.Services.AddTransient<IRepositoryPromocion, RepositoryPromocion>();
+builder.Services.AddTransient<IRepositoryRolUsuario, RepositoryRolUsuario>();
+builder.Services.AddTransient<IRepositoryTipoPromocion, RepositoryTipoPromocion>();
+builder.Services.AddTransient<IRepositoryUsuario, RepositoryUsuario>();
+builder.Services.AddTransient<IRepositoryProductoPersonalizado, RepositoryProductoPersonalizado>();
+builder.Services.AddTransient<IRepositoryProductoCategorias, RepositoryProductoCategorias>();
+
 //Services 
 builder.Services.AddTransient<IServiceAutor, ServiceAutor>();
 builder.Services.AddTransient<IServiceCategoria, ServiceCategoria>();
 builder.Services.AddTransient<IServiceProducto, ServiceProducto>();
+builder.Services.AddTransient<IServiceReseña, ServiceReseña>();
+builder.Services.AddTransient<IservicePedido, ServicePedido>();
+builder.Services.AddTransient<IServiceProductoPersonalizado, ServiceProductoPersonalizado>();
+builder.Services.AddTransient<IServicePromocion, ServicePromocion>();
+builder.Services.AddTransient<IServiceProductoCategorias,ServiceProductoCategorias>();
+builder.Services.AddTransient<IServiceUsuario, ServiceUsuario>();
+//Seguridad
+builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+    .AddCookie(options =>
+    {
+        options.LoginPath = "/Login/Index";
+        options.ExpireTimeSpan = TimeSpan.FromMinutes(20);
+        options.AccessDeniedPath = "/Login/Forbidden/";
+    });
+builder.Services.Configure<AppConfig>(builder.Configuration.GetSection("AppConfig"));
+
 
 //Configurar Automapper 
 builder.Services.AddAutoMapper(config =>
@@ -33,7 +68,6 @@ config.AddProfile<CategoriaProfile>();
 config.AddProfile<ProductoProfile>();
 config.AddProfile<UsuarioProfile>();
 config.AddProfile<RolUsuarioProfile>();
-config.AddProfile<DetallePedidoProfile>();
 config.AddProfile<EtiquetaProfile>();
 config.AddProfile<PagoProfile>();
 config.AddProfile<PedidoProfile>();
@@ -45,6 +79,9 @@ config.AddProfile<CarritoProfile>();
 config.AddProfile<GeneroProductoProfile>();
 config.AddProfile<TipoPromocionProfile>();
 config.AddProfile<ProductoEtiquetaProfile>();
+config.AddProfile<DetallePedidoProfile>();
+config.AddProfile<ProductoPersonalizadoProfile>();
+    config.AddProfile<ProductoCategoriasProfile>();
 });
 
 // Configuar Conexión a la Base de Datos SQL 

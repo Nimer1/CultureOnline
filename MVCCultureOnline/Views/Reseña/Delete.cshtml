@@ -1,0 +1,33 @@
+@model CultureOnline.Application.DTOs.ReseñaDTO
+@{
+    ViewData["Title"] = "Eliminar Reseña";
+}
+<div class="container mt-5" style="max-width: 600px;">
+    <div class="border rounded p-4 shadow-sm bg-light">
+        <h2 class="mb-4 text-center" style="font-family: 'Playfair Display', serif; color: #b71c1c;">¿Eliminar Reseña?</h2>
+        <div class="mb-3">
+            <label class="form-label">Comentario</label>
+            <div class="form-control-plaintext" style="font-family: 'Georgia', serif;">@Model.Comentario</div>
+        </div>
+        <div class="mb-3">
+            <label class="form-label">Valoración</label>
+            <div class="form-control-plaintext">
+                @for (int i = 0; i < Model.Valoracion; i++)
+                {
+                    <i class="fas fa-star text-warning"></i>
+                }
+                @for (int i = Model.Valoracion; i < 5; i++)
+                {
+                    <i class="far fa-star text-warning"></i>
+                }
+            </div>
+        </div>
+        <form asp-action="Delete" method="post">
+            <input type="hidden" asp-for="Id" />
+            <div class="d-flex justify-content-between mt-4">
+                <button type="submit" class="btn btn-danger" style="font-family: 'Playfair Display', serif;">Eliminar</button>
+                <a asp-action="Index" class="btn btn-outline-secondary">Cancelar</a>
+            </div>
+        </form>
+    </div>
+</div>

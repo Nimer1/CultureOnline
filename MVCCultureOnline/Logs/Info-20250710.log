@@ -1,0 +1,20 @@
+2025-07-10 10:25:44.596 -06:00 [INF] Error en login de admin, Errores --> El Correo Usuario no tiene un formato v?lido.; El Correo Usuario debe tener entre 6 y 100 caracteres.; La contrase?a debe tener entre 6 y 20 caracteres, incluyendo al menos una may?scula, una min?scula, un n?mero y un car?cter especial.
+2025-07-10 10:26:02.234 -06:00 [INF] Error en login de admin, Errores --> El Correo no tiene un formato v?lido.; El Correo debe tener entre 6 y 100 caracteres.; La contrase?a debe tener entre 6 y 20 caracteres, incluyendo al menos una may?scula, una min?scula, un n?mero y un car?cter especial.
+2025-07-10 10:39:02.386 -06:00 [INF] Error en login de ana.martinez@gmail.com, Error --> Usuario o contrase?a incorrectos
+2025-07-10 10:40:52.465 -06:00 [INF] Error en login de admin, Errores --> El Correo Usuario no tiene un formato v?lido.; El Correo Usuario debe tener entre 6 y 100 caracteres.
+2025-07-10 10:41:06.574 -06:00 [INF] Error en login de admin, Errores --> El Correo no tiene un formato v?lido.; El Correo debe tener entre 6 y 100 caracteres.
+2025-07-10 10:41:22.977 -06:00 [INF] Error en login de ana.martinez@gmail.com, Errores --> Error en pol?tica de largo de contrase?a
+2025-07-10 10:43:48.451 -06:00 [INF] Error en login de ana.martinez@gmail.com, Errores --> Error en pol?tica de largo de contrase?a
+2025-07-10 10:43:53.962 -06:00 [INF] Error en login de ana.martinez@gmail.com, Error --> Usuario o contrase?a incorrectos
+2025-07-10 10:44:02.901 -06:00 [INF] Error en login de ana.martinez@gmail.com, Error --> Usuario o contrase?a incorrectos
+2025-07-10 10:44:08.853 -06:00 [INF] Error en login de ana.martinez@gmail.com, Errores --> Error en pol?tica de largo de contrase?a
+2025-07-10 10:44:42.370 -06:00 [INF] Error en login de ana.martinez@gmail.com, Errores --> Solamente n?meros y letras
+2025-07-10 12:48:22.348 -06:00 [INF] Conexion correcta de ana.martinez@gmail.com
+2025-07-10 13:39:40.961 -06:00 [INF] Error en login de alexandra00@gmail.com, Errores --> Solamente n?meros y letras
+2025-07-10 13:40:41.191 -06:00 [INF] Conexion correcta de alexandra00@gmail.com
+2025-07-10 13:41:00.140 -06:00 [INF] Conexion correcta de alexandra00@gmail.com
+2025-07-10 13:41:35.198 -06:00 [INF] Conexion correcta de alexandra00@gmail.com
+2025-07-10 14:46:20.637 -06:00 [INF] Error en login de alexandra00@gmail.com, Error --> Usuario o contrase?a incorrectos
+2025-07-10 14:46:37.532 -06:00 [INF] Conexion correcta de alexandra00@gmail.com
+2025-07-10 17:47:57.098 -06:00 [INF] Conexion correcta de perez@gmail.com
+2025-07-10 17:49:29.566 -06:00 [INF] Conexion correcta de perez@gmail.com

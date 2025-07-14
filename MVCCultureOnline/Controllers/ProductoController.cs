@@ -29,7 +29,13 @@ namespace MVCCultureOnline.Controllers
         public async Task<IActionResult> Detalle(int id)
         {
             var producto = await _serviceProducto.FindByIdAsync(id);
-            return View("Detalle",producto);
+
+            if (producto == null)
+                return NotFound();
+
+            producto.Reseñas = await _serviceProducto.GetReseñasPorProductoAsync(id);
+
+            return View("Detalle", producto);
         }
 
         /*[HttpGet]
@@ -44,6 +50,25 @@ namespace MVCCultureOnline.Controllers
 
             return PartialView("_ListProductos", productos);
         }*/
+        public async Task<IActionResult> Promociones()
+        {
+            var productos = await _serviceProducto.ListAsync();
+            // Solo productos con precio promocional válido (calculado en el servicio)
+            var productosEnPromocion = productos
+                .Where(p => p.PrecioPromocional.HasValue && p.PrecioPromocional.Value < p.Precio)
+                .ToList();
+            return View(productosEnPromocion);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> ReseñasParcial(int productoId)
+        {
+            var producto = await _serviceProducto.FindByIdAsync(productoId);
+            if (producto == null)
+                return NotFound();
+
+            return PartialView("_ReseñasProducto", producto.Reseñas.ToList());
+        }
     }
 
 }

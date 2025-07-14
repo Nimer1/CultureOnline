@@ -1,0 +1,54 @@
+﻿@model IEnumerable<CultureOnline.Application.DTOs.ReseñaDTO>
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1 class="mt-4 mb-5 text-start fs-4">Listado de Reseñas</h1>
+
+@*
+<section class="row">
+    <div class="col-2">
+        <ul class="list-group" style="background-color:white">
+            <li class="list-group-item">
+                <button type="button" class="btn btn-info" onclick="buscarPorCategoria(0)">Todos</button>
+            </li>
+            @foreach (var categoria in (List<CultureOnline.Application.DTOs.CategoriaDTO>)ViewBag.ListCategorias)
+            {
+                <li class="list-group-item">
+                    <button type="button" class="btn btn-info" onclick="buscarPorCategoria(@categoria.Id)">@categoria.Nombre</button>
+                </li>
+            }
+        </ul>
+    </div> *@
+<div class="col-10">
+    <div id="listaProductos" class="row row-cols-1 row-cols-sm-2 row-cols-md-4 g-4">
+        @await Html.PartialAsync("_ListReseñas", Model)
+    </div>
+</div>
+
+@section Scripts {
+    <script type="text/javascript">
+        function buscarPorCategoria(idCategoria) {
+            const divLista = document.getElementById("listaProductos");
+            const url = '@Url.Action("BuscarPorCategoria", "Producto")';
+            fetch(url + "?categoriaId=" + idCategoria, { method: 'GET' })
+                .then(response => {
+                    if (!response.ok) {
+                        return response.text().then(text => { throw new Error(text) });
+                    }
+                    return response.text();
+                })
+                .then(html => {
+                    divLista.innerHTML = html;
+                })
+                .catch(error => {
+                    Swal.fire({
+                        title: "Error",
+                        text: error.message,
+                        icon: "error"
+                    });
+                });
+        }
+    </script>
+}
+

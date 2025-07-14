@@ -1,0 +1,81 @@
+﻿@model IEnumerable<CultureOnline.Application.DTOs.ReseñaDTO>
+
+<table class="table align-middle w-100" style="table-layout:auto;">
+    <thead>
+        <tr>
+            <th class="text-center">Fecha</th>
+            <th class="text-center">Usuario</th>
+            <th class="text-center">Producto</th>
+            <th class="text-center">Valoración</th>
+            <th class="text-center">Acciones</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var r in Model)
+        {
+            <tr>
+                <td class="text-center">@(r.Fecha?.ToShortDateString())</td>
+                <td class="text-center">@r.Usuario?.Nombre</td>
+                <td>
+                    @{
+                        var nombreProducto = r.Producto?.Nombre ?? "";
+                        var etiqueta = nombreProducto.ToLower().Contains("separador")
+                        ? "(Separador)" : "(Libro) ";
+                    }
+                    @etiqueta @nombreProducto
+                </td>
+                <td class="text-center">
+                    @{
+                        var valoracion = r.Valoracion;
+                        var vacias = 5 - valoracion;
+                    }
+                    <span class="text-warning">
+                        @for (int i = 0; i < valoracion; i++)
+                        {
+                            <i class="fas fa-star"></i>
+                        }
+                        @for (int i = 0; i < vacias; i++)
+                        {
+                            <i class="far fa-star"></i>
+                        }
+                    </span>
+                    <span class="ms-2 text-muted">(@valoracion.ToString("0.0"))</span>
+                </td>
+                <td class="text-center">
+                    <div class="d-flex justify-content-center gap-3 flex-wrap align-items-center">
+                        <!-- Botón ver detalle -->
+                        <a class="btn-verDetalle" href="@Url.Action("Detalle", "Reseña", new { id = r.Id })">
+                            Ver Detalle
+                        </a>
+
+                        <!-- botón crear -->
+                        <div class="circulo-contenedor">
+                            @*<a class="mx-3" href="@Url.Action("Crear", "Reseña", new { id = r.Id })"
+                               data-bs-toggle="tooltip" data-bs-placement="top" title="Crear">
+                                <i class="fas fa-plus"></i>
+                            </a>*@
+                            <!-- botón editar -->
+                           <a class="mx-3" href="@Url.Action("Editar", "Reseña", new { id = r.Id })"
+                               data-bs-toggle="tooltip" data-bs-placement="top" title="Editar">
+                                <i class="fas fa-edit"></i>
+                            </a>
+
+                        
+                        </div>
+                    </div>
+                </td>
+
+            </tr>
+        }
+    </tbody>
+</table>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+        tooltipTriggerList.forEach(function (tooltipTriggerEl) {
+            new bootstrap.Tooltip(tooltipTriggerEl);
+        });
+    });
+</script>
+

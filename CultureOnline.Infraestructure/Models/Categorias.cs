@@ -14,4 +14,6 @@ public partial class Categorias
     public virtual ICollection<Productos> Productos { get; set; } = new List<Productos>();
 
     public virtual ICollection<Promociones> Promociones { get; set; } = new List<Promociones>();
+    public virtual ICollection<ProductoCategorias> ProductoCategorias { get; set; } = new List<ProductoCategorias>();
+
 }

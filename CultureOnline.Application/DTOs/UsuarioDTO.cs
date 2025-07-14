@@ -27,9 +27,9 @@ namespace CultureOnline.Application.DTOs
         public DateTime? UltimoInicioSesion { get; set; }
 
         [Display(Name = "Estado")]
-        public int? IdEstado { get; set; }
+        public string? Estado { get; set; }
 
-        public virtual RolUsuarioDTO IDRolNavigation { get; set; } = null!;
+        public virtual RolUsuarioDTO? IDRolNavigation { get; set; }
 
     }
 }

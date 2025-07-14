@@ -1,6 +1,13 @@
-﻿<nav class="navbar navbar-expand-lg custom-navbar">
+﻿@using System.Security.Claims
+
+@{
+    var isAuthenticated = User.Identity.IsAuthenticated;
+    var userName = User.Identity.Name;
+}
+
+<nav class="navbar navbar-expand-lg custom-navbar">
     <div class="container-fluid">
-        <a class="navbar-brand d-flex align-items-center" href="@Url.Action("Index")">
+        <a class="navbar-brand d-flex align-items-center" href="@Url.Action("Index", "Home")">
             <img src="~/images/Imagen1.png" alt="Logo">
         </a>
 
@@ -8,34 +15,94 @@
                 aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
-        <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
+
+        <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between w-100">
             <ul class="navbar-nav flex-grow-1">
                 <li class="nav-item">
                     <a class="nav-link nav-item-custom" asp-area="" asp-controller="Producto" asp-action="Index">Productos</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link nav-item-custom" asp-area="" asp-controller="Resena" asp-action="Index">Reseñas</a>
+                    <a class="nav-link nav-item-custom" asp-area="" asp-controller="Reseña" asp-action="Index">Reseñas</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link nav-item-custom" asp-area="" asp-controller="Promociones" asp-action="Index">Promociones</a>
+                    <a class="nav-link nav-item-custom" asp-area="" asp-controller="Promocion" asp-action="Index">Listado Promociones</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link nav-item-custom" asp-area="" asp-controller="Producto" asp-action="Promociones">Promociones</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link nav-item-custom" asp-area="" asp-controller="Pedido" asp-action="Index">Pedidos</a>
                 </li>
                 
-                @*<li class="nav-item">
-                    <a class="nav-link nav-item-custom" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-                </li>*@
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle nav-item-custom" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                         Mantenimientos
                     </a>
                     <ul class="dropdown-menu">
-                        <li><a class="dropdown-item" asp-controller="Producto" asp-action="Index">Productos</a></li>
-                        <li><a class="dropdown-item" asp-controller="Resena" asp-action="IndexAdmin">Reseñas</a></li>
+                        <li>
+                            <a class="dropdown-item custom-dropdown-item" asp-controller="Producto" asp-action="Index">
+                                Productos
+                            </a>
+                        </li>
+                        <li>
+                            <a class="dropdown-item custom-dropdown-item" asp-controller="Usuario" asp-action="IndexAdmin">
+                                Usuarios
+                            </a>
+                        </li>
+
                     </ul>
                 </li>
             </ul>
+
+            <!-- Botones a la derecha -->
+            <div class="d-flex align-items-center ms-auto">
+                <!-- Botón favorito -->
+                <label class="favorite-toggle me-4" title="Favoritos">
+                    <input type="checkbox" />
+                    <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M16.4,4C14.6,4,13,4.9,12,6.3C11,4.9,9.4,4,7.6,4C4.5,4,2,6.5,2,9.6C2,14,12,22,12,22s10-8,10-12.4C22,6.5,19.5,4,16.4,4z" />
+                    </svg>
+                </label>
+
+                <!-- Ícono de búsqueda -->
+                <a href="#" class="text-white fs-5 me-4" title="Buscar">
+                    <i class="fas fa-search"></i>
+                </a>
+
+                @if (!isAuthenticated)
+                {
+                    <!-- Botón Ingresar -->
+                    <a href="@Url.Action("Index", "Login")" class="text-decoration-none me-4" aria-label="Botón Ingresar">
+                        <div class="user-profile">
+                            <div class="user-profile-inner">
+                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" aria-hidden="true">
+                                    <path d="m15.626 11.769a6 6 0 1 0 -7.252 0 9.008 9.008 0 0 0 -5.374 8.231 3 3 0 0 0 3 3h12a3 3 0 0 0 3-3 9.008 9.008 0 0 0 -5.374-8.231zm-7.626-4.769a4 4 0 1 1 4 4 4 4 0 0 1 -4-4zm10 14h-12a1 1 0 0 1 -1-1 7 7 0 0 1 14 0 1 1 0 0 1 -1 1z" />
+                                </svg>
+                                <p class="m-0">Ingresar</p>
+                            </div>
+                        </div>
+                    </a>
+                }
+                else
+                {
+                    <!-- Usuario autenticado: dropdown con nombre -->
+                    <div class="dropdown me-4">
+                        <button class="btn btn-outline-light dropdown-toggle" type="button" id="userDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                            @userName
+                        </button>
+                        <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
+                            <li><a class="dropdown-item" href="@Url.Action("CerrarSesion", "Login")">Cerrar sesión</a></li>
+                        </ul>
+                    </div>
+                }
+                <!-- Ícono de carrito -->
+                <a href="#" class="text-white fs-5 me-5" title="Carrito">
+                    <i class="fas fa-shopping-cart"></i>
+                </a>
+
+            </div>
+
         </div>
     </div>
 </nav>
+

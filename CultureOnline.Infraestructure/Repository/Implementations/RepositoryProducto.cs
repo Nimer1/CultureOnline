@@ -22,20 +22,21 @@ namespace CultureOnline.Infraestructure.Repository.Implementations
         public async Task<Productos> FindByIdAsync(int id)
         {
             var producto = await _context.Productos
-                .Include(p => p.Categorias)
-                .Include(p => p.Etiqueta)
+                .Include(p => p.ProductoCategorias)
+                    .ThenInclude(pc => pc.Categoria)
+                .Include(p => p.Etiquetas)
                 .Include(p => p.Promociones)
                 .Include(p => p.ProductoImagenes)
+                .Include(p => p.Reseñas)
                 .FirstOrDefaultAsync(p => p.Id == id);
 
             return producto!;
         }
-
         public async Task<ICollection<Productos>> ListAsync()
         {
             var productos = await _context.Productos
-                //.Include(p => p.Categorias)
-                .Include(p => p.Etiqueta)
+                .Include(p => p.ProductoCategorias).ThenInclude(pc => pc.Categoria)
+                .Include(p => p.Etiquetas)
                 .Include(p => p.Promociones)
                 .Include(p => p.ProductoImagenes)
                 .Include(p => p.IdAutorNavigation)
@@ -53,7 +54,17 @@ namespace CultureOnline.Infraestructure.Repository.Implementations
                     .Where(c => selectedCategorias.Contains(c.Id.ToString()))
                     .ToListAsync();
 
-                producto.Categorias = categorias;
+                if (producto.ProductoCategorias == null)
+                    producto.ProductoCategorias = new List<ProductoCategorias>();
+
+                foreach (var cat in categorias)
+                {
+                    producto.ProductoCategorias.Add(new ProductoCategorias
+                    {
+                        ProductoId = producto.Id, 
+                        CategoriaId = cat.Id
+                    });
+                }
             }
 
             _context.Productos.Add(producto);
@@ -61,7 +72,7 @@ namespace CultureOnline.Infraestructure.Repository.Implementations
             return producto.Id;
         }
 
-    public async Task DeleteAsync(int id)
+        public async Task DeleteAsync(int id)
         {
             var producto = await _context.Productos
                 .Include(p => p.Categorias)
@@ -78,24 +89,33 @@ namespace CultureOnline.Infraestructure.Repository.Implementations
             return await _context.Productos
                 .Where(p => p.Categorias.Any(c => c.Id == idCategoria))
                 .Include(p => p.Categorias)
-                .Include(p => p.Etiqueta)
+                .Include(p => p.Etiquetas)
                 .ToListAsync();
         }
         public async Task UpdateAsync(Productos producto, string[] selectedCategorias)
         {
-            // Primero busca el producto existente con categorías y autor
             var existingProducto = await _context.Productos
-                .Include(p => p.Categorias)
+                .Include(p => p.ProductoCategorias)
                 .Include(p => p.IdAutorNavigation)
                 .FirstOrDefaultAsync(p => p.Id == producto.Id);
 
             if (existingProducto == null)
                 throw new Exception("El producto no se ha encontrado");
 
-            // Actualiza las propiedades simples
-            _context.Entry(existingProducto).CurrentValues.SetValues(producto);
+            // Actualiza solo propiedades simples
+            existingProducto.Nombre = producto.Nombre;
+            existingProducto.Descripcion = producto.Descripcion;
+            existingProducto.Precio = producto.Precio;
+            existingProducto.Stock = producto.Stock;
+            existingProducto.Estado = producto.Estado;
+            existingProducto.AnioPublicacion = producto.AnioPublicacion;
+            existingProducto.IdAutor = producto.IdAutor;
+            existingProducto.ClasificacionEdad = producto.ClasificacionEdad;
+            existingProducto.Editorial = producto.Editorial;
+            existingProducto.PromedioValoracion = producto.PromedioValoracion;
+            existingProducto.EsPersonalizable = producto.EsPersonalizable;
 
-            // Si el idAutor existe entonces lo actualiza
+            // Actualiza el autor si corresponde
             if (producto.IdAutor != null)
             {
                 var autor = await _context.Autor.FindAsync(producto.IdAutor);
@@ -110,8 +130,10 @@ namespace CultureOnline.Infraestructure.Repository.Implementations
                 }
             }
 
-            // Actualiza las categorías
-            existingProducto.Categorias.Clear();
+            // Actualiza solo categorías
+            if (existingProducto.ProductoCategorias == null)
+                existingProducto.ProductoCategorias = new List<ProductoCategorias>();
+            existingProducto.ProductoCategorias.Clear();
             if (selectedCategorias != null && selectedCategorias.Length > 0)
             {
                 var categorias = await _context.Categorias
@@ -120,20 +142,23 @@ namespace CultureOnline.Infraestructure.Repository.Implementations
 
                 foreach (var cat in categorias)
                 {
-                    existingProducto.Categorias.Add(cat);
+                    existingProducto.ProductoCategorias.Add(new ProductoCategorias
+                    {
+                        ProductoId = existingProducto.Id,
+                        CategoriaId = cat.Id
+                    });
                 }
             }
 
             await _context.SaveChangesAsync();
         }
-        /*public async Task<ICollection<Productos>> GetProductoByCategoria(int idCategoria)
+
+        public async Task<List<Reseñas>> GetReseñasPorProductoAsync(int productoId)
         {
-            return await _context.Productos
-                .Where(p => p.CategoriaId == idCategoria)
+            return await _context.Reseñas
+                .Where(r => r.ProductoId == productoId && r.Aprobada == true)
+                .Include(r => r.Usuario)
                 .ToListAsync();
-        }*/
-
-
+        }
     }
-
 }

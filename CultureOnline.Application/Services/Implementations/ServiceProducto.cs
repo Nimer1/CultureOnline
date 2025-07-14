@@ -12,17 +12,21 @@ using CultureOnline.Infraestructure.Repository.Interfaces;
 
 namespace CultureOnline.Application.Services.Implementations
 {
-    public  class ServiceProducto : IServiceProducto
+    public class ServiceProducto : IServiceProducto
     {
         private readonly IRepositoryProducto _repository;
         private readonly IMapper _mapper;
         private readonly ILogger<ServiceProducto> _logger;
-
-        public ServiceProducto(IRepositoryProducto repository, IMapper mapper, ILogger<ServiceProducto> logger)
+        private readonly IServicePromocion _servicePromocion;
+        private readonly IServiceProductoCategorias _serviceProductoCategorias;
+        public ServiceProducto(IRepositoryProducto repository, IMapper mapper, ILogger<ServiceProducto> logger,
+                                        IServicePromocion servicePromocion, IServiceProductoCategorias serviceProductoCategorias)
         {
+            _servicePromocion = servicePromocion;
             _repository = repository;
             _mapper = mapper;
             _logger = logger;
+            _serviceProductoCategorias = serviceProductoCategorias;
         }
         public async Task<int> AddAsync(ProductoDTO dto, string[] selectedCategorias)
         {
@@ -32,12 +36,61 @@ namespace CultureOnline.Application.Services.Implementations
             // Return
             return await _repository.AddAsync(objectMapped, selectedCategorias);
         }
+
         //Listar productos
         public async Task<ProductoDTO> FindByIdAsync(int id)
         {
-            var @object = await _repository.FindByIdAsync(id);
-            var objectMapped = _mapper.Map<ProductoDTO>(@object);
-            return objectMapped;
+            var producto = await _repository.FindByIdAsync(id);
+            if (producto == null)
+                return null;
+            var productoDTO = _mapper.Map<ProductoDTO>(producto);
+            if (productoDTO.Promociones == null)
+                productoDTO.Promociones = new List<PromocionDTO>();
+            if (productoDTO.Categorias == null)
+                productoDTO.Categorias = new List<CategoriaDTO>();
+
+            // Trae todas las promociones vigentes
+            var promociones = await _servicePromocion.ListAsync();
+
+            // Promociones directas al producto
+            var promocionesDirectas = productoDTO.Promociones
+                .Where(p =>
+                    p.Estado == "Vigente" &&
+                    p.ProductoId == productoDTO.Id &&
+                    p.FechaInicio <= DateTime.Now &&
+                    p.FechaFin >= DateTime.Now)
+                .ToList();
+
+            // Promociones por categoría
+            var promocionesPorCategoria = promociones
+                .Where(p =>
+                    p.Estado == "Vigente" &&
+                    p.CategoriaId.HasValue &&
+                    productoDTO.Categorias.Any(c => c.Id == p.CategoriaId.Value) &&
+                    p.FechaInicio <= DateTime.Now &&
+                    p.FechaFin >= DateTime.Now)
+                .ToList();
+
+            // Unir todas las promociones y sumar descuentos
+            var todasPromociones = promocionesDirectas.Concat(promocionesPorCategoria).Distinct().ToList();
+
+            int descuentoTotal = todasPromociones.Sum(p => p.DescuentoPorcentaje);
+            if (descuentoTotal > 100)
+                descuentoTotal = 100;
+
+            if (descuentoTotal > 0)
+            {
+                productoDTO.PrecioPromocional = productoDTO.Precio - (productoDTO.Precio * descuentoTotal / 100m);
+                productoDTO.DescuentoPorcentajePromocion = descuentoTotal;
+                productoDTO.NombresPromociones = todasPromociones.Select(p => p.Nombre).ToList();
+            }
+            else
+            {
+                productoDTO.PrecioPromocional = null;
+                productoDTO.DescuentoPorcentajePromocion = null;
+                productoDTO.NombresPromociones = new List<string>();
+            }
+            return productoDTO;
         }
 
         //Borrar un producto por ID
@@ -45,16 +98,59 @@ namespace CultureOnline.Application.Services.Implementations
         {
             await _repository.DeleteAsync(id);
         }
-        //
+
+        // Listar todos los productos
         public async Task<ICollection<ProductoDTO>> ListAsync()
         {
-            // Get data from Repository
-            var list = await _repository.ListAsync();
-            // Map List<Producto> to ICollection<ProductoDTO>
-            var collection = _mapper.Map<ICollection<ProductoDTO>>(list);
-            // Return Data
-            return collection;
+            var productos = await _repository.ListAsync();
+            var productosDTO = _mapper.Map<ICollection<ProductoDTO>>(productos);
+            var promociones = await _servicePromocion.ListAsync();
+            var categorias = await _serviceProductoCategorias.ListAsync();
+
+            foreach (var prod in productosDTO)
+            {
+                // Promociones directas
+                var promocionesDirectas = prod.Promociones
+                    .Where(p =>
+                        p.Estado == "Vigente" &&
+                        p.ProductoId == prod.Id &&
+                        p.FechaInicio <= DateTime.Now &&
+                        p.FechaFin >= DateTime.Now)
+                    .ToList();
+
+                // Promociones por categoría
+                var promocionesPorCategoria = promociones
+                    .Where(p =>
+                        p.Estado == "Vigente" &&
+                        p.CategoriaId.HasValue &&
+                        prod.Categorias.Any(c => c.Id == p.CategoriaId.Value) &&
+                        p.FechaInicio <= DateTime.Now &&
+                        p.FechaFin >= DateTime.Now)
+                    .ToList();
+
+                var todasPromociones = promocionesDirectas.Concat(promocionesPorCategoria).Distinct().ToList();
+
+                int descuentoTotal = todasPromociones.Sum(p => p.DescuentoPorcentaje);
+                if (descuentoTotal > 100)
+                    descuentoTotal = 100;
+
+                if (descuentoTotal > 0)
+                {
+                    prod.PrecioPromocional = prod.Precio - (prod.Precio * descuentoTotal / 100m);
+                    prod.DescuentoPorcentajePromocion = descuentoTotal;
+                    prod.NombresPromociones = todasPromociones.Select(p => p.Nombre).ToList();
+                }
+                else
+                {
+                    prod.PrecioPromocional = null;
+                    prod.DescuentoPorcentajePromocion = null;
+                    prod.NombresPromociones = new List<string>();
+                }
+            }
+            return productosDTO;
         }
+
+
         // Actualizar un producto por ID
         public async Task UpdateAsync(int id, ProductoDTO dto, string[] selectedCategorias)
         {
@@ -66,16 +162,12 @@ namespace CultureOnline.Application.Services.Implementations
 
             await _repository.UpdateAsync(entity, selectedCategorias);
         }
-        // Obtener productos por categoría
-        /*public async Task<ICollection<ProductoDTO>> GetProductoByCategoria(int IdCategoria)
-        {
-            // Get data from Repository
-            var list = await _repository.GetProductoByCategoria(IdCategoria);
-            // Map List<Libro> to ICollection<LibroDTO>
-            var collection = _mapper.Map<ICollection<ProductoDTO>>(list);
-            // Return Data
-            return collection;
-        }*/
 
+        public async Task<List<ReseñaDTO>> GetReseñasPorProductoAsync(int productoId)
+        {
+            var reseñas = await _repository.GetReseñasPorProductoAsync(productoId);
+            return _mapper.Map<List<ReseñaDTO>>(reseñas);
+        }
     }
 }
+

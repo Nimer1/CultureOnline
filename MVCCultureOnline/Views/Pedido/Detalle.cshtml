@@ -1,0 +1,164 @@
+﻿@model CultureOnline.Application.DTOs.PedidoDTO
+
+@{
+    ViewBag.Title = "Detalle del Pedido";
+    var pedido = Model;
+    var metodoPago = pedido.Pago.FirstOrDefault()?.MetodoPago ?? "No especificado";
+}
+
+<div class="invoice-container">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+    <h4>Factura - Detalle #@pedido.NumeroFactura</h4>
+        <img src="~/images/Imagen1.png" alt="Logo" style="height: 80px;" />
+    </div>
+    <hr />
+
+    <!-- Encabezado -->
+    <section>
+        <p><strong>Fecha/Hora:</strong> @pedido.Fecha.ToString("dd/MM/yyyy  HH:mm")</p>
+    </section><br />
+
+    <!-- Información del Cliente -->
+    <section>
+        <h4>Información del Cliente</h4>
+        <p><strong>Nombre:</strong> @pedido.Usuario?.Nombre</p>
+        <p><strong>Dirección de Envío:</strong> @pedido.Direccion</p>
+    </section>
+
+    <!-- Detalle de Productos -->
+        <section>
+            <h4>Detalle de Productos</h4>
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th>Producto</th>
+                    <th class="text-center">Cantidad</th>
+                    <th class="text-center">Precio Unitario</th>
+                    <th class="text-center">Subtotal</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in pedido.DetallePedido)
+                    {
+                        <tr>
+                        <td>
+                            @{
+                                var nombreProducto = item.Producto?.Nombre ?? "";
+                                var lowerNombre = nombreProducto.ToLower();
+
+                                var etiqueta = lowerNombre.Contains("separador") ? "(Separador)" : "(Libro)";
+                            }
+                            @etiqueta @nombreProducto
+                        </td>
+
+                        <td class="text-center">@item.Cantidad</td>
+                        <td class="text-center">@item.PrecioUnitario.ToString("C")</td>
+                        <td class="text-center">@((item.Cantidad * item.PrecioUnitario).ToString("C"))</td>
+                        </tr>
+
+                        @if (!string.IsNullOrEmpty(item.Observacion))
+                        {
+                            <tr>
+                                <td colspan="5"><strong>Observación:</strong> @item.Observacion</td>
+                            </tr>
+                        }
+                    }
+                </tbody>
+            </table>
+        </section>
+
+
+    @if (pedido.ProductosPersonalizados != null && pedido.ProductosPersonalizados.Any())
+    {
+    <!-- Detalle de Productos Personalizados -->
+    <section>
+        <h4>Detalle de Productos Personalizados</h4>
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th>Producto Personalizado</th>
+                    <th>Criterios Personalizados</th>
+                    <th class="text-center">Cantidad</th>
+                    <th class="text-center">Precio Unitario</th>
+                    <th class="text-center">Subtotal</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in pedido.ProductosPersonalizados)
+                {
+                    <tr>
+                        <td>@item.Producto?.Nombre</td>
+                        <td>
+                            @if (!string.IsNullOrEmpty(item.TextoPersonalizado))
+                            {
+                                <div><strong>Texto:</strong> @item.TextoPersonalizado (@item.CostoTexto.ToString("C"))</div>
+                            }
+                            @if (!string.IsNullOrEmpty(item.MaterialPersonalizado))
+                            {
+                                <div><strong>Material:</strong> @item.MaterialPersonalizado (@item.CostoMaterial.ToString("C"))</div>
+                            }
+                            @if (!string.IsNullOrEmpty(item.ImagenPersonalizada))
+                            {
+                                <div><strong>Imagen:</strong> <img src="~/images/@item.ImagenPersonalizada" alt="Imagen personalizada" style="max-height:70px;" /> (@item.CostoImagen.ToString("C"))</div>
+                            }
+                        </td>
+                        <td class="text-center">@item.Cantidad</td>
+                        <td class="text-center">
+                            @item.Producto?.Precio.ToString("C")
+                        </td>
+                        <td class="text-center">
+                            @((item.PrecioUnitario).ToString("C"))
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </section>
+    }
+
+
+    <!-- Resumen -->
+    <section class="d-flex justify-content-end mt-4">
+        <div style="width: 350px; text-align: right; margin-right: 40px; margin-top: 25px;">
+           <!-- <h5 class="mb-3">Resumen del Pedido</h5>-->
+            @{
+                const decimal impuesto = 0.13m; // 13 %
+
+                var subtotalNormales = pedido.DetallePedido.Sum(d => d.Cantidad * d.PrecioUnitario);
+                var subtotalPersonalizados = pedido.ProductosPersonalizados.Sum(p => p.Cantidad * p.PrecioUnitario);
+                var subtotal = subtotalNormales + subtotalPersonalizados;
+                var impuestos = Math.Round(subtotal * impuesto, 2);
+                var total = subtotal + impuestos;
+            }
+            <p><strong>Subtotal Productos Normales:</strong> @subtotalNormales.ToString("C")</p>
+            <p><strong>Subtotal Personalizados:</strong> @subtotalPersonalizados.ToString("C")</p>
+            <p><strong>Impuestos:</strong> @impuestos.ToString("C")</p>
+            <hr />
+            <p><strong>Total:</strong> <span style="font-size: 1.1rem;">@total.ToString("C")</span></p>
+            <p><strong>Método de Pago:</strong> @metodoPago</p>
+        </div>
+    </section>
+
+    <footer class="mt-5 text-center text-muted" style="font-size: 0.85rem;">
+        <hr />
+        <p><strong>CultureOnline</strong></p>
+        <p>cultureonline@gmail.com  |  +506 24099011</p>
+        <p>Gracias por apoyar la lectura y el conocimiento.</p>
+    </footer>
+
+    <div class="card-footer text-center bg-white border-0 mt-3">
+        <a class="animated-button"
+           asp-action="Index">
+            <svg viewBox="0 0 24 24" class="arr-2" xmlns="http://www.w3.org/2000/svg">
+                <path d="M7.8284 10.9999L13.1924 5.63589L11.7782 4.22168L4 11.9999L11.7782 19.778L13.1924 18.3638L7.8284 12.9999H20V10.9999H7.8284Z"></path>
+            </svg>
+            <span class="text">Volver al listado</span>
+            <span class="circle"></span>
+            <svg viewBox="0 0 24 24" class="arr-1" xmlns="http://www.w3.org/2000/svg">
+                <path d="M7.8284 10.9999L13.1924 5.63589L11.7782 4.22168L4 11.9999L11.7782 19.778L13.1924 18.3638L7.8284 12.9999H20V10.9999H7.8284Z"></path>
+            </svg>
+        </a>
+    </div>
+
+</div>
+

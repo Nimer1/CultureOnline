@@ -41,7 +41,9 @@ namespace CultureOnline.Application.DTOs
         [Display(Name = "Descripción del pago")]
         public string? Descripcion { get; set; }
 
-        
+        [Display(Name = "Método de pago")]
+        public string? MetodoPago { get; set; }
+
         public PedidoDTO? Pedido { get; set; }
     }
 }

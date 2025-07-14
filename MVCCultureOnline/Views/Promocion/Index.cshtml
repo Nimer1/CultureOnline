@@ -1,0 +1,24 @@
+﻿@model IEnumerable<CultureOnline.Application.DTOs.PromocionDTO>
+
+@{
+    ViewData["Title"] = "Listado de Promociones";
+}
+
+<h1 class="mt-4 mb-5 text-start fs-4">Listado de Promociones</h1>
+
+@*
+    <section class="row">
+    <div class="col-2">
+        <ul class="list-group" style="background-color:white">
+            <li class="list-group-item">
+                <button type="button" class="btn btn-info" onclick="buscarPorCategoria(0)">Todos</button>
+            </li>
+            @foreach (var categoria in (List<CultureOnline.Application.DTOs.CategoriaDTO>)ViewBag.ListCategorias)
+            {
+                <li class="list-group
+*@
+<div class="col-10">
+    <div id="listaPromocion" class="row row-cols-1 row-cols-sm-2 row-cols-md-4 g-4">
+        @await Html.PartialAsync("_ListPromocion", Model)
+    </div>
+</div>

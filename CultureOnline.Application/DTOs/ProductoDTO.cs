@@ -66,10 +66,18 @@ namespace CultureOnline.Application.DTOs
 
         //[ValidateNever]
         // public virtual List<PedidoDetalleDTO> DetallePedido { get; set; } = null!;
-        public List<CategoriaDTO> Categorias { get; set; } = new();
+      //  public List<CategoriaDTO> Categorias { get; set; } = new();
         public List<EtiquetaDTO> Etiquetas { get; set; } = new();
         public List<ProductoImagenesDTO> Imagenes { get; set; } = new();
         public List<ReseñaDTO> Reseñas { get; set; } = new();
         public List<PromocionDTO> Promociones { get; set; } = new();
+        public List<ProductoCategoriasDTO> ProductoCategorias { get; set; } = new();
+
+        public decimal? PrecioPromocional { get; set; }
+        public string? NombrePromocion { get; set; }
+        public decimal? DescuentoPorcentajePromocion { get; set; } = 0;
+        public List<string> NombresPromociones { get; set; } = new List<string>();
+  
+        public ICollection<CategoriaDTO> Categorias { get; set; }
     }
 }

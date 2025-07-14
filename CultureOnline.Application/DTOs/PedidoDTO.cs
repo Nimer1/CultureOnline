@@ -25,9 +25,9 @@ namespace CultureOnline.Application.DTOs
         [Display(Name = "Estado")]
         public string? Estado { get; set; } = null!;
 
-        [Display(Name = "Método de Pago")]
+        /*[Display(Name = "Método de Pago")]
         [Required(ErrorMessage = "{0} es un dato requerido")]
-        public int IdmetodoPago { get; set; }
+        public int IdmetodoPago { get; set; }*/
 
         [Display(Name = "Código de Descuento")]
         public string? CodigoDescuento { get; set; }
@@ -44,6 +44,9 @@ namespace CultureOnline.Application.DTOs
         [Display(Name = "Imagen Personalizada")]
         public string? ImagenPersonalizada { get; set; }
 
+        [Display(Name = "Número de Factura")]
+        public string? NumeroFactura { get; set; }
+
         public virtual UsuarioDTO? Usuario { get; set; }
 
         public virtual List<DetallePedidoDTO> DetallePedido { get; set; } = new();
@@ -51,5 +54,7 @@ namespace CultureOnline.Application.DTOs
         public virtual List<PagoDTO> Pago { get; set; } = new();
 
         public virtual List<ReseñaDTO> Reseñas { get; set; } = new();
+        public virtual List<ProductoPersonalizadoDTO> ProductosPersonalizados { get; set; } = new();
+
     }
 }

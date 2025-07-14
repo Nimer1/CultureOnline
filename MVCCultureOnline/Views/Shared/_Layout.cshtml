@@ -17,11 +17,25 @@
         @await Html.PartialAsync("_Menu")
     </header>
     
-        <main role="main" class="flex-grow-1">
-            <div class="container pb-3">
-                @RenderBody()
-            </div>
-        </main>
+       <main role="main" class="flex-grow-1">
+    @{
+        var currentController = ViewContext.RouteData.Values["controller"]?.ToString();
+        var currentAction = ViewContext.RouteData.Values["action"]?.ToString();
+        var isHomePage = currentController == "Home" && currentAction == "Index";
+    }
+
+    @if (isHomePage)
+    {
+        @RenderBody()
+    }
+    else
+    {
+        <div class="container pb-3">
+            @RenderBody()
+        </div>
+    }
+</main>
+
 
 
     <footer class="custom-footer text-center text-lg-start">
@@ -31,12 +45,12 @@
                     <h5 class="text-uppercase">CultureOnline</h5>
 
                     <p>
-                        CultureOnline es una tienda en línea dedicada <br />a ofrecer una amplia variedad
+                        CultureOnline es una librería en línea dedicada <br />a ofrecer una amplia variedad
                         de libros <br/> para todo tipo de lectores.
                     </p>
                 </div>
                 <div class="col-lg-3 col-md-6 mb-4 mb-md-0">
-                    <h5 class="text-uppercase">Enlaces Rápidos</h5>
+                    <h5 class="text-uppercase mb-3">Enlaces Rápidos</h5>
 
                     <ul class="list-unstyled">
                         <li><span class="text-white">Inicio</span></li>
@@ -47,24 +61,30 @@
 
                 </div>
                 <div class="col-lg-3 col-md-6 mb-4 mb-md-0">
-                    <h5 class="text-uppercase mb-0">Contacto</h5>
+                    <h5 class="text-uppercase mb-3">Contacto</h5>
 
-                    <ul class="list-unstyled">
-                        <li class=" mt-3">
+                    <ul class="list-unstyled d-flex flex-column gap-2">
+                        <li class="d-flex align-items-center">
                             <i class="bi bi-envelope text-white me-2"></i>
                             <span class="text-white">cultureonline@gmail.com</span>
                         </li>
-                        <li>
+                        <li class="d-flex align-items-center">
                             <i class="bi bi-telephone text-white me-2"></i>
                             <span class="text-white">+506 24099011</span>
                         </li>
+                        <li class="d-flex align-items-center">
+                            <i class="bi bi-facebook text-white me-2"></i>
+                            <a href="https://www.facebook.com/CultureOnline" target="_blank" class="text-white text-decoration-none">Culture Online</a>
+                        </li>
                     </ul>
+
 
                 </div>
             </div>
         </div>
         <div class="text-center p-3" style="background-color: rgba(0, 0, 0, 0.2);">
-            © 2025 Copyright CultureOnline
+            © 2025 Copyright CultureOnline - Daniela Ruiz Gutiérrez - Nimer Hernández Calderón
+
         </div>
     </footer>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>

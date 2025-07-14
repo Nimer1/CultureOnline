@@ -14,6 +14,8 @@ namespace CultureOnline.Infraestructure.Repository.Interfaces
         Task<int> AddAsync(Productos objectMapped, string[] selectedCategorias);
         Task DeleteAsync(int id);
         Task UpdateAsync(Productos entity, string[] selectedCategorias);
+        Task<List<Reseñas>> GetReseñasPorProductoAsync(int productoId);
+
         //Task<ICollection<Productos>> GetProductoByCategoria(int idCategoria);
     }
 }
