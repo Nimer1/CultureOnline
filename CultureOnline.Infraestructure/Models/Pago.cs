@@ -22,6 +22,7 @@ public partial class Pago
     public decimal? Monto { get; set; }
 
     public string? Descripcion { get; set; }
+    public string? MetodoPago { get; set; }
 
     public virtual Pedidos Pedido { get; set; } = null!;
 }

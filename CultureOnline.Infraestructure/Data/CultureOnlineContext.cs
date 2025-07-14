@@ -43,6 +43,8 @@ public partial class CultureOnlineContext : DbContext
     public virtual DbSet<TipoPromocion> TipoPromocion { get; set; }
 
     public virtual DbSet<Usuario> Usuario { get; set; }
+    public virtual DbSet<ProductoPersonalizado> ProductosPersonalizados { get; set; }
+    public virtual DbSet<ProductoCategorias> ProductoCategorias { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -72,10 +74,10 @@ public partial class CultureOnlineContext : DbContext
 
         modelBuilder.Entity<Categorias>(entity =>
         {
-            entity.Property(e => e.IdEstado)
+            entity.Property(e => e.Estado)
                 .HasMaxLength(20)
                 .IsUnicode(false)
-                .HasColumnName("idEstado");
+                .HasColumnName("Estado");
             entity.Property(e => e.Nombre).HasMaxLength(50);
         });
 
@@ -155,12 +157,12 @@ public partial class CultureOnlineContext : DbContext
             entity.Property(e => e.Fecha)
                 .HasDefaultValueSql("(getdate())")
                 .HasColumnType("datetime");
-            entity.Property(e => e.IdEstado)
+            entity.Property(e => e.Estado)
                 .HasMaxLength(20)
                 .IsUnicode(false)
-                .HasColumnName("idEstado");
+                .HasColumnName("Estado");
             entity.Property(e => e.IdSeguimiento).HasMaxLength(100);
-            entity.Property(e => e.IdmetodoPago).HasColumnName("IDMetodoPago");
+           // entity.Property(e => e.IdmetodoPago).HasColumnName("IDMetodoPago");
             entity.Property(e => e.ImagenPersonalizada)
                 .HasMaxLength(255)
                 .HasColumnName("imagenPersonalizada");
@@ -172,6 +174,24 @@ public partial class CultureOnlineContext : DbContext
                 .HasConstraintName("FK_Pedidos_Usuario");
         });
 
+        modelBuilder.Entity<ProductoPersonalizado>(entity =>
+        {
+            entity.ToTable("ProductosPersonalizados");
+
+            entity.HasKey(e => e.Id);
+
+            entity.HasOne(e => e.Pedido)
+                  .WithMany(p => p.ProductosPersonalizados)
+                  .HasForeignKey(e => e.PedidoId)
+                  .OnDelete(DeleteBehavior.Cascade);
+
+            entity.HasOne(e => e.Producto)
+                  .WithMany()
+                  .HasForeignKey(e => e.ProductoId)
+                  .OnDelete(DeleteBehavior.Restrict);
+        });
+
+
         modelBuilder.Entity<ProductoImagenes>(entity =>
         {
             entity.Property(e => e.Ruta).HasMaxLength(255);
@@ -180,35 +200,35 @@ public partial class CultureOnlineContext : DbContext
                 .HasForeignKey(d => d.ProductoId)
                 .HasConstraintName("FK_ProductoImagenes_Productos");
         });
-
         modelBuilder.Entity<Productos>(entity =>
         {
             entity.Property(e => e.ClasificacionEdad).HasMaxLength(20);
             entity.Property(e => e.Editorial).HasMaxLength(100);
             entity.Property(e => e.IdAutor).HasColumnName("idAutor");
-            entity.Property(e => e.IdEstado)
+            entity.Property(e => e.Estado)
                 .HasMaxLength(20)
                 .IsUnicode(false)
-                .HasColumnName("idEstado");
-            entity.Property(e => e.IdGeneroProducto).HasColumnName("idGeneroProducto");
+                .HasColumnName("Estado");
             entity.Property(e => e.Nombre).HasMaxLength(100);
-            entity.Property(e => e.Precio).HasColumnType("decimal(10, 2)");
+            entity.Property(e => e.Precio).HasColumnType("decimal(10, 2" +
+                ")");
             entity.Property(e => e.PromedioValoracion).HasDefaultValue(0.0);
 
-            entity.HasOne(d => d.Categoria).WithMany(p => p.Productos)
-                .HasForeignKey(d => d.CategoriaId)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK_Productos_Categorias");
-
-            entity.HasOne(d => d.IdAutorNavigation).WithMany(p => p.Productos)
+            // Relación con Autor
+            entity.HasOne(d => d.IdAutorNavigation)
+                .WithMany(p => p.Productos)
                 .HasForeignKey(d => d.IdAutor)
                 .HasConstraintName("FK_Productos_Autor");
 
-            entity.HasOne(d => d.IdGeneroProductoNavigation).WithMany(p => p.Productos)
-                .HasForeignKey(d => d.IdGeneroProducto)
-                .HasConstraintName("FK_Productos_GeneroProducto");
+            // Relación con Imágenes del Producto
+            entity.HasMany(p => p.ProductoImagenes)
+                .WithOne(pi => pi.Producto)
+                .HasForeignKey(pi => pi.ProductoId)
+                .HasConstraintName("FK_ProductoImagenes_Productos");
 
-            entity.HasMany(d => d.Etiqueta).WithMany(p => p.Producto)
+            // Relación con Etiquetas (muchos a muchos anónima, esta sí puede quedar así si no tenés entidad explícita)
+            entity.HasMany(d => d.Etiquetas)
+                .WithMany(p => p.Producto)
                 .UsingEntity<Dictionary<string, object>>(
                     "ProductoEtiquetas",
                     r => r.HasOne<Etiquetas>().WithMany()
@@ -223,7 +243,26 @@ public partial class CultureOnlineContext : DbContext
                     {
                         j.HasKey("ProductoId", "EtiquetaId");
                     });
+
+            // Relación con Categorías (muchos a muchos explícita)
+            entity.HasMany(p => p.Categorias)
+                .WithMany(c => c.Productos)
+                .UsingEntity<ProductoCategorias>(
+                    j => j
+                        .HasOne(pc => pc.Categoria)
+                        .WithMany(c => c.ProductoCategorias)
+                        .HasForeignKey(pc => pc.CategoriaId),
+                    j => j
+                        .HasOne(pc => pc.Producto)
+                        .WithMany(p => p.ProductoCategorias)
+                        .HasForeignKey(pc => pc.ProductoId),
+                    j =>
+                    {
+                        j.ToTable("ProductoCategorias");
+                        j.HasKey(pc => new { pc.ProductoId, pc.CategoriaId });
+                    });
         });
+
 
         modelBuilder.Entity<Promociones>(entity =>
         {
@@ -233,12 +272,7 @@ public partial class CultureOnlineContext : DbContext
             entity.Property(e => e.DescuentoPorcentaje).HasColumnType("decimal(18, 0)");
             entity.Property(e => e.FechaFin).HasColumnType("datetime");
             entity.Property(e => e.FechaInicio).HasColumnType("datetime");
-            entity.Property(e => e.IdEstado)
-                .HasMaxLength(20)
-                .IsUnicode(false)
-                .HasColumnName("idEstado");
-            entity.Property(e => e.Nombre).HasMaxLength(100);
-
+        
             entity.HasOne(d => d.Categoria).WithMany(p => p.Promociones)
                 .HasForeignKey(d => d.CategoriaId)
                 .HasConstraintName("FK_Promociones_Categoria");
@@ -276,9 +310,9 @@ public partial class CultureOnlineContext : DbContext
 
         modelBuilder.Entity<RolUsuario>(entity =>
         {
-            entity.HasKey(e => e.Idrol);
+            entity.HasKey(e => e.IDrol);
 
-            entity.Property(e => e.Idrol).HasColumnName("IDRol");
+            entity.Property(e => e.IDrol).HasColumnName("IDRol");
             entity.Property(e => e.Descripcion).HasMaxLength(15);
         });
 
@@ -296,10 +330,10 @@ public partial class CultureOnlineContext : DbContext
 
             entity.Property(e => e.Contrasena).HasMaxLength(255);
             entity.Property(e => e.Correo).HasMaxLength(100);
-            entity.Property(e => e.IdEstado)
+            entity.Property(e => e.Estado)
                 .HasMaxLength(20)
                 .IsUnicode(false)
-                .HasColumnName("idEstado");
+                .HasColumnName("Estado");
             entity.Property(e => e.Idrol).HasColumnName("IDRol");
             entity.Property(e => e.Nombre).HasMaxLength(50);
             entity.Property(e => e.UltimoInicioSesion)
@@ -310,9 +344,23 @@ public partial class CultureOnlineContext : DbContext
                 .HasForeignKey(d => d.Idrol)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK_Usuario_Rol");
+
+
         });
 
-        OnModelCreatingPartial(modelBuilder);
+   
+        modelBuilder.Entity<ProductoCategorias>(entity =>
+        {
+            entity.HasKey(e => new { e.ProductoId, e.CategoriaId }); 
+            entity.HasOne(e => e.Producto)
+                .WithMany(p => p.ProductoCategorias)
+                .HasForeignKey(e => e.ProductoId);
+
+            entity.HasOne(e => e.Categoria)
+                .WithMany(c => c.ProductoCategorias)
+                .HasForeignKey(e => e.CategoriaId);
+        });
+
     }
 
     partial void OnModelCreatingPartial(ModelBuilder modelBuilder);

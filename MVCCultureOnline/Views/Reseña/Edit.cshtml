@@ -1,0 +1,82 @@
+@model CultureOnline.Application.DTOs.ReseñaDTO
+@{
+    ViewData["Title"] = "Editar Reseña";
+}
+
+<div class="container mt-5" style="max-width: 600px;">
+    <h2 class="mb-4 text-center">Editar Reseña</h2>
+
+    @if (!ViewData.ModelState.IsValid)
+    {
+        <div class="alert alert-danger">
+            <ul>
+                @foreach (var error in ViewData.ModelState.Values.SelectMany(v => v.Errors))
+                {
+                    <li>@error.ErrorMessage</li>
+                }
+            </ul>
+        </div>
+    }
+
+    <form asp-action="Edit" method="post" class="border rounded p-4 shadow-sm bg-light">
+        <input type="hidden" asp-for="Id" />
+        <input type="hidden" asp-for="ProductoId" />
+        <input type="hidden" asp-for="PedidoId" />
+
+        <div class="mb-3">
+            <label asp-for="Comentario" class="form-label">Comentario</label>
+            <textarea asp-for="Comentario" class="form-control" rows="3"></textarea>
+            <span asp-validation-for="Comentario" class="text-danger"></span>
+        </div>
+
+        <div class="mb-3">
+            <label asp-for="Valoracion" class="form-label">Valoración</label>
+            <div id="star-rating" class="mb-2">
+                @for (int i = 1; i <= 5; i++)
+                {
+                    var selected = Model.Valoracion == i ? "#ffc107" : "#ccc";
+                    <span class="star" data-value="@i" style="font-size:2rem; cursor:pointer; color:@selected;">&#9733;</span>
+                }
+            </div>
+            <input type="hidden" asp-for="Valoracion" />
+            <span asp-validation-for="Valoracion" class="text-danger"></span>
+        </div>
+
+        <div class="d-flex justify-content-between mt-4">
+            <button type="submit" class="btn btn-dark">Guardar Cambios</button>
+            <a asp-action="Index" class="btn btn-outline-secondary">Cancelar</a>
+        </div>
+    </form>
+</div>
+
+@section Scripts {
+    <script>
+        const stars = document.querySelectorAll('#star-rating .star');
+        const valoracionInput = document.getElementById('Valoracion');
+        let currentRating = parseInt(valoracionInput.value) || 0;
+
+        highlightStars(currentRating);
+
+        stars.forEach(star => {
+            star.addEventListener('mouseover', function () {
+                const val = parseInt(this.getAttribute('data-value'));
+                highlightStars(val);
+            });
+            star.addEventListener('mouseout', function () {
+                highlightStars(currentRating);
+            });
+            star.addEventListener('click', function () {
+                currentRating = parseInt(this.getAttribute('data-value'));
+                valoracionInput.value = currentRating;
+                highlightStars(currentRating);
+            });
+        });
+
+        function highlightStars(rating) {
+            stars.forEach(star => {
+                const val = parseInt(star.getAttribute('data-value'));
+                star.style.color = val <= rating ? '#ffc107' : '#ccc';
+            });
+        }
+    </script>
+}

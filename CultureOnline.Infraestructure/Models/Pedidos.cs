@@ -13,9 +13,9 @@ public partial class Pedidos
 
     public string? Direccion { get; set; }
 
-    public string IdEstado { get; set; } = null!;
+    public string Estado { get; set; } = null!;
 
-    public int IdmetodoPago { get; set; }
+    //public int IdmetodoPago { get; set; }
 
     public string? CodigoDescuento { get; set; }
 
@@ -27,6 +27,8 @@ public partial class Pedidos
 
     public string? ImagenPersonalizada { get; set; }
 
+    public string? NumeroFactura { get; set; }
+
     public virtual ICollection<DetallePedido> DetallePedido { get; set; } = new List<DetallePedido>();
 
     public virtual ICollection<Pago> Pago { get; set; } = new List<Pago>();
@@ -34,4 +36,6 @@ public partial class Pedidos
     public virtual ICollection<Reseñas> Reseñas { get; set; } = new List<Reseñas>();
 
     public virtual Usuario? Usuario { get; set; }
+    public virtual ICollection<ProductoPersonalizado> ProductosPersonalizados { get; set; } = new List<ProductoPersonalizado>();
+
 }

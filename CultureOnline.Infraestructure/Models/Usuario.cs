@@ -17,11 +17,11 @@ public partial class Usuario
 
     public DateTime UltimoInicioSesion { get; set; }
 
-    public string? IdEstado { get; set; }
+    public string? Estado { get; set; }
 
     public virtual ICollection<Carrito> Carrito { get; set; } = new List<Carrito>();
 
-    public virtual RolUsuario IdrolNavigation { get; set; } = null!;
+    public virtual RolUsuario? IdrolNavigation { get; set; } 
 
     public virtual ICollection<Pedidos> Pedidos { get; set; } = new List<Pedidos>();
 

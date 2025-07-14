@@ -1,0 +1,31 @@
+﻿@model IEnumerable<CultureOnline.Application.DTOs.PedidoDTO>
+
+@*<h2>Pedidos</h2>*@
+
+<table class="table align-middle">
+    <thead>
+        <tr>
+            <th class="text-center">Número Pedido</th>
+            <th class="text-center">Fecha/hora del pedido</th>
+            <th class="text-center">Cliente</th>
+            <th class="text-center">Estado</th>
+            <th class="text-center">Total</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var p in Model)
+        {
+            <tr>
+                <td class="text-center"># @p.NumeroFactura</td>
+                <td class="text-center">@p.Fecha.ToString("dd/MM/yyyy h:mm")</td>
+                <td class="text-center">@p.Usuario?.Nombre</td>
+                <td class="text-center">@p.Estado</td>
+                <td class="text-center">@p.Total.ToString("C")</td>
+                <td>
+                    <a class="btn-verDetalle" href="@Url.Action("Detalle", "Pedido", new { id = p.Id })">Ver Detalle</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

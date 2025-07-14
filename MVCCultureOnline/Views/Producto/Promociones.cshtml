@@ -1,0 +1,102 @@
+﻿@model IEnumerable<CultureOnline.Application.DTOs.ProductoDTO>
+
+@{
+    ViewBag.Title = "Ofertas y Promociones";
+}
+
+<h2 class="mb-4 text-center">¡Productos en Promoción!</h2>
+<div class="row">
+    @foreach (var item in Model.Where(x => x.PrecioPromocional.HasValue && x.PrecioPromocional.Value < x.Precio))
+    {
+        var imagen = item.Imagenes?.FirstOrDefault()?.Ruta ?? "Defaul.jpg";
+        var porcentaje = (int)Math.Round(((item.Precio - item.PrecioPromocional.Value) / item.Precio) * 100);
+        <div class="col-md-4 mb-4">
+            <div class="card shadow-sm h-100 border-danger border-2 position-relative">
+                @if (item.PrecioPromocional.HasValue && item.PrecioPromocional.Value < item.Precio)
+                {
+                <div class="position-absolute top-0 end-0 m-2">
+                    <span class="badge bg-gradient bg-danger text-white fs-6 shadow promo-badge">
+                        <i class="fas fa-bolt"></i>
+                        -@porcentaje%
+                            @if (item.NombresPromociones?.Any() == true)
+                            {
+                                @foreach (var nombre in item.NombresPromociones)
+                                {
+                            <span class="ms-1">|        @nombre <br /></span>
+                        }}
+                    </span>
+                </div>
+                }
+                <img class="card-img-top"
+                     style="height: 350px; object-fit: cover;"
+                     src="@Url.Content($"/images/{imagen}")"
+                     alt="Imagen de @item.Nombre" />
+                <div class="card-body">
+                    <h4 class="card-title text-center">@item.Nombre</h4>
+                    <p class="card-text">@item.Descripcion</p>
+                    <div class="text-center mb-2">
+                        <span class="fs-4 fw-bold text-success">
+                            @item.PrecioPromocional.Value.ToString("C")
+                        </span>
+                        <span class="fs-6 text-decoration-line-through text-muted ms-2">
+                            @item.Precio.ToString("C")
+                        </span>
+                    </div>
+                    @if (!string.IsNullOrEmpty(item.Editorial))
+                    {
+                        <p class="mb-1"><strong>Editorial:</strong> @item.Editorial</p>
+                    }
+                    @if (!string.IsNullOrWhiteSpace(item.ClasificacionEdad))
+                    {
+                        <p class="mb-1"><strong>Clasificación:</strong> @item.ClasificacionEdad</p>
+                    }
+                    @if (!string.IsNullOrEmpty(item.IdAutorNavigation?.Descripcion))
+                    {
+                        <p class="mb-1"><strong>Autor:</strong> @item.IdAutorNavigation.Descripcion</p>
+                    }
+                    @{
+                        var valoracion = item.PromedioValoracion ?? 0;
+                        var enteras = (int)Math.Floor(valoracion);
+                        var tieneMedia = (valoracion % 1) > 0;
+                        var vacias = 5 - enteras - (tieneMedia ? 1 : 0);
+                    }
+                    <div>
+                        <span class="text-warning">
+                            @for (int i = 0; i < enteras; i++)
+                            {
+                                <i class="fas fa-star"></i>
+                            }
+                            @if (tieneMedia)
+                            {
+                                <i class="fas fa-star-half-alt"></i>
+                            }
+                            @for (int i = 0; i < vacias; i++)
+                            {
+                                <i class="far fa-star"></i>
+                            }
+                        </span>
+                        <span class="ms-2 text-muted">(@valoracion.ToString("0.0"))</span>
+                    </div>
+                </div>
+                <div class="card-footer text-center bg-white border-0">
+                    <a class="btn btn-outline-danger fw-bold"
+                       asp-action="Detalle"
+                       asp-controller="Producto"
+                       asp-route-id="@item.Id">
+                        Ver Detalle <i class="fas fa-arrow-right"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+    }
+</div>
+
+<style>
+    .promo-badge {
+        padding: 0.6em 1.2em;
+        font-size: 1.1em;
+        border-radius: 1.5em;
+        letter-spacing: 0.04em;
+        box-shadow: 0 1px 6px rgba(220,53,69, .22);
+    }
+</style>

@@ -9,5 +9,5 @@ public partial class GeneroProducto
 
     public string Descripcion { get; set; } = null!;
 
-    public virtual ICollection<Productos> Productos { get; set; } = new List<Productos>();
+    //public virtual ICollection<Productos> Productos { get; set; } = new List<Productos>();
 }
