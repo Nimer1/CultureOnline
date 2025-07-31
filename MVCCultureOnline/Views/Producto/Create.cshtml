@@ -1,0 +1,477 @@
+﻿@model MVCCultureOnline.Views.ViewModels.ViewModelProducto
+
+@{
+    Layout = "_layoutlogin";
+}
+
+<div class="container my-5">
+    <div class="d-flex align-items-center justify-content-center">
+        <div class="card shadow-lg border-0 rounded-4 p-5" style="width: 100%; max-width: 960px;">
+            <div class="card-header bg-white border-0 text-center mb-4">
+                <h3 class="fw-bold text-danger">Crear Producto</h3>
+            </div>
+
+            <div class="card-body">
+                <form asp-controller="Producto" asp-action="Create" method="post" enctype="multipart/form-data" asp-antiforgery="true">
+
+                    <div class="row mb-4">
+                        <!-- Tipo de Producto -->
+                        <div class="col-md-6 mb-3">
+                            <label asp-for="TipoProducto" class="form-label fw-semibold text-secondary"></label>
+                            <select asp-for="TipoProducto" class="form-select form-select-lg rounded-3 shadow-sm">
+                                <option value="">Seleccione tipo</option>
+                                <option value="Libro">Libro</option>
+                                <option value="Separador">Separador</option>
+                            </select>
+                            <span asp-validation-for="TipoProducto" class="text-danger small"></span>
+                        </div>
+                        <!-- Nombre del producto -->
+                        <div class="col-md-6">
+                            <label asp-for="Nombre" class="form-label fw-semibold text-secondary">Nombre del Producto</label>
+                            <input asp-for="Nombre" class="form-control form-control-lg rounded-3 shadow-sm" placeholder="Ingrese el nombre del producto" />
+                            <span asp-validation-for="Nombre" class="text-danger small"></span>
+                        </div>
+                    </div>
+
+                    <!-- Descripción del roducto -->
+                    <div class="mb-4">
+                        <label asp-for="Descripcion" class="form-label fw-semibold text-secondary">Descripción Detallada</label>
+                        <textarea asp-for="Descripcion" class="form-control form-control-lg rounded-3 shadow-sm" rows="4" placeholder="Ingrese la descripción completa"></textarea>
+                        <span asp-validation-for="Descripcion" class="text-danger small"></span>
+                    </div>
+
+                    <!-- Precio del producto -->
+                    <div class="row mb-4">
+                        <div class="col-md-6">
+                            <label asp-for="Precio" class="form-label fw-semibold text-secondary">Precio</label>
+                            <input asp-for="Precio" type="text" inputmode="decimal" class="form-control form-control-lg rounded-3 shadow-sm" placeholder="0.00" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1')"/>
+
+                            <span asp-validation-for="Precio" class="text-danger small"></span>
+                        </div>
+
+                        <!-- Cantidad en stock -->
+                        <div class="col-md-6">
+                            <label asp-for="Stock" class="form-label fw-semibold text-secondary">Stock</label>
+                            <input asp-for="Stock" type="number" min="1" class="form-control form-control-lg rounded-3 shadow-sm" placeholder="Cantidad disponible" />
+                            <span asp-validation-for="Stock" class="text-danger small"></span>
+                        </div>
+                    </div>
+
+                    <!-- Imágenes del producto -->
+                    <div class="mb-4">
+                        <label class="form-label fw-semibold text-secondary">Imágenes</label>
+                        <input id="inputImagen" type="file" class="form-control form-control rounded-3 shadow-sm w-50" accept="image/*" multiple />
+                        <span asp-validation-for="Imagenes" class="text-danger small"></span>
+                        <div id="previewImagenes" class="d-flex flex-wrap gap-3 mt-3"></div>
+                    </div>
+
+                    <div class="row mb-4">
+                        <!-- Categorías -->
+                        <div class="col-md-6">
+                            <label class="form-label fw-semibold text-secondary">Categorías</label>
+                            <div class="dropdown">
+                                <button class="btn btn-outline-secondary dropdown-toggle w-100 text-start shadow-sm"
+                                        type="button"
+                                        id="dropdownCategorias"
+                                        data-bs-toggle="dropdown"
+                                        aria-expanded="false">
+                                    Seleccione una o más categorías
+                                </button>
+                                <ul class="dropdown-menu w-100 p-2 rounded-3 shadow-sm"
+                                    id="categoriaCheckboxList"
+                                    style="max-height: 200px; overflow-y: auto;">
+                                    @foreach (var categoria in Model.Categorias)
+                                    {
+                                        <li class="mb-1">
+                                            <div class="form-check">
+                                                <input class="form-check-input categoria-checkbox"
+                                                       type="checkbox"
+                                                       value="@categoria.Value"
+                                                       id="cat_@categoria.Value" />
+                                                <label class="form-check-label" for="cat_@categoria.Value">
+                                                    @categoria.Text
+                                                </label>
+                                            </div>
+                                        </li>
+                                    }
+                                </ul>
+                            </div>
+                            <div id="categoriasSeleccionadas"></div>
+                            <span asp-validation-for="CategoriaIds" class="text-danger small"></span>
+                        </div>
+
+                        <!-- Etiquetas -->
+                        <div class="col-md-6">
+                            <label class="form-label fw-semibold text-secondary">Etiquetas</label>
+                            <div class="dropdown">
+                                <button class="btn btn-outline-secondary dropdown-toggle w-100 text-start shadow-sm"
+                                        type="button"
+                                        id="dropdownEtiquetas"
+                                        data-bs-toggle="dropdown"
+                                        aria-expanded="false">
+                                    Seleccione una o más etiquetas
+                                </button>
+                                <ul class="dropdown-menu w-100 p-2 rounded-3 shadow-sm"
+                                    id="etiquetasCheckboxList"
+                                    style="max-height: 200px; overflow-y: auto;">
+                                    @foreach (var etiqueta in Model.Etiquetas)
+                                    {
+                                        <li class="mb-1">
+                                            <div class="form-check">
+                                                <input class="form-check-input etiqueta-checkbox"
+                                                       type="checkbox"
+                                                       value="@etiqueta.Value"
+                                                       id="etq_@etiqueta.Value" />
+                                                <label class="form-check-label" for="etq_@etiqueta.Value">
+                                                    @etiqueta.Text
+                                                </label>
+                                            </div>
+                                        </li>
+                                    }
+                                </ul>
+                            </div>
+                            <div id="etiquetasSeleccionadas"></div>
+                            <span asp-validation-for="EtiquetaIds" class="text-danger small"></span>
+                        </div>
+                    </div>
+
+                    <!--Solo si el producto es libro-->
+                    <!-- Año de publicación -->
+                    <div class="row mb-4 d-none" id="camposLibro">
+                        <div class="col-md-6 mb-3">
+                            <label asp-for="AnioPublicacion" class="form-label fw-semibold">Año de Publicación</label>
+                            <input asp-for="AnioPublicacion" class="form-control form-control-lg rounded-3 shadow-sm" id="AnioPublicacion" />
+                            <span asp-validation-for="AnioPublicacion" class="text-danger small"></span>
+                        </div>
+                        <!-- Editorial -->
+                        <div class="col-md-6 mb-3">
+                            <label asp-for="Editorial" class="form-label fw-semibold">Editorial</label>
+                            <input asp-for="Editorial" class="form-control form-control-lg rounded-3 shadow-sm" id="Editorial" />
+                            <span asp-validation-for="Editorial" class="text-danger small"></span>
+                        </div>
+                        <!-- Autor -->
+                        <div class="col-md-6 mb-3">
+                            <label asp-for="AutorId" class="form-label fw-semibold">Autor</label>
+                            <select asp-for="AutorId" class="form-select form-select-lg rounded-3 shadow-sm" asp-items="Model.Autores" id="AutorId">
+                                <option value="">Seleccione un autor</option>
+                            </select>
+                            <span asp-validation-for="AutorId" class="text-danger small"></span>
+                        </div>
+                        <!-- Clasificación edad -->
+                        <div class="col-md-6 mb-3">
+                            <label asp-for="ClasificacionEdad" class="form-label fw-semibold">Clasificación de Edad</label>
+                            <input asp-for="ClasificacionEdad" type="number" class="form-control form-control-lg rounded-3 shadow-sm" id="ClasificacionEdad" min="0" max="40" onkeydown="return ['ArrowUp','ArrowDown','Tab'].includes(event.key)" />
+                            <span asp-validation-for="ClasificacionEdad" class="text-danger small"></span>
+                        </div>
+                    </div>
+
+                    <!-- Personalizable -->
+                    <div class="row mb-4 d-none" id="personalizableBox">
+                        <div class="col-md-6">
+                            <div class="form-check mt-3">
+                                <input asp-for="EsPersonalizable" class="form-check-input" type="checkbox" id="EsPersonalizable" />
+                                <label class="form-check-label fw-semibold" for="EsPersonalizable">
+                                    ¿Este producto es personalizable?
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Valoraciones -->
+                    <div class="row mb-4">
+                        <div class="col-md-6">
+                            <label asp-for="PromedioValoracion" class="form-label fw-semibold text-secondary">Promedio de Valoraciones</label>
+                            <input asp-for="PromedioValoracion" class="form-control form-control-lg rounded-3 shadow-sm" readonly />
+                        </div>
+                    </div>
+
+                    <!-- Guardar el producto -->
+                    <div class="text-center mt-5">
+                        <button type="submit" id="btnGuardar" class="btn btn-lg w-50 text-white" style="background-color: #B22222;" disabled>
+                            Guardar Producto
+                        </button>
+                        @if (TempData["MensajeExito"] != null)
+                        {
+                            <!-- Mensaje flotante -->
+                            <div class="position-fixed top-50 start-50 translate-middle p-3" style="z-index: 1100;">
+                                <div class="alert alert-success alert-dismissible fade show shadow-lg d-flex align-items-center" role="alert" style="min-width: 300px; backdrop-filter: blur(5px);">
+                                    <div class="me-3">
+                                        <i class="fas fa-check-circle fa-2x"></i>
+                                    </div>
+                                    <div>
+                                        <h5 class="mb-0">@TempData["MensajeExito"]</h5>
+                                    </div>
+                                    <button type="button" class="btn-close ms-auto" data-bs-dismiss="alert" aria-label="Close"></button>
+                                </div>
+                            </div>
+
+                            <style>
+                                .alert-success {
+                                    background-color: rgba(25, 135, 84, 0.95);
+                                    border: none;
+                                    color: white;
+                                    border-radius: 12px;
+                                    animation: pulse 1.5s infinite;
+                                }
+                            </style>
+
+                            <script>
+                                // Desvanecer y redirigir después de 2 segundos
+                                setTimeout(function() {
+                                    $('.alert').animate({
+                                        opacity: 0,
+                                        top: "-=20"
+                                    }, 500, function() {
+                                        window.location.href = '@Url.Action("Index")';
+                                    });
+                                }, 2000);
+                            </script>
+                        }
+                    </div>
+
+                    <!-- Botón para volver al menú -->
+                    <div class="text-center mt-3">
+                        <a class="animated-button"
+                           asp-controller="Home" asp-action="Index">
+                            <svg viewBox="0 0 24 24" class="arr-2" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M7.8284 10.9999L13.1924 5.63589L11.7782 4.22168L4 11.9999L11.7782 19.778L13.1924 18.3638L7.8284 12.9999H20V10.9999H7.8284Z"></path>
+                            </svg>
+                            <span class="text">Volver al menú</span>
+                            <span class="circle"></span>
+                            <svg viewBox="0 0 24 24" class="arr-1" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M7.8284 10.9999L13.1924 5.63589L11.7782 4.22168L4 11.9999L11.7782 19.778L13.1924 18.3638L7.8284 12.9999H20V10.9999H7.8284Z"></path>
+                            </svg>
+                        </a>
+                    </div>
+                </form>
+            </div>
+
+            <div class="card-footer text-center text-muted small">
+                CultureOnline &copy; @DateTime.Now.Year
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@section Scripts {
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script>
+        $(document).ready(function () {
+
+            /*
+             Función para mostrar/ocultar los campos específicos de libros
+             basado en el tipo de producto seleccionado
+            */
+            function toggleCamposLibro() {
+                 // Obtener el valor del dropdown de tipo de producto (en minúsculas)
+                const tipo = $('#TipoProducto').val().toLowerCase();
+                 // Verificar si el tipo seleccionado es libro
+                const esLibro = tipo === "libro";
+
+                 // Mostrar/ocultar el contenedor de campos de libro
+                $('#camposLibro').toggleClass('d-none', !esLibro);
+
+                 // Si no es un libro entonces limpia los campos relacionados
+                if (!esLibro) {
+                    $('#AnioPublicacion').val('');
+                    $('#AutorId').val('');
+                    $('#ClasificacionEdad').val('');
+                    $('#Editorial').val('');
+                }
+            }
+
+             /*
+               Función para mostrar/ocultar la opción de personalización
+               basado en el tipo de producto seleccionado
+              */
+            function togglePersonalizable() {
+            // Obtener el valor del dropdown de tipo de producto (en minúsculas)
+            const tipo = $('#TipoProducto').val().toLowerCase();
+            // Verificar si el tipo seleccionado es "separador"
+            const esSeparador = tipo === "separador";
+
+             // Mostrar/ocultar el contenedor de personalización
+            $('#personalizableBox').toggleClass('d-none', !esSeparador);
+
+            // Si no es un separador, desmarcar la casilla de personalizable
+            if (!esSeparador) {
+                $('#EsPersonalizable').prop('checked', false);
+            }
+        }
+
+            // Ejecutar al cargar la página
+            toggleCamposLibro();
+            togglePersonalizable();
+
+            // Ejecutar cuando cambie la selección
+            $('#TipoProducto').on('change', function(){
+                 toggleCamposLibro();
+            togglePersonalizable();
+             });
+            
+        });
+    </script>
+
+   <script>
+        // Array global para almacenar las imágenes seleccionadas
+        let imagenesSeleccionadas = [];
+
+        $(document).ready(function () {
+            // Evento cuando se selecciona un archivo en el input de imágenes
+            $('#inputImagen').on('change', function (e) {
+                // Obtener el primer archivo seleccionado
+                const file = e.target.files[0];
+
+                 // Validar que sea una imagen
+                if (!file || !file.type.startsWith('image/')) return;
+                // Agregar el archivo al array de imágenes seleccionadas
+                imagenesSeleccionadas.push(file); // Guarda en array
+
+                 // Crear un FileReader para previsualizar la imagen
+                const reader = new FileReader();
+                  // Evento cuando se completa la lectura del archivo
+                reader.onload = function (e) {
+                     // Obtener el índice de la última imagen agregada
+            const index = imagenesSeleccionadas.length - 1;
+
+             // Crea un contenedor para la previsualización
+            const container = $('<div class="text-center me-2 mb-2 position-relative">').css({ width: '90px' });
+
+             // Crear elemento de imagen para la previsualización
+            const img = $('<img>').attr('src', e.target.result).css({
+                width: '80px',
+                height: '80px',
+                objectFit: 'cover',
+                borderRadius: '8px',
+                border: '1px solid #ccc',
+                padding: '2px'
+            });
+
+             // Mostrar nombre del archivo
+            const name = $('<div class="small text-truncate">').text(file.name);
+
+            const btnQuitar = $('<button type="button" class="btn btn-sm btn-outline-danger mt-1">Quitar</button>');
+
+            btnQuitar.on('click', function () {
+                imagenesSeleccionadas.splice(index, 1); // Elimina del array
+                container.remove(); // Elimina del DOM
+            });
+
+            container.append(img).append(name).append(btnQuitar);
+            $('#previewImagenes').append(container);
+        };
+
+                reader.readAsDataURL(file);
+
+                // Resetea input para poder volver a seleccionar otra imagen
+                $(this).val('');
+            });
+
+             // Maneja el envío del formulario
+            // Envia las imágenes al backend manualmente en el submit
+                   $('form').on('submit', function () {
+            // Limpiar por si hay previos
+            $('#previewImagenes input[type="hidden"]').remove();
+
+             // Crea un input oculto por cada imagen para enviar al backend
+             imagenesSeleccionadas.forEach((file, i) => {
+            const input = $('<input>')
+                .attr('type', 'hidden')
+                .attr('name', `Imagenes[${i}]`)
+                .val(file.name); // Solo se envía el nombre del archivo
+
+            $('#previewImagenes').append(input);
+        });
+
+        });
+
+        });
+    </script>
+
+
+    <script>
+        $(document).ready(function () {
+            // Al hacer clic en un checkbox, actualiza los campos ocultos
+            $('.categoria-checkbox').on('change', function () {
+                const seleccionadas = [];
+
+                // Limpia inputs anteriores
+                $('#categoriasSeleccionadas').empty();
+
+                $('.categoria-checkbox:checked').each(function () {
+                    const valor = $(this).val();
+                    seleccionadas.push(valor);
+                    // Crea input hidden por cada seleccionada
+                    $('#categoriasSeleccionadas').append(
+                        `<input type="hidden" name="CategoriaIds" value="${valor}" />`
+                    );
+                });
+
+                // Actualiza el texto del botón con resumen
+                if (seleccionadas.length === 0) {
+                    $('#dropdownCategorias').text('Seleccione una o más categorías');
+                } else {
+                    $('#dropdownCategorias').text(seleccionadas.length + ' seleccionadas');
+                }
+            });
+        });
+    </script>
+
+    <script>
+        $(document).ready(function () {
+             // Evento para cuando cambia el estado de cualquier checkbox con clase 'etiqueta-checkbox'
+            $('.etiqueta-checkbox').on('change', function () {
+                // Array para almacenar los valores de las etiquetas seleccionadas
+                const seleccionadas = [];
+
+                  // Limpia el contenedor de inputs ocultos para evitar duplicados
+                $('#etiquetasSeleccionadas').empty();
+
+                 // Iterar sobre todas las etiquetas checkbox que están marcadas
+                $('.etiqueta-checkbox:checked').each(function () {
+                    const valor = $(this).val();
+                    seleccionadas.push(valor);
+                    $('#etiquetasSeleccionadas').append(
+                        `<input type="hidden" name="EtiquetaIds" value="${valor}" />`
+                    );
+                });
+                  // Actualiza el texto del dropdown según la cantidad seleccionada
+                if (seleccionadas.length === 0) {
+                    $('#dropdownEtiquetas').text('Seleccione una o más etiquetas');
+                } else {
+                    $('#dropdownEtiquetas').text(seleccionadas.length + ' seleccionadas');
+                }
+            });
+        });
+    </script>
+
+    <script>
+        $(document).ready(function () {
+             /*
+              Función que valida si se ha seleccionado un tipo de producto
+              y habilita/deshabilita el botón de guardar
+             */
+            function validarTipoProducto() {
+                const tipoSeleccionado = $('#TipoProducto').val();
+                const botonGuardar = $('#btnGuardar');
+
+                if (tipoSeleccionado) {
+                    botonGuardar.prop('disabled', false);
+                } else {
+                    botonGuardar.prop('disabled', true);
+                }
+            }
+
+            // Ejecutar al cargar la página
+            validarTipoProducto();
+
+            // Ejecutar cuando cambie la selección
+            $('#TipoProducto').on('change', function () {
+                validarTipoProducto();
+            });
+        });
+    </script>
+
+}
+

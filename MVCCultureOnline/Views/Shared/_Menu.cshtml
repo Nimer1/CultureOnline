@@ -1,4 +1,4 @@
-﻿@using System.Security.Claims
+﻿﻿@using System.Security.Claims
 
 @{
     var isAuthenticated = User.Identity.IsAuthenticated;
@@ -33,19 +33,19 @@
                 <li class="nav-item">
                     <a class="nav-link nav-item-custom" asp-area="" asp-controller="Pedido" asp-action="Index">Pedidos</a>
                 </li>
-                
+
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle nav-item-custom" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                         Mantenimientos
                     </a>
                     <ul class="dropdown-menu">
                         <li>
-                            <a class="dropdown-item custom-dropdown-item" asp-controller="Producto" asp-action="Index">
-                                Productos
+                            <a class="dropdown-item custom-dropdown-item" asp-controller="Producto" asp-action="Create">
+                                Crear Productos
                             </a>
                         </li>
                         <li>
-                            <a class="dropdown-item custom-dropdown-item" asp-controller="Usuario" asp-action="IndexAdmin">
+                            <a class="dropdown-item custom-dropdown-item" asp-controller="Usuario" asp-action="Index">
                                 Usuarios
                             </a>
                         </li>

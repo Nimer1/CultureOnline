@@ -26,7 +26,7 @@ namespace CultureOnline.Infraestructure.Repository.Implementations
             return entity.Correo;
         }
 
-        public async Task DeleteAsync(string id)
+        public async Task DeleteAsync(int id)
         {
 
             var @object = await FindByIdAsync(id);
@@ -43,12 +43,16 @@ namespace CultureOnline.Infraestructure.Repository.Implementations
             return collection;
         }
 
-        public async Task<Usuario> FindByIdAsync(string id)
+        public async Task<Usuario> FindByIdAsync(int id)
         {
-            var @object = await _context.Set<Usuario>().FindAsync(id);
+            var usuario = await _context.Set<Usuario>()
+                .Include(u => u.IdrolNavigation)
+                .FirstOrDefaultAsync(u => u.Id == id);
 
-            return @object!;
+            return usuario!;
         }
+
+
 
         public async Task<ICollection<Usuario>> ListAsync()
         {
@@ -73,8 +77,13 @@ namespace CultureOnline.Infraestructure.Repository.Implementations
             //return @object!;
         }
 
-        public async Task UpdateAsync()
+        /*public async Task UpdateAsync()
         {
+            await _context.SaveChangesAsync();
+        }*/
+        public async Task UpdateAsync(Usuario usuario)
+        {
+            _context.Usuario.Update(usuario);
             await _context.SaveChangesAsync();
         }
     }

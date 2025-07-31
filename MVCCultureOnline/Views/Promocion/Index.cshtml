@@ -4,21 +4,78 @@
     ViewData["Title"] = "Listado de Promociones";
 }
 
-<h1 class="mt-4 mb-5 text-start fs-4">Listado de Promociones</h1>
+<h1 class="mt-4 mb-3 text-start fs-4">Listado de Promociones</h1>
 
-@*
-    <section class="row">
-    <div class="col-2">
-        <ul class="list-group" style="background-color:white">
-            <li class="list-group-item">
-                <button type="button" class="btn btn-info" onclick="buscarPorCategoria(0)">Todos</button>
-            </li>
-            @foreach (var categoria in (List<CultureOnline.Application.DTOs.CategoriaDTO>)ViewBag.ListCategorias)
-            {
-                <li class="list-group
-*@
+<div class="mb-4">
+    <a class="Btn" href="@Url.Action("Crear", "Promocion")">
+        <div class="sign">+</div>
+        <div class="text">Crear Promoción</div>
+    </a>
+</div>
+
+
 <div class="col-10">
     <div id="listaPromocion" class="row row-cols-1 row-cols-sm-2 row-cols-md-4 g-4">
         @await Html.PartialAsync("_ListPromocion", Model)
     </div>
 </div>
+
+<style>
+    .Btn {
+        display: flex;
+        align-items: center;
+        justify-content: flex-start;
+        width: 45px;
+        height: 45px;
+        border-radius: calc(45px/2);
+        border: none;
+        cursor: pointer;
+        position: relative;
+        overflow: hidden;
+        transition: width 0.3s ease;
+        box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.199);
+        background: linear-gradient(144deg, #D4A054, #C48A3A);
+        text-decoration: none;
+    }
+
+    .sign {
+        width: 100%;
+        font-size: 2.2em;
+        color: white;
+        transition: all 0.3s ease;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .text {
+        position: absolute;
+        right: 0;
+        width: 0;
+        opacity: 0;
+        color: white;
+        font-size: 1.2em;
+        font-weight: 500;
+        white-space: nowrap;
+        transition: all 0.3s ease;
+    }
+
+    .Btn:hover {
+        width: 20%;
+    }
+
+        .Btn:hover .sign {
+            width: 40px;
+            padding-left: 10px;
+        }
+
+        .Btn:hover .text {
+            opacity: 1;
+            width: calc(100% - 50px);
+            padding-left: 10px;
+        }
+
+    .Btn:active {
+        transform: translate(2px, 2px);
+    }
+</style>

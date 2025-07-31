@@ -1,0 +1,203 @@
+@model CultureOnline.Application.DTOs.ProductoDTO
+@using System.Security.Claims
+@{
+    var mensajeError = TempData["MensajeError"] as string;
+    int usuarioId = 0;
+    if (User.Identity.IsAuthenticated)
+    {
+        var claim = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier);
+        if (claim != null)
+        {
+            int.TryParse(claim.Value, out usuarioId);
+        }
+    }
+    var reseñaUsuario = Model.Reseñas?.FirstOrDefault(r => r.UsuarioId == usuarioId);
+}
+@if (!string.IsNullOrEmpty(mensajeError))
+{
+    <div class="alert alert-warning alert-dismissible fade show" role="alert">
+        <strong>Atención:</strong> @mensajeError
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+}
+
+<div class="card mx-auto" style="max-width: 820px;">
+    <div class="row g-0">
+        <div class="col-md-6">
+            @if (Model.Imagenes != null && Model.Imagenes.Any())
+            {
+                <div id="carouselDetalle" class="carousel slide h-100" data-bs-ride="carousel">
+                    <div class="carousel-indicators">
+                        @for (int i = 0; i < Model.Imagenes.Count; i++)
+                        {
+                            <button type="button" data-bs-target="#carouselDetalle" data-bs-slide-to="@i" class="@(i == 0 ? "active" : "")" aria-current="@(i == 0 ? "true" : "false")" aria-label="Slide @(i + 1)"></button>
+                        }
+                    </div>
+                    <div class="carousel-inner">
+                        @for (int i = 0; i < Model.Imagenes.Count; i++)
+                        {
+                            var ruta = Model.Imagenes[i].Ruta;
+                            <div class="carousel-item @(i == 0 ? "active" : "")">
+                                <img src="@Url.Content($"/images/{ruta}")"
+                                     class="d-block w-100 h-100"
+                                     style="object-fit: contain; max-height: 460px;"
+                                     alt="Imagen de @Model.Nombre" />
+                            </div>
+                        }
+                    </div>
+                </div>
+            }
+            else
+            {
+                <img src="@Url.Content("/images/Default.jpg")"
+                     class="img-fluid"
+                     style="height: 460px; object-fit: contain;"
+                     alt="Imagen por defecto" />
+            }
+        </div>
+        <div class="col-md-6">
+            <div class="card-body">
+                <h2 class="card-title">@Model.Nombre</h2>
+                <p class="card-text">@Model.Descripcion</p>
+                @if (Model.PrecioPromocional.HasValue && Model.PrecioPromocional.Value < Model.Precio)
+                {
+                    <div class="alert alert-success text-center mb-3">
+                        <strong>¡Oferta especial!</strong>
+                        @if (!string.IsNullOrEmpty(Model.NombrePromocion))
+                        {
+                            <span>— <b>@Model.NombrePromocion</b></span>
+                        }
+                        @if (Model.DescuentoPorcentajePromocion.HasValue)
+                        {
+                            <span> (-@Model.DescuentoPorcentajePromocion.Value%)</span>
+                        }
+                    </div>
+                }
+                <p class="card-text">
+                    <b>@Html.DisplayNameFor(m => m.Precio):</b>
+                    @if (Model.PrecioPromocional.HasValue && Model.PrecioPromocional.Value < Model.Precio)
+                    {
+                        <span style="color: #28a745; font-weight: bold;">
+                            &cent; @Model.PrecioPromocional.Value.ToString("N2")
+                        </span>
+                        <span style="text-decoration: line-through; color: #888; margin-left:8px;">
+                            &cent; @Model.Precio.ToString("N2")
+                        </span>
+                    }
+                    else
+                    {
+                        <span>&cent; @Model.Precio.ToString("N2")</span>
+                    }
+                </p>
+                @if (!string.IsNullOrEmpty(Model.IdAutorNavigation?.Descripcion))
+                {
+                    <p class="card-text"><b>@Html.DisplayNameFor(m => m.IdAutorNavigation):</b> @Model.IdAutorNavigation.Descripcion</p>
+                }
+                @if (!string.IsNullOrEmpty(Model.Editorial))
+                {
+                    <p class="card-text"><b>@Html.DisplayNameFor(m => m.Editorial):</b> @Model.Editorial</p>
+                }
+                @if (!string.IsNullOrWhiteSpace(Model.ClasificacionEdad))
+                {
+                    <p class="card-text"><b>@Html.DisplayNameFor(m => m.ClasificacionEdad):</b> @Model.ClasificacionEdad</p>
+                }
+                @if (Model.Categorias?.Any() == true)
+                {
+                    <p class="card-text">
+                        <b>Categorías:</b>
+                        <ul>
+                            @foreach (var cat in Model.Categorias)
+                            {
+                                <li>@cat.Nombre</li>
+                            }
+                        </ul>
+                    </p>
+                }
+                @if (Model.Etiquetas?.Any() == true)
+                {
+                    <div class="card-text mb-2">
+                        <b>Etiquetas:</b>
+                        <div class="d-flex flex-wrap gap-2 mt-2">
+                            @foreach (var etiqueta in Model.Etiquetas)
+                            {
+                                <span class="badge etiqueta-pill">@etiqueta.Descripcion</span>
+                            }
+                        </div>
+                    </div>
+                }
+                @{
+                    var valoracion = Model.PromedioValoracion ?? 0;
+                    var enteras = (int)Math.Floor(valoracion);
+                    var tieneMedia = (valoracion % 1) > 0;
+                    var vacias = 5 - enteras - (tieneMedia ? 1 : 0);
+                }
+                <p class="mt-3 card-text">
+                    <br />
+                    <span class="text-warning">
+                        @for (int i = 0; i < enteras; i++)
+                        {
+                            <i class="fas fa-star"></i>
+                        }
+                        @if (tieneMedia)
+                        {
+                            <i class="fas fa-star-half-alt"></i>
+                        }
+                        @for (int i = 0; i < vacias; i++)
+                        {
+                            <i class="far fa-star"></i>
+                        }
+                    </span>
+                    <span class="ms-2 text-muted">(@valoracion.ToString("0.0"))</span>
+                </p>
+                @if (Model.Categorias != null && Model.Categorias.Any(c => c.Nombre.Equals("Marcapáginas", StringComparison.OrdinalIgnoreCase)))
+                {
+                    <p class="card-text">
+                        <b>@Html.DisplayNameFor(m => m.EsPersonalizable):</b>
+                        @(Model.EsPersonalizable ? "Si" : "No")
+                    </p>
+                }
+            </div>
+        </div>
+    </div>
+    <h4 class="mt-5 mb-3 ms-3">Reseñas de clientes</h4>
+    <div id="reseñas-container">
+        @await Html.PartialAsync("~/Views/Reseña/_ReseñasParcial.cshtml", Model.Reseñas?.Where(r => r.Aprobada == true).OrderByDescending(r => r.Fecha).ToList() ?? new List<CultureOnline.Application.DTOs.ReseñaDTO>())
+        <div class="text-start mb-4 ms-3">
+            @if (User.Identity.IsAuthenticated)
+            {
+                if (reseñaUsuario != null)
+                {
+                    <a href="@Url.Action("Edit", "Reseña", new { id = reseñaUsuario.Id })" class="menu__link">
+                        <i class="fas fa-edit me-2"></i> Editar mi reseña
+                    </a>
+                }
+                else
+                {
+                    <a id="btnMostrarFormularioResena" class="menu__link" style="color:#a30000; font-weight:500; font-size:1.2rem; cursor:pointer; display:inline-flex; align-items:center; gap:8px;">
+                        <i class="fas fa-plus"></i> Agregar un comentario
+                    </a>
+                    <div id="contenedorFormularioResena" style="display:none;"></div>
+                }
+            }
+            else
+            {
+                <a href="@Url.Action("Create", "Reseña", new { productoId = Model.Id })" class="menu__link">
+                    <i class="fas fa-plus me-2"></i> Agregar un comentario
+                </a>
+            }
+        </div>
+    </div>
+    <div class="card-footer text-center bg-white border-0 mt-3">
+        <a class="animated-button"
+           asp-action="Index">
+            <svg viewBox="0 0 24 24" class="arr-2" xmlns="http://www.w3.org/2000/svg">
+                <path d="M7.8284 10.9999L13.1924 5.63589L11.7782 4.22168L4 11.9999L11.7782 19.778L13.1924 18.3638L7.8284 12.9999H20V10.9999H7.8284Z"></path>
+            </svg>
+            <span class="text">Volver al listado</span>
+            <span class="circle"></span>
+            <svg viewBox="0 0 24 24" class="arr-1" xmlns="http://www.w3.org/2000/svg">
+                <path d="M7.8284 10.9999L13.1924 5.63589L11.7782 4.22168L4 11.9999L11.7782 19.778L13.1924 18.3638L7.8284 12.9999H20V10.9999H7.8284Z"></path>
+            </svg>
+        </a>
+    </div>
+</div>

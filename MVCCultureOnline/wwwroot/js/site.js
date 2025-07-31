@@ -66,29 +66,35 @@ document.addEventListener("DOMContentLoaded", function () {
     mostrarPagina(1);
 });
 
-document.addEventListener('DOMContentLoaded', function () {
-    const passwordInput = document.querySelector('input[name="Contrasena"]');
+//Validaciones para los campos del formulario de registro
+function validatePassword(password) {
+    // Se obtiene el elemento tooltip que muestra las reglas de validación
+    const tooltip = document.getElementById("passwordTooltip");
 
-    if (!passwordInput) return; // Por si no está en la página
+    // Objeto que define las reglas de validación y verifica si se cumplen:
+    const rules = {
+        length: password.length >= 8 && password.length <= 20, // Longitud entre 8-20 caracteres
+        upper: /[A-Z]/.test(password), // Contiene al menos una mayúscula
+        lower: /[a-z]/.test(password), // Contiene al menos una minúscula
+        number: /[0-9]/.test(password), // Contiene al menos un número
+        special: /[!@@#$%^&*]/.test(password) // Contiene al menos un carácter especial
+    };
 
-    passwordInput.addEventListener('input', () => {
-        const val = passwordInput.value;
+    // Actualizar la interfaz para cada regla:
+    // Cambia a texto verde si se cumple la regla
+    // Cambia a texto rojo si no se cumple
+    document.getElementById("ruleLength").className = rules.length ? "text-success" : "text-danger";
+    document.getElementById("ruleUpper").className = rules.upper ? "text-success" : "text-danger";
+    document.getElementById("ruleLower").className = rules.lower ? "text-success" : "text-danger";
+    document.getElementById("ruleNumber").className = rules.number ? "text-success" : "text-danger";
+    document.getElementById("ruleSpecial").className = rules.special ? "text-success" : "text-danger";
 
-        // Longitud
-        document.getElementById('lengthReq').className = (val.length >= 8 && val.length <= 20) ? 'mb-1 text-success' : 'mb-1 text-danger';
-
-        // Letra mayúscula
-        document.getElementById('upperReq').className = /[A-Z]/.test(val) ? 'mb-1 text-success' : 'mb-1 text-danger';
-
-        // Letra minúscula
-        document.getElementById('lowerReq').className = /[a-z]/.test(val) ? 'mb-1 text-success' : 'mb-1 text-danger';
-
-        // Número
-        document.getElementById('numberReq').className = /\d/.test(val) ? 'mb-1 text-success' : 'mb-1 text-danger';
-
-        // Carácter especial
-        document.getElementById('specialReq').className = /[!@#$%^&*]/.test(val) ? 'mb-1 text-success' : 'mb-1 text-danger';
-    });
-});
+    // Aquí se verificar si todas las reglas se cumplen (isValid = true si todas son true)
+    const isValid = Object.values(rules).every(val => val);
+    // Muestra u oculta el tooltip según
+    // Lo oculta si la contraseña es válida o está vacía
+    // Lo muestra si hay contenido pero no cumple todas las reglas
+    tooltip.classList.toggle("d-none", isValid || password.length === 0);
+}
 
 

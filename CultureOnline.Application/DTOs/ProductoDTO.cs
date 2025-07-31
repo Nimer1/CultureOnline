@@ -26,7 +26,8 @@ namespace CultureOnline.Application.DTOs
         [Required(ErrorMessage = "{0} es un dato requerido")]
         public decimal Precio { get; set; }
 
-        [Display(Name = "Cantidad")]
+        [Display(Name = "Cantidad en stock")]
+        [Required(ErrorMessage = "{0} es un dato requerido")]
         public int Stock { get; set; }
 
         [Display(Name = "Estado ")]
@@ -78,6 +79,6 @@ namespace CultureOnline.Application.DTOs
         public decimal? DescuentoPorcentajePromocion { get; set; } = 0;
         public List<string> NombresPromociones { get; set; } = new List<string>();
   
-        public ICollection<CategoriaDTO> Categorias { get; set; }
+        public ICollection<CategoriaDTO>? Categorias { get; set; }
     }
 }

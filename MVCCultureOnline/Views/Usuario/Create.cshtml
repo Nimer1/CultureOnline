@@ -1,5 +1,5 @@
-﻿
-@model MVCCultureOnline.Models.RegistroViewModel
+﻿@model MVCCultureOnline.Views.ViewModels.ViewModelRegistro
+
 @{
     Layout = "_layoutlogin";
 }
@@ -26,20 +26,23 @@
                         <span asp-validation-for="Correo" class="text-danger small"></span>
                     </div>
 
-                    <div class="mb-3">
-                        <label asp-for="Contrasena" class="form-label fw-semibold">Contraseña</label>
-                        <input asp-for="Contrasena" type="password" class="form-control" placeholder="Ingrese una contraseña segura" />
-                        <span asp-validation-for="Contrasena" class="text-danger small"></span>
+                   <div class="mb-3 position-relative">
+                   <label asp-for="Contrasena" class="form-label fw-semibold">Contraseña</label>
+                   <input asp-for="Contrasena" type="password" class="form-control"
+                    placeholder="Ingrese una contraseña segura"
+                    oninput="validatePassword(this.value)" id="passwordInput" />
+                  <span asp-validation-for="Contrasena" class="text-danger small"></span>
 
-                        <div id="passwordRequirements" class="mt-2 small text-muted">
-                        <p id="lengthReq" class="mb-1 text-danger">• Entre 8 y 20 caracteres</p>
-                        <p id="upperReq" class="mb-1 text-danger">• Al menos una letra mayúscula</p>
-                        <p id="lowerReq" class="mb-1 text-danger">• Al menos una letra minúscula</p>
-                        <p id="numberReq" class="mb-1 text-danger">• Al menos un número</p>
-                        <p id="specialReq" class="mb-1 text-danger">• Al menos un carácter especial (!@@#$%^&*)</p>
-                        </div>
+                   
+                   <div id="passwordTooltip" class="card tooltip-card shadow-sm p-3 bg-light small d-none" style="position: absolute; top: 100%; left: 0; width: 100%; z-index: 10;">
+                   <div class="mb-1"><span id="ruleLength" class="text-danger">• Entre 8 y 20 carácteres</span></div>
+                   <div class="mb-1"><span id="ruleUpper" class="text-danger">• Al menos una letra mayúscula</span></div>
+                   <div class="mb-1"><span id="ruleLower" class="text-danger">• Al menos una letra minúscula</span></div>
+                   <div class="mb-1"><span id="ruleNumber" class="text-danger">• Al menos un número</span></div>
+                  <div class="mb-1"><span id="ruleSpecial" class="text-danger">• Al menos un carácter especial (!@@#$%^&*)</span></div>
+                  </div>
+                  </div>
 
-                    </div>
 
                     <div class="mb-3">
                         <label asp-for="ConfirmarContrasena" class="form-label fw-semibold">Confirmar Contraseña</label>
@@ -78,15 +81,20 @@
 
 @section Scripts {
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
-    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
     <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
 
     <script>
         function spinnerEffect() {
             document.getElementById("loader").classList.remove("d-none");
         }
     </script>
+
+
+
 }
+
+
 
 

@@ -21,17 +21,17 @@ namespace CultureOnline.Infraestructure.Repository.Implementations
         {
             try
             {
-                // Begin Transaction
+                
                 await _context.Database.BeginTransactionAsync();
                 await _context.Set<Pedidos>().AddAsync(entity);
-                // Actualizar inventario
+                
                 foreach (var item in entity.DetallePedido)
                 {
-                    //Buscar libro
+                    //Busca el producto
                     var libro = await _context.Set<Productos>().FindAsync(item.Id);
-                    //Actualizar cantidad en stock
+                    //Actualiza la cantidad en stock
                     libro!.Stock= libro.Stock - item.Cantidad;
-                    //Actualizar producto
+                    //Actualiza producto
                     _context.Set<Productos>().Update(libro);
                 }
                 await _context.SaveChangesAsync();

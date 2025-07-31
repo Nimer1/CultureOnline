@@ -4,7 +4,7 @@
 {
     var imagen = item.Imagenes?.FirstOrDefault()?.Ruta ?? "Defaul.jpg";
 
-    <div class="col-md-4 mb-4">
+    <div class="col-md-4 mb-md-4">
         <div class="card shadow-sm h-100">
 
             
@@ -64,6 +64,7 @@
                     }
                 </h6>
                 <!-- FIN BLOQUE PRECIO Y PROMOCIÓN -->
+
                 @if (!string.IsNullOrEmpty(item.IdAutorNavigation?.Descripcion))
                 {
                     <h6><strong>@Html.DisplayNameFor(modelItem => item.IdAutorNavigation):</strong> @item.IdAutorNavigation.Descripcion</h6>
@@ -117,4 +118,5 @@
             </div>
         </div>
     </div>
+  
 }

@@ -42,20 +42,8 @@ namespace CultureOnline.Application.Services.Implementations
             //throw new NotImplementedException();
         }
 
-        /*  public async Task<string> AddAsync(UsuarioDTO dto)
-          {
-              // Llave secreta
-              string secret = _options.Value.Crypto.Secret;
-              // Password encriptado
-              string passwordEncrypted = Cryptography.Encrypt(dto.Contrasena!, secret);
-              // Establecer password DTO
-              dto.Contrasena = passwordEncrypted;
-              var objectMapped = _mapper.Map<Usuario>(dto);
-
-              return await _repository.AddAsync(objectMapped);
-          }*/
-
-        public async Task DeleteAsync(string id)
+       
+        public async Task DeleteAsync(int id)
         {
             await _repository.DeleteAsync(id);
         }
@@ -68,7 +56,7 @@ namespace CultureOnline.Application.Services.Implementations
             return collection;
         }
 
-        public async Task<UsuarioDTO> FindByIdAsync(string id)
+        public async Task<UsuarioDTO> FindByIdAsync(int id)
         {
             var @object = await _repository.FindByIdAsync(id);
             var objectMapped = _mapper.Map<UsuarioDTO>(@object);
@@ -107,31 +95,23 @@ namespace CultureOnline.Application.Services.Implementations
             //throw new NotImplementedException();
         }
 
-        /*   public async Task<UsuarioDTO> LoginAsync(string id, string password)
-           {
-               UsuarioDTO usuarioDTO = null!;
-
-               // Llave secreta
-               string secret = _options.Value.Crypto.Secret;
-               // Password encriptado
-               string passwordEncrypted = Cryptography.Encrypt(password, secret);
-
-               var @object = await _repository.LoginAsync(id, passwordEncrypted);
-
-               if (@object != null)
-               {
-                   usuarioDTO = _mapper.Map<UsuarioDTO>(@object);
-               }
-
-               return usuarioDTO;
-           }
-        */
-        public async Task UpdateAsync(string id, UsuarioDTO dto)
+       
+        public async Task UpdateAsync(int id, UsuarioDTO dto)
         {
             var @object = await _repository.FindByIdAsync(id);
-            //       source, destination
-            _mapper.Map(dto, @object!);
-            await _repository.UpdateAsync();
+            if (@object == null)
+                throw new Exception("Usuario no encontrado");
+            @object.Estado = dto.Estado;
+            await _repository.UpdateAsync(@object);
+        } 
+        public async Task ActualizarUltimoInicioSesionAsync(int id)
+        {
+            var usuario = await _repository.FindByIdAsync(id);
+            if (usuario != null)
+            {
+                usuario.UltimoInicioSesion = DateTime.Now;
+                await _repository.UpdateAsync(usuario);
+            }
         }
     }
 }

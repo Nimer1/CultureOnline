@@ -12,7 +12,7 @@ namespace CultureOnline.Infraestructure.Repository.Implementations
     public class RepositoryCategoria: IRepositoryCategoria
     {
         private readonly CultureOnlineContext _context;
-        //Alt+Enter
+        
         public RepositoryCategoria(CultureOnlineContext context)
         {
             _context = context;

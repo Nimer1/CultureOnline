@@ -9,10 +9,11 @@ namespace CultureOnline.Application.Profiles
     {
         public ProductoProfile()
         {
-            // Productos <-> ProductoDTO (incluye imágenes y categorías)
+            // Productos <-> ProductoDTO (incluye imágenes, categorías y etiquetas)
             CreateMap<Productos, ProductoDTO>()
                 .ForMember(dest => dest.Imagenes, opt => opt.MapFrom(src => src.ProductoImagenes))
                 .ForMember(dest => dest.Categorias, opt => opt.MapFrom(src => src.ProductoCategorias.Select(pc => pc.Categoria)))
+                .ForMember(dest => dest.Etiquetas, opt => opt.MapFrom(src => src.ProductoEtiquetas.Select(pe => pe.Etiqueta)))
                 .ReverseMap();
 
             CreateMap<ProductoDTO, Productos>()
@@ -20,12 +21,12 @@ namespace CultureOnline.Application.Profiles
                 .ForMember(dest => dest.Promociones, opt => opt.Ignore())
                 .ForMember(dest => dest.Reseñas, opt => opt.Ignore())
                 .ForMember(dest => dest.ProductoCategorias, opt => opt.Ignore())
-                .ForMember(dest => dest.Etiquetas, opt => opt.Ignore())
+                //.ForMember(dest => dest.Etiquetas, opt => opt.Ignore())
                 .ForMember(dest => dest.Categorias, opt => opt.Ignore());
             CreateMap<ProductoImagenes, ProductoImagenesDTO>().ReverseMap();
             CreateMap<Categorias, CategoriaDTO>().ReverseMap();
 
-            // Promociones <-> PromocionDTO (incluye tipo de promoción y categoría)
+            // Promociones <-> PromocionDTO (incluye tipo de promoción y la categoría)
             CreateMap<Promociones, PromocionDTO>()
                 .ForMember(dest => dest.TipoPromocion, opt => opt.MapFrom(src => src.TipoPromocion))
                 .ForMember(dest => dest.Categoria, opt => opt.MapFrom(src => src.Categoria))

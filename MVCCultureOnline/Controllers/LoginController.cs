@@ -29,44 +29,29 @@ namespace MVCCultureOnline.Controllers
             return View();
         }
 
-        /*[HttpPost("login")]
-        public IActionResult Login(LoginViewModel login)
-        {
-            // Here you would typically validate the user credentials
-            // For demonstration purposes, we'll just redirect to a welcome page
-            if (login == null)
-            {
-                return View("Error"); 
-                    
-            }
-            if(login.User ==("admin") && login.Password ==("123456"))
-            {
-                // Redirect to a welcome page or dashboard
-                return RedirectToAction("Index", "Home");
-            }
-            else
-            {
-                ViewBag.ErrorMessage = "Error en el acceso";
-                return View("Index");
-            }
-        }*/
-
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> LogIn(ViewModelLogin viewModelLogin)
         {
             if (!ModelState.IsValid)
             {
+                // Aquí se recopilan todos los errores de validación del modelo
                 string errors = string.Join("; ", ModelState.Values
                                        .SelectMany(x => x.Errors)
                                        .Select(x => x.ErrorMessage));
 
+                // Configura el mensaje de error para mostrar en la vista
                 ViewBag.NotificationMessage = Util.SweetAlertHelper.Mensaje("Login", $"Error de Acceso: {errors}", SweetAlertMessageType.error);
+                // Se registra el intento fallido en logs
                 _logger.LogInformation($"Error en login de {viewModelLogin.User}, Errores --> {errors}");
+                // Retorna a la vista Index con los errores
                 return View("Index");
             }
 
+            // --- Autenticación del usuario ---
             var usuarioDTO = await _serviceUsuario.LoginAsync(viewModelLogin.User, viewModelLogin.Password);
+
+            // Primera validación de usuario o contraseña incorrectas
             if (usuarioDTO == null)
             {
                 ViewBag.Message = "Usuario o contraseña incorrectos";
@@ -77,33 +62,51 @@ namespace MVCCultureOnline.Controllers
                 return View("Index");
             }
 
-            
-            List<Claim> claims = new List<Claim>()
+            // Usuario no encontrado
+            if (usuarioDTO == null)
             {
-                new Claim(ClaimTypes.NameIdentifier, usuarioDTO.Id.ToString()),
+                ViewBag.Message = "Usuario o contraseña incorrectos";
+                _logger.LogInformation($"Error en login de {viewModelLogin.User}, Error --> Usuario o contraseña incorrectos");
+                return View("Index");
+            }
+
+            // --- Validación del estado del usuario ---
+            // Verificar si el usuario está inactivo
+            if (usuarioDTO.Estado?.ToLower() == "inactivo")
+            {
+                ViewBag.Message = "Este correo ya no es válido. Por favor, cree una cuenta nueva con otro correo.";
+
+                _logger.LogInformation($"Intento de login con usuario inactivo: {viewModelLogin.User}");
+                return View("Index");
+            }
+
+            // --- Actualizar el último inicio de sesión ---
+            // Se registra la fecha/hora actual como último inicio de sesión
+            usuarioDTO.UltimoInicioSesion = DateTime.Now;
+            await _serviceUsuario.ActualizarUltimoInicioSesionAsync(usuarioDTO.Id);
+
+            // --- Creación de la identidad del usuario ---
+            // Se configuran los claims (información del usuario) para la cookie de autenticación
+            var claims = new List<Claim>
+            {
                 new Claim(ClaimTypes.Name, usuarioDTO.Nombre),
-                new Claim(ClaimTypes.Role, usuarioDTO.IDRolNavigation.Descripcion!)
+                new Claim(ClaimTypes.Email, usuarioDTO.Correo),
+                new Claim(ClaimTypes.NameIdentifier, usuarioDTO.Id.ToString())
             };
 
-            ClaimsIdentity claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
-
-            AuthenticationProperties properties = new AuthenticationProperties()
-            {
-                AllowRefresh = true
-            };
-
-            await HttpContext.SignInAsync(
-                CookieAuthenticationDefaults.AuthenticationScheme,
-                new ClaimsPrincipal(claimsIdentity),
-                properties);
+            // Crear identidad y principal para la autenticación
+            var identity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
+            var principal = new ClaimsPrincipal(identity);
+            await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, principal);
 
             _logger.LogInformation($"Conexion correcta de {viewModelLogin.User}");
 
-           
             TempData["Mensaje"] = Util.SweetAlertHelper.Mensaje("Login", "Usuario identificado", SweetAlertMessageType.success);
 
+            // Redirigir al home después de login exitoso
             return RedirectToAction("Index", "Home");
         }
+
         [HttpGet]
         public async Task<IActionResult> CerrarSesion()
         {

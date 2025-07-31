@@ -22,7 +22,7 @@ public partial class Promociones
 
     public DateTime FechaFin { get; set; }
     [NotMapped]
-    public string Estado { get; set; }
+    public string? Estado { get; set; }
 
     public virtual Categorias? Categoria { get; set; }
 

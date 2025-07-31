@@ -1,0 +1,42 @@
+@model IEnumerable<CultureOnline.Application.DTOs.ReseñaDTO>
+@{ Layout = null; }
+@if (!Model.Any())
+{
+    <h6 class="mt-4" style="margin-left: 15px;">*Este producto aún no tiene reseñas.</h6>
+}
+else
+{
+    <div id="reseñas-list" style="display:flex; flex-wrap: nowrap; gap: 1rem; max-width: 820px; margin: auto;">
+        @foreach (var reseña in Model)
+        {
+            <div class="card reseña-item" style="flex: 0 0 48%;">
+                <div class="card-header d-flex align-items-center">
+                    <div class="avatar me-2">
+                        @reseña.Usuario?.Nombre?.Substring(0, 2).ToUpper()
+                    </div>
+                    <div class="user-info">
+                        <div class="user-name">@reseña.Usuario?.Nombre</div>
+                        <div class="user-role">@reseña.Fecha?.ToString("dd/MM/yyyy")</div>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div class="rating text-warning mb-2">
+                        @{
+                            int estrellas = reseña.Valoracion;
+                            int pvacias = 5 - estrellas;
+                        }
+                        @for (int j = 0; j < estrellas; j++)
+                        {
+                            <i class="fas fa-star"></i>
+                        }
+                        @for (int j = 0; j < pvacias; j++)
+                        {
+                            <i class="far fa-star"></i>
+                        }
+                    </div>
+                    <p class="card-text">@reseña.Comentario</p>
+                </div>
+            </div>
+        }
+    </div>
+}

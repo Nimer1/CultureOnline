@@ -1,12 +1,12 @@
 ﻿@model IEnumerable<CultureOnline.Application.DTOs.PromocionDTO>
 
-<table class="table w-100" style="table-layout:auto;">
+<table class="table w-100 mx-auto" style="table-layout:auto;">
     <thead>
         <tr>
-            <th style="background-color:white">Nombre</th>
-            <th style="background-color:white">Fecha Inicio</th>
-            <th style="background-color:white">Fecha Final</th>
-            <th style="background-color:white">Estado</th>
+            <th class="text-center" style="background-color:white">Nombre</th>
+            <th class="text-center" style="background-color:white">Fecha Inicio</th>
+            <th class="text-center" style="background-color:white">Fecha Final</th>
+            <th class="text-center" style="background-color:white">Estado</th>
             <th style="background-color:white" class="text-center">Acciones</th>
         </tr>
     </thead>
@@ -29,10 +29,10 @@
                 _ => "black"
             };
             <tr>
-                <td style="background-color:@bgColor; color:@textColor">@promo.Nombre</td>
-                <td style="background-color:@bgColor; color:@textColor">@promo.FechaInicio.ToShortDateString()</td>
-                <td style="background-color:@bgColor; color:@textColor">@promo.FechaFin.ToShortDateString()</td>
-                <td style="background-color:@bgColor; color:@textColor"><strong>@promo.Estado</strong></td>
+                <td class="text-center" style="background-color:@bgColor; color:@textColor">@promo.Nombre</td>
+                <td class="text-center" style= "background-color:@bgColor; color:@textColor">@promo.FechaInicio.ToShortDateString()</td>
+                <td class="text-center" style="background-color:@bgColor; color:@textColor">@promo.FechaFin.ToShortDateString()</td>
+                <td class="text-center" style="background-color:@bgColor; color:@textColor"><strong>@promo.Estado</strong></td>
                 <td class="text-center" style="background-color:@bgColor;">
                     <div class="d-flex justify-content-center align-items-center gap-3 flex-wrap">
                         <!-- botón de ver detalle -->
@@ -43,11 +43,7 @@
 
                         <!-- botón de crear -->
                         <div class="circulo-contenedor">
-                            <a class="mx-3" href="@Url.Action("Crear", "Promocion", new { id = promo.IdPromocion })"
-                               data-bs-toggle="tooltip" data-bs-placement="top" title="Crear">
-                                <i class="fas fa-plus"></i>
-                            </a>
-
+                        
                             <!-- botón de editar -->
                             <a class="mx-3" href="@Url.Action("Editar", "Promocion", new { id = promo.IdPromocion })"
                                data-bs-toggle="tooltip" data-bs-placement="top" title="Editar">

@@ -17,14 +17,14 @@ namespace CultureOnline.Application.DTOs
         public string Nombre { get; set; } = null!;
 
         [Display(Name = "Tipo de promoción")]
-        [Required(ErrorMessage = "{0} es un dato requerido")]
-        public int TipoPromocionId { get; set; }
+        //[Required(ErrorMessage = "El tipo de promoción es obligatorio")]
+        public int? TipoPromocionId { get; set; }
 
         /*[Display(Name = "Producto Asociado")]
         public int? ProductoId { get; set; }
 
         [Display(Name = "Categoria Asociada")]
-        public int? CategoriaId { get; set; }*/
+        public int? CategoriaId { get; set;}*/
         public int? ProductoId { get; set; }
 
         public int? CategoriaId { get; set; }
@@ -44,7 +44,6 @@ namespace CultureOnline.Application.DTOs
         public DateTime FechaFin { get; set; }
 
         [Display(Name = "Estado")]
-
         public string Estado
         {
             get
@@ -58,7 +57,7 @@ namespace CultureOnline.Application.DTOs
 
         public List<CategoriaDTO> Categorias { get; set; } = new();
         public ProductoDTO? Producto { get; set; }
-        public TipoPromocionDTO TipoPromocion { get; set; } = null!;
+        public TipoPromocionDTO? TipoPromocion { get; set; }
         public CategoriaDTO? Categoria { get; set; }
     }
 }

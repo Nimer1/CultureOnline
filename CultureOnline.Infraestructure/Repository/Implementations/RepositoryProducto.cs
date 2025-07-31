@@ -24,10 +24,12 @@ namespace CultureOnline.Infraestructure.Repository.Implementations
             var producto = await _context.Productos
                 .Include(p => p.ProductoCategorias)
                     .ThenInclude(pc => pc.Categoria)
-                .Include(p => p.Etiquetas)
+                    .Include(p => p.ProductoEtiquetas)
+                    .ThenInclude(pe => pe.Etiqueta)
                 .Include(p => p.Promociones)
                 .Include(p => p.ProductoImagenes)
                 .Include(p => p.Reseñas)
+                .Include(p => p.IdAutorNavigation)
                 .FirstOrDefaultAsync(p => p.Id == id);
 
             return producto!;
@@ -36,7 +38,7 @@ namespace CultureOnline.Infraestructure.Repository.Implementations
         {
             var productos = await _context.Productos
                 .Include(p => p.ProductoCategorias).ThenInclude(pc => pc.Categoria)
-                .Include(p => p.Etiquetas)
+                 .Include(p => p.ProductoEtiquetas).ThenInclude(pe => pe.Etiqueta)
                 .Include(p => p.Promociones)
                 .Include(p => p.ProductoImagenes)
                 .Include(p => p.IdAutorNavigation)
@@ -75,21 +77,21 @@ namespace CultureOnline.Infraestructure.Repository.Implementations
         public async Task DeleteAsync(int id)
         {
             var producto = await _context.Productos
-                .Include(p => p.Categorias)
+                .Include(p => p.ProductoCategorias)
                 .FirstOrDefaultAsync(p => p.Id == id);
 
             if (producto == null) throw new Exception("Producto no encontrado");
 
-            producto.Categorias.Clear(); // Limpia la relación que hay de muchos a muchos
+            producto.ProductoCategorias.Clear(); // Limpia la relación que hay de muchos a muchos
             _context.Productos.Remove(producto);
             await _context.SaveChangesAsync();
         }
         public async Task<ICollection<Productos>> GetLibroByCategoria(int idCategoria)
         {
             return await _context.Productos
-                .Where(p => p.Categorias.Any(c => c.Id == idCategoria))
-                .Include(p => p.Categorias)
-                .Include(p => p.Etiquetas)
+                 .Where(p => p.ProductoCategorias.Any(pc => pc.CategoriaId == idCategoria))
+                 .Include(p => p.ProductoCategorias).ThenInclude(pc => pc.Categoria)
+                 .Include(p => p.ProductoEtiquetas).ThenInclude(pe => pe.Etiqueta)
                 .ToListAsync();
         }
         public async Task UpdateAsync(Productos producto, string[] selectedCategorias)
@@ -99,10 +101,9 @@ namespace CultureOnline.Infraestructure.Repository.Implementations
                 .Include(p => p.IdAutorNavigation)
                 .FirstOrDefaultAsync(p => p.Id == producto.Id);
 
-            if (existingProducto == null)
-                throw new Exception("El producto no se ha encontrado");
 
-            // Actualiza solo propiedades simples
+            // Los campos se actualizan uno a la vez
+            
             existingProducto.Nombre = producto.Nombre;
             existingProducto.Descripcion = producto.Descripcion;
             existingProducto.Precio = producto.Precio;
@@ -112,43 +113,9 @@ namespace CultureOnline.Infraestructure.Repository.Implementations
             existingProducto.IdAutor = producto.IdAutor;
             existingProducto.ClasificacionEdad = producto.ClasificacionEdad;
             existingProducto.Editorial = producto.Editorial;
-            existingProducto.PromedioValoracion = producto.PromedioValoracion;
+       
             existingProducto.EsPersonalizable = producto.EsPersonalizable;
 
-            // Actualiza el autor si corresponde
-            if (producto.IdAutor != null)
-            {
-                var autor = await _context.Autor.FindAsync(producto.IdAutor);
-                if (autor != null)
-                {
-                    existingProducto.IdAutorNavigation = autor;
-                    existingProducto.IdAutor = producto.IdAutor;
-                }
-                else
-                {
-                    throw new Exception("Autor no encontrado");
-                }
-            }
-
-            // Actualiza solo categorías
-            if (existingProducto.ProductoCategorias == null)
-                existingProducto.ProductoCategorias = new List<ProductoCategorias>();
-            existingProducto.ProductoCategorias.Clear();
-            if (selectedCategorias != null && selectedCategorias.Length > 0)
-            {
-                var categorias = await _context.Categorias
-                    .Where(c => selectedCategorias.Contains(c.Id.ToString()))
-                    .ToListAsync();
-
-                foreach (var cat in categorias)
-                {
-                    existingProducto.ProductoCategorias.Add(new ProductoCategorias
-                    {
-                        ProductoId = existingProducto.Id,
-                        CategoriaId = cat.Id
-                    });
-                }
-            }
 
             await _context.SaveChangesAsync();
         }

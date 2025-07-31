@@ -1,0 +1,316 @@
+@model CultureOnline.Application.DTOs.PromocionDTO
+@{
+    ViewData["Title"] = Model.IdPromocion > 0 ? "Editar Promoción" : "Crear Promoción";
+    bool esEdicion = Model.IdPromocion > 0;
+    bool deshabilitar = esEdicion && Model.FechaInicio <= DateTime.Now;
+
+    if (!esEdicion)
+    {
+        Model.FechaInicio = DateTime.Today;
+        Model.FechaFin = DateTime.Today.AddDays(1);
+    }
+    var successMessage = TempData["SuccessMessage"] as string;
+}
+
+<div aria-live="polite" aria-atomic="true" class="position-relative">
+    <div id="toastContainer" class="toast-container position-fixed top-0 start-50 translate-middle-x mt-5" style="z-index: 9999;"></div>
+</div>
+<style>
+    .form {
+        margin-top: 3%;
+        max-width: 100%;
+        background-color: #fff;
+        padding: 20px;
+        border-radius: 20px;
+       
+        box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    }
+   
+    #toastContainer {
+        min-width: 350px;
+        max-width: 500px;
+    }
+
+    .title {
+        font-size: 28px;
+        color: #D4A054;
+        font-weight: 600;
+        letter-spacing: -1px;
+        position: relative;
+        display: flex;
+        align-items: center;
+        padding-left: 30px;
+        margin-bottom: 20px;
+    }
+
+        .title::before, .title::after {
+            position: absolute;
+            content: "";
+            height: 16px;
+            width: 16px;
+            border-radius: 50%;
+            left: 0px;
+            background-color: #D4A054;
+        }
+
+        .title::before {
+            width: 18px;
+            height: 18px;
+        }
+
+        .title::after {
+            width: 18px;
+            height: 18px;
+            animation: pulse 1s linear infinite;
+        }
+
+    @@keyframes pulse {
+        from
+
+    {
+        transform: scale(0.9);
+        opacity: 1;
+    }
+
+    to {
+        transform: scale(1.8);
+        opacity: 0;
+    }
+
+    }
+
+    .form-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 20px;
+    }
+
+    .form label {
+        position: relative;
+        display: block;
+    }
+
+    .form .input {
+        width: 100%;
+        padding: 10px 10px 20px 10px;
+        border: 1px solid rgba(105, 105, 105, 0.397);
+        border-radius: 10px;
+        outline: none;
+        background: none;
+    }
+
+        .form .input + span {
+            position: absolute;
+            left: 10px;
+            top: 15px;
+            color: grey;
+            font-size: 0.9em;
+            pointer-events: none;
+            transition: 0.3s ease;
+        }
+
+        .form .input:focus + span,
+        .form .input:not(:placeholder-shown) + span,
+        .form .input:valid + span {
+            top: -5px;
+            font-size: 0.75em;
+            font-weight: 600;
+            color: #D4A054;
+            background-color: #fff;
+            padding: 0 5px;
+        }
+
+    .form-actions {
+        margin-top: 20px;
+        display: flex;
+        gap: 10px;
+        justify-content: flex-end;
+    }
+
+    .submit {
+        background-color: #D4A054;
+        color: white;
+        border: none;
+        padding: 10px 20px;
+        border-radius: 10px;
+        font-size: 16px;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+    }
+
+        .submit:hover {
+            background-color: #a30000;
+        }
+
+    .text-danger {
+        display: block;
+        font-size: 0.8em;
+        margin-top: 4px;
+        color: red;
+    }
+
+    @@media (max-width: 768px) {
+        .form-grid
+
+    {
+        grid-template-columns: 1fr;
+    }
+
+    .form-actions {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    }
+</style>
+
+<form asp-action="@(esEdicion ? "Editar" : "Crear")" method="post" class="form">
+    @Html.AntiForgeryToken()
+    <p class="title">@ViewData["Title"]</p>
+    <input type="hidden" asp-for="IdPromocion" />
+
+    <div class="form-grid">
+        <label>
+            <span>Nombre</span>
+            <input asp-for="Nombre" class="input" placeholder="Escriba el nombre de la promoción" readonly="@(deshabilitar)" required data-bs-toggle="tooltip" title="Ingrese el nombre de la promoción" />
+            <span></span>
+            <span asp-validation-for="Nombre" class="text-danger"></span>
+        </label>
+
+        <label>
+            <span >  Tipo de Promoción</span>
+            <select asp-for="TipoPromocionId" asp-items="ViewBag.TiposPromocion" class="input" id="TipoPromocionId" required>
+                <option value="" >Seleccione un tipo de promoción </option>
+            </select>
+      
+            <span asp-validation-for="TipoPromocionId" class="text-danger"></span>
+        </label>
+
+        <div id="categoriaDiv" style="display:none;">
+            <label>
+                <span>Categoría</span>
+                <select asp-for="CategoriaId" asp-items="ViewBag.Categorias" class="input" disabled="@(deshabilitar)">
+                    <option value="">-- Seleccione una categoría --</option>
+                </select>
+                <span asp-validation-for="CategoriaId" class="text-danger"></span>
+            </label>
+        </div>
+
+        <div id="productoDiv" style="display:none;">
+            <label>
+                <span>Producto</span>
+                <select asp-for="ProductoId" asp-items="ViewBag.Productos" class="input" disabled="@(deshabilitar)">
+                    <option value="">-- Seleccione un producto --</option>
+                </select>
+      
+                <span asp-validation-for="ProductoId" class="text-danger"></span>
+            </label>
+        </div>
+        <label>
+            <span>Descuento (%)</span>
+            <input asp-for="DescuentoPorcentaje" type="number" min="1" class="input" placeholder=" " readonly="@(deshabilitar)" required />
+            <span asp-validation-for="DescuentoPorcentaje" class="text-danger"></span>
+        </label>
+        <label>
+            <span>Fecha Inicio</span>
+            <input asp-for="FechaInicio" type="date" class="input" placeholder=" " readonly="@(deshabilitar)" required value="@Model.FechaInicio.ToString("yyyy-MM-dd")" />
+        
+            <span asp-validation-for="FechaInicio" class="text-danger"></span>
+        </label>
+
+        <label>
+            <span>Fecha Fin</span>
+            <input asp-for="FechaFin" type="date" class="input" placeholder=" " readonly="@(deshabilitar)" required value="@Model.FechaFin.ToString("yyyy-MM-dd")" />
+        
+            <span asp-validation-for="FechaFin" class="text-danger"></span>
+        </label>
+    </div>
+  
+    <div class="form-actions">
+        <button type="submit" class="submit" disabled="@(deshabilitar)">Guardar</button>
+        <a asp-action="Index" class="btn btn-outline-secondary">Cancelar</a>
+    </div>
+</form>
+
+@section Scripts {
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        //Este script maneja la lógica de mostrar/ocultar los campos según el tipo de promoción seleccionado
+        function toggleAplicaA() {
+            var tipo = document.getElementById('TipoPromocionId').value;
+            var categoriaDiv = document.getElementById('categoriaDiv');
+            var productoDiv = document.getElementById('productoDiv');
+            var categoriaSelect = document.querySelector('[name="CategoriaId"]');
+            var productoSelect = document.querySelector('[name="ProductoId"]');
+
+            if (tipo == '6') {
+                categoriaDiv.style.display = 'block';
+                categoriaSelect.disabled = false;
+                productoDiv.style.display = 'none';
+                productoSelect.disabled = true;
+                productoSelect.value = '';
+            } else if (tipo == '5') {
+                productoDiv.style.display = 'block';
+                productoSelect.disabled = false;
+                categoriaDiv.style.display = 'none';
+                categoriaSelect.disabled = true;
+                categoriaSelect.value = '';
+            } else {
+                categoriaDiv.style.display = 'none';
+                productoDiv.style.display = 'none';
+                categoriaSelect.disabled = true;
+                productoSelect.disabled = true;
+                categoriaSelect.value = '';
+                productoSelect.value = '';
+            }
+        }
+
+        document.getElementById('TipoPromocionId').addEventListener('change', toggleAplicaA);
+        toggleAplicaA();
+
+        // Mostrar toast si hay errores de validación
+        document.addEventListener('DOMContentLoaded', function () {
+            var errors = [];
+            @if (!ViewData.ModelState.IsValid)
+            {
+                foreach (var error in ViewData.ModelState.Values.SelectMany(v => v.Errors))
+                {
+                    @:errors.push('@error.ErrorMessage');
+                }
+            }
+            if (errors.length > 0) {
+                var toastContainer = document.getElementById('toastContainer');
+                errors.forEach(function (msg) {
+                    var toastEl = document.createElement('div');
+                    toastEl.className = 'toast align-items-center text-bg-danger border-0 show';
+                    toastEl.setAttribute('role', 'alert');
+                    toastEl.setAttribute('aria-live', 'assertive');
+                    toastEl.setAttribute('aria-atomic', 'true');
+                    toastEl.innerHTML = '<div class="d-flex"><div class="toast-body">' + msg + '</div><button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button></div>';
+                    toastContainer.appendChild(toastEl);
+                    new bootstrap.Toast(toastEl, { delay: 5000 }).show();
+                });
+            }
+
+            // Mostrar toast de éxito si existe el mensaje
+            var successMessage = '@successMessage';
+            if (successMessage && successMessage.length > 0) {
+                var toastContainer = document.getElementById('toastContainer');
+                var toastEl = document.createElement('div');
+                toastEl.className = 'toast align-items-center text-bg-success border-0 show';
+                toastEl.setAttribute('role', 'alert');
+                toastEl.setAttribute('aria-live', 'assertive');
+                toastEl.setAttribute('aria-atomic', 'true');
+                toastEl.innerHTML = '<div class="d-flex"><div class="toast-body">' + successMessage + '</div><button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button></div>';
+                toastContainer.appendChild(toastEl);
+                new bootstrap.Toast(toastEl, { delay: 5000 }).show();
+            }
+
+            // Inicializar tooltips de Bootstrap
+            var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+            var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+                return new bootstrap.Tooltip(tooltipTriggerEl);
+            });
+        });
+    </script>
+}

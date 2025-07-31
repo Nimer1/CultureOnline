@@ -43,9 +43,24 @@ namespace MVCCultureOnline.Controllers
             // Obtener el usuario autenticado
             var userIdClaim = User.Claims.FirstOrDefault(c => c.Type == System.Security.Claims.ClaimTypes.NameIdentifier);
             int usuarioId = 0;
+            //Si el usuario no está autenticado, redirigir al login
             if (userIdClaim == null || !int.TryParse(userIdClaim.Value, out usuarioId))
             {
                 return RedirectToAction("Index", "Login");
+            }
+
+            // Obtener todos los pedidos del usuario
+            var pedidosUsuario = await _servicePedido.ListAsync();
+            //Buscar los pedidos que contengan el producto específico
+            var pedidosConProducto = pedidosUsuario
+                .Where(p => p.UsuarioId == usuarioId && p.DetallePedido.Any(d => d.ProductoId == productoId))
+                .ToList();
+
+            // Si el usuario no ha comprado el producto, no puede crear la reseña
+            if (!pedidosConProducto.Any())
+            {
+                TempData["MensajeError"] = "Solo puedes reseñar productos que hayas comprado.";
+                return RedirectToAction("Detalle", "Producto", new { id = productoId, error = true });
             }
 
             // Verificar si ya existe una reseña de este usuario para este producto
@@ -53,7 +68,8 @@ namespace MVCCultureOnline.Controllers
             var reseñaExistente = reseñas.FirstOrDefault(r => r.ProductoId == productoId && r.UsuarioId == usuarioId);
             if (reseñaExistente != null)
             {
-                // Redirigir a la edición de la reseña existente
+                // Redirigir a la edición de la reseña si ya existe
+                TempData["MensajeExito"] = "Reseña editada correctamente";
                 return RedirectToAction("Edit", new { id = reseñaExistente.Id });
             }
 
@@ -64,27 +80,17 @@ namespace MVCCultureOnline.Controllers
                 return NotFound();
             }
 
-            // Obtener todos los pedidos del usuario
-            var pedidosUsuario = await _servicePedido.ListAsync();
-            var pedidosConProducto = pedidosUsuario
-                .Where(p => p.UsuarioId == usuarioId && p.DetallePedido.Any(d => d.ProductoId == productoId))
-                .ToList();
-
-            // Si el usuario no ha comprado el producto, no puede crear reseña
-            if (!pedidosConProducto.Any())
-            {
-                TempData["MensajeError"] = "Solo puedes reseñar productos que hayas comprado.";
-                return RedirectToAction("Detalle", "Producto", new { id = productoId, error = true });
-            }
-
-            // Prepara la lista de pedidos para el dropdown
+            // Preparar la lista de pedidos para el dropdown
             ViewBag.ListPedidos = pedidosConProducto;
             ViewBag.NombreProducto = producto.Nombre;
+
+            // Seleccionar el primer pedido que tenga el producto
+            int primerPedidoId = pedidosConProducto.First().Id;
 
             var reseña = new ReseñaDTO
             {
                 ProductoId = productoId,
-                PedidoId = pedidoId,
+                PedidoId = primerPedidoId,
                 UsuarioId = usuarioId,
                 Fecha = DateTime.Now
             };
@@ -97,12 +103,12 @@ namespace MVCCultureOnline.Controllers
         public async Task<IActionResult> Create(ReseñaDTO reseña)
         {
             try
-            {
+            {   
+                // Obtener el usuario autenticado
                 var userIdClaim = User.Claims.FirstOrDefault(c => c.Type == System.Security.Claims.ClaimTypes.NameIdentifier);
 
                 if (!ModelState.IsValid)
                 {
-                
                     if (reseña.ProductoId == 0 && Request.Query.ContainsKey("productoId"))
                     {
                         int.TryParse(Request.Query["productoId"], out int prodId);
@@ -117,8 +123,7 @@ namespace MVCCultureOnline.Controllers
                         .Where(p => p.UsuarioId == reseña.UsuarioId && p.DetallePedido.Any(d => d.ProductoId == reseña.ProductoId))
                         .ToList();
 
-                    // Muestra los errores en la vista
-                    return View(reseña);
+                    
                 }
 
                 if (userIdClaim != null && int.TryParse(userIdClaim.Value, out int userId))
@@ -132,24 +137,28 @@ namespace MVCCultureOnline.Controllers
 
                 reseña.Fecha = DateTime.Now;
                 reseña.Aprobada = true;
-
+                //Se guarda la reseña
                 await _serviceReseña.AddAsync(reseña);
 
                 // Actualizar el promedio de valoraciones del producto
                 var reseñasProducto = await _serviceReseña.ListAsync();
+                //Busca las reseñas del producto, y verifica si ha sido aprobada (si no ha sido eliminada)
                 var reseñasDeEsteProducto = reseñasProducto
                     .Where(r => r.ProductoId == reseña.ProductoId && r.Aprobada == true && r.Valoracion > 0)
                     .ToList();
 
                 double promedio = 0;
+                //Verifica hay reseñas
+                //Si la condición es verdadera saca el promedio
                 if (reseñasDeEsteProducto.Any())
                 {
                     promedio = reseñasDeEsteProducto.Average(r => r.Valoracion);
                 }
-
+              
                 var producto = await _serviceProducto.FindByIdAsync(reseña.ProductoId);
                 if (producto != null)
                 {
+                    //Actualiza el promedio de valoración del producto
                     producto.PromedioValoracion = promedio;
                     var categorias = producto.Categorias ?? new List<CategoriaDTO>();
                     try
@@ -166,7 +175,8 @@ namespace MVCCultureOnline.Controllers
                         return StatusCode(500, $"Error: {ex.Message}");
                     }
                 }
-
+                //Esto es importante porque se asegura si la operación de AJAX fue exitosa
+                //Si es exitosa permite que la interfaz se actualice sin la necesidad de recargar la pagina 
                 if (Request.Headers["X-Requested-With"] == "XMLHttpRequest")
                 {
                     return Json(new { success = true, productoId = reseña.ProductoId });
@@ -175,7 +185,6 @@ namespace MVCCultureOnline.Controllers
             }
             catch (Exception ex)
             {
-                // TEMPORAL: para depuración rápida
                 return StatusCode(500, $"Error: {ex.Message}");
             }
         }
@@ -185,6 +194,9 @@ namespace MVCCultureOnline.Controllers
         {
             var reseña = await _serviceReseña.FindByIdAsync(id);
             if (reseña == null) return NotFound();
+            // Si es AJAX, devuelve el partial del formulario
+            if (Request.Headers["X-Requested-With"] == "XMLHttpRequest")
+                return PartialView("_FormularioReseña", reseña);
             return View(reseña);
         }
 
@@ -207,32 +219,30 @@ namespace MVCCultureOnline.Controllers
                         }
                         reseña.Fecha = DateTime.Now;
                         reseña.Aprobada = true;
-
-                        // Asegura que PedidoId no sea 0 ni null
+                        // Si el PedidoId es 0, intenta obtenerlo del original
                         if (reseña.PedidoId == 0)
                         {
-                            // Busca la reseña original para obtener el PedidoId correcto
                             var reseñaOriginal = await _serviceReseña.FindByIdAsync(id);
                             if (reseñaOriginal != null && reseñaOriginal.PedidoId != 0)
                             {
                                 reseña.PedidoId = reseñaOriginal.PedidoId;
                             }
                         }
-
+                        // Actualizar la reseña
                         await _serviceReseña.UpdateAsync(id, reseña);
-
                         // Actualizar el promedio de valoraciones del producto
                         var reseñasProducto = await _serviceReseña.ListAsync();
                         var reseñasDeEsteProducto = reseñasProducto
                             .Where(r => r.ProductoId == reseña.ProductoId && r.Aprobada == true && r.Valoracion > 0)
                             .ToList();
 
+                        // Calcular el promedio de valoraciones
                         double promedio = 0;
                         if (reseñasDeEsteProducto.Any())
                         {
                             promedio = reseñasDeEsteProducto.Average(r => r.Valoracion);
                         }
-
+                        // Obtener el producto asociado a la reseña
                         var producto = await _serviceProducto.FindByIdAsync(reseña.ProductoId);
                         if (producto != null)
                         {
@@ -240,6 +250,7 @@ namespace MVCCultureOnline.Controllers
                             var categorias = producto.Categorias ?? new List<CategoriaDTO>();
                             try
                             {
+                                // Actualiza el producto con las categorías
                                 await _serviceProducto.UpdateAsync(
                                     producto.Id,
                                     producto,
@@ -249,10 +260,15 @@ namespace MVCCultureOnline.Controllers
                             }
                             catch (Exception ex)
                             {
+                                if (Request.Headers["X-Requested-With"] == "XMLHttpRequest")
+                                    return StatusCode(500, $"Error: {ex.Message}");
                                 return StatusCode(500, $"Error: {ex.Message}");
                             }
                         }
-
+                        // AJAX: Si la reseña se ha guardado correctamente, devuelve JSON
+                        if (Request.Headers["X-Requested-With"] == "XMLHttpRequest")
+                            return Json(new { success = true, productoId = reseña.ProductoId });
+                        // Redirige a la vista de detalle del producto
                         return RedirectToAction("Detalle", "Producto", new { id = reseña.ProductoId });
                     }
                     catch (Exception ex)
@@ -264,7 +280,8 @@ namespace MVCCultureOnline.Controllers
             }
             catch (Exception ex)
             {
-                // TEMPORAL: para depuración rápida
+                if (Request.Headers["X-Requested-With"] == "XMLHttpRequest")
+                    return StatusCode(500, $"Error: {ex.Message}");
                 return StatusCode(500, $"Error: {ex.Message}");
             }
             return View(reseña);
@@ -275,15 +292,36 @@ namespace MVCCultureOnline.Controllers
         {
             var reseña = await _serviceReseña.FindByIdAsync(id);
             if (reseña == null) return NotFound();
+            if (Request.Headers["X-Requested-With"] == "XMLHttpRequest")
+                return PartialView("_ConfirmarEliminarResena", reseña);
             return View(reseña);
         }
 
-        [HttpPost, ActionName("Delete")]
+        [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
+            var reseña = await _serviceReseña.FindByIdAsync(id);
+            if (reseña == null)
+                return NotFound();
+            int productoId = reseña.ProductoId;
             await _serviceReseña.DeleteAsync(id);
-            return RedirectToAction(nameof(Index));
+            // Si es AJAX, responde con JSON
+            if (Request.Headers["X-Requested-With"] == "XMLHttpRequest")
+                return Json(new { success = true, productoId });
+            return RedirectToAction("Detalle", "Producto", new { id = productoId });
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> ReseñasParcial(int productoId)
+        {
+            var producto = await _serviceProducto.FindByIdAsync(productoId);
+            if (producto == null)
+                return NotFound();
+
+            // Solo reseñas aprobadas
+            var reseñas = producto.Reseñas?.Where(r => r.Aprobada == true).OrderByDescending(r => r.Fecha).ToList() ?? new List<ReseñaDTO>();
+            return PartialView("_ReseñasParcial", reseñas);
         }
     }
 }

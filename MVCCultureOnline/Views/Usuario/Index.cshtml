@@ -1,0 +1,114 @@
+﻿@model IEnumerable<CultureOnline.Application.DTOs.UsuarioDTO>
+@{
+    ViewData["Title"] = "Index";
+}
+@if (TempData["MensajeExito"] != null)
+{
+    <div class="alert-overlay2" id="customAlert" role="alert" aria-live="assertive" aria-atomic="true">
+        <div class="alert-box2 alert-success">
+            <div class="alert-icon-wrapper2">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" class="alert-icon2" viewBox="0 0 20 20" aria-hidden="true">
+                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.707a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
+                </svg>
+            </div>
+            <div>
+                <h3 class="alert-title2">¡Éxito!</h3>
+                <p class="alert-message2">@TempData["MensajeExito"]</p>
+            </div>
+            <button type="button" class="alert-close-btn2" aria-label="Cerrar alerta" onclick="document.getElementById('customAlert').style.display='none'">&times;</button>
+        </div>
+    </div>
+}
+
+
+
+<h1 class="mt-4 mb-5 text-start fs-4">Listado de Usuarios</h1>
+
+@*
+<section class="row">
+    <div class="col-2">
+        <ul class="list-group" style="background-color:white">
+            <li class="list-group-item">
+                <button type="button" class="btn btn-info" onclick="buscarPorCategoria(0)">Todos</button>
+            </li>
+            @foreach (var categoria in (List<CultureOnline.Application.DTOs.CategoriaDTO>)ViewBag.ListCategorias)
+            {
+                <li class="list-group-item">
+                    <button type="button" class="btn btn-info" onclick="buscarPorCategoria(@categoria.Id)">@categoria.Nombre</button>
+                </li>
+            }
+        </ul>
+    </div> *@
+<div class="col-10">
+    <div id="listaProductos" class="row row-cols-1 row-cols-sm-2 row-cols-md-4 g-4">
+        @await Html.PartialAsync("_ListUsuarios", Model)
+    </div>
+</div>
+
+@section Scripts {
+    <script type="text/javascript">
+         /**
+         * Función para buscar productos por categoría mediante AJAX
+         */
+        function buscarPorCategoria(idCategoria) {
+              // Obtener referencia al contenedor donde se mostrarán los productos
+            const divLista = document.getElementById("listaProductos");
+            // Generar la URL del endpoint usando Razor
+            const url = '@Url.Action("BuscarPorCategoria", "Producto")';
+            // Realizar petición fetch a la API
+            fetch(url + "?categoriaId=" + idCategoria, { method: 'GET' })
+                .then(response => {
+                    if (!response.ok) {
+                        return response.text().then(text => { throw new Error(text) });
+                    }
+                    return response.text();
+                })
+                .then(html => {
+                    divLista.innerHTML = html;
+                })
+                .catch(error => {
+                    Swal.fire({
+                        title: "Error",
+                        text: error.message,
+                        icon: "error"
+                    });
+                });
+        }
+    </script>
+
+    <script type="text/javascript">
+        function buscarPorCategoria(idCategoria) {
+            const divLista = document.getElementById("listaProductos");
+            const url = '@Url.Action("BuscarPorCategoria", "Producto")';
+            fetch(url + "?categoriaId=" + idCategoria, { method: 'GET' })
+                .then(response => {
+                    if (!response.ok) {
+                        return response.text().then(text => { throw new Error(text) });
+                    }
+                    return response.text();
+                })
+                .then(html => {
+                    divLista.innerHTML = html;
+                })
+                .catch(error => {
+                    Swal.fire({
+                        title: "Error",
+                        text: error.message,
+                        icon: "error"
+                    });
+                });
+        }
+
+        // Ocultar la alerta después de 2 segundo
+        window.onload = function () {
+            const alert = document.getElementById('customAlert');
+            if (alert) {
+                setTimeout(() => {
+                    alert.style.display = 'none';
+                }, 2000); 
+            }
+        };
+    </script>
+}
+
+

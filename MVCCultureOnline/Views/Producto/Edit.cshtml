@@ -1,0 +1,469 @@
+﻿@model MVCCultureOnline.Views.ViewModels.ViewModelProducto 
+
+@{
+    Layout = "_layoutlogin";
+}
+
+<div class="container my-5">
+    <div class="d-flex align-items-center justify-content-center">
+        <div class="card shadow-lg border-0 rounded-4 p-5" style="width: 100%; max-width: 960px;">
+            <div class="card-header bg-white border-0 text-center mb-4">
+                <h3 class="fw-bold text-danger">Editar Producto</h3>
+            </div>
+
+            <div class="card-body">
+                <form asp-controller="Producto" asp-action="Edit" method="post" enctype="multipart/form-data" asp-antiforgery="true">
+                    <input type="hidden" asp-for="Id" />
+
+                    <div class="row mb-4">
+                        <!-- Tipo de Producto -->
+                        <div class="col-md-6 mb-3">
+                            <label asp-for="TipoProducto" class="form-label fw-semibold text-secondary"></label>
+                            <select asp-for="TipoProducto" asp-items="Model.TiposProducto" class="form-select form-select-lg rounded-3 shadow-sm" id="TipoProducto">
+                                <option value="">Seleccione tipo</option>
+                            </select>
+                            <span asp-validation-for="TipoProducto" class="text-danger small"></span>
+                        </div>
+                        <!-- Nombre del producto -->
+                        <div class="col-md-6">
+                            <label asp-for="Nombre" class="form-label fw-semibold text-secondary">Nombre del Producto</label>
+                            <input asp-for="Nombre" class="form-control form-control-lg rounded-3 shadow-sm" placeholder="Ingrese el nombre del producto" />
+                            <span asp-validation-for="Nombre" class="text-danger small"></span>
+                        </div>
+                    </div>
+
+                    <!-- Descripción del roducto -->
+                    <div class="mb-4">
+                        <label asp-for="Descripcion" class="form-label fw-semibold text-secondary">Descripción Detallada</label>
+                        <textarea asp-for="Descripcion" class="form-control form-control-lg rounded-3 shadow-sm" rows="4" placeholder="Ingrese la descripción completa"></textarea>
+                        <span asp-validation-for="Descripcion" class="text-danger small"></span>
+                    </div>
+                    <!-- Precio del producto -->
+                    <div class="row mb-4">
+                        <div class="col-md-6">
+                            <label asp-for="Precio" class="form-label fw-semibold text-secondary">Precio</label>
+                            <input asp-for="Precio" type="text" inputmode="decimal" class="form-control form-control-lg rounded-3 shadow-sm" placeholder="0.00" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1')" />
+                            <span asp-validation-for="Precio" class="text-danger small"></span>
+                        </div>
+                        <!-- Cantidad en stock -->
+                        <div class="col-md-6">
+                            <label asp-for="Stock" class="form-label fw-semibold text-secondary">Stock</label>
+                            <input asp-for="Stock" type="number" min="1" class="form-control form-control-lg rounded-3 shadow-sm" placeholder="Cantidad disponible" />
+                            <span asp-validation-for="Stock" class="text-danger small"></span>
+                        </div>
+                    </div>
+                    <!-- Imágenes del producto -->
+                    <div class="mb-4">
+                        <label class="form-label fw-semibold text-secondary">Imágenes</label>
+                        <input id="inputImagen" name="ImagenesNuevas" type="file" class="form-control form-control rounded-3 shadow-sm w-50" accept="image/*" multiple />
+                        <span asp-validation-for="Imagenes" class="text-danger small"></span>
+
+                        <div id="previewImagenes" class="d-flex flex-wrap gap-3 mt-3">
+                            @* Mostrar imágenes ya cargadas si las hay *@
+                            @if (Model.Imagenes != null && Model.Imagenes.Any())
+                            {
+                                @foreach (var ruta in Model.Imagenes)
+                                {
+                                    <div class="text-center me-2 mb-2 position-relative imagen-existente" style="width: 90px;">
+                                        <img src="/images/@System.IO.Path.GetFileName(ruta)" alt="Imagen producto" style="width: 80px; height: 80px; object-fit: cover; border-radius: 8px; border: 1px solid #ccc; padding: 2px;" />
+                                        <div class="small text-truncate">@System.IO.Path.GetFileName(ruta)</div>
+                                        <button type="button" class="btn btn-sm btn-outline-danger mt-1 btn-quitar-imagen" data-imagenruta="@ruta">
+                                            Quitar
+                                        </button>
+                                        <input type="hidden" name="ImagenesGuardadas" value="@ruta" />
+                                    </div>
+                                }
+                            }
+                        </div>
+                    </div>
+
+                    <div class="row mb-4">
+                        <!-- Categorías -->
+                        <div class="col-md-6">
+                            <label class="form-label fw-semibold text-secondary">Categorías</label>
+                            <div class="dropdown">
+                                <button class="btn btn-outline-secondary dropdown-toggle w-100 text-start shadow-sm"
+                                        type="button"
+                                        id="dropdownCategorias"
+                                        data-bs-toggle="dropdown"
+                                        aria-expanded="false">
+                                    Seleccione una o más categorías
+                                </button>
+                                <ul class="dropdown-menu w-100 p-2 rounded-3 shadow-sm"
+                                    id="categoriaCheckboxList"
+                                    style="max-height: 200px; overflow-y: auto;">
+                                    @foreach (var categoria in Model.Categorias)
+                                    {
+                                        var isChecked = Model.CategoriaIds != null && Model.CategoriaIds.Contains(int.Parse(categoria.Value));
+                                        <li class="mb-1">
+                                            <div class="form-check">
+                                                <input class="form-check-input categoria-checkbox"
+                                                       type="checkbox"
+                                                       value="@categoria.Value"
+                                                       id="cat_@categoria.Value"
+                                                       @(isChecked ? "checked" : "") />
+                                                <label class="form-check-label" for="cat_@categoria.Value">
+                                                    @categoria.Text
+                                                </label>
+                                            </div>
+                                        </li>
+                                    }
+                                </ul>
+                            </div>
+                            <div id="categoriasSeleccionadas"></div>
+                            <span asp-validation-for="CategoriaIds" class="text-danger small"></span>
+                        </div>
+
+                        <!-- Etiquetas -->
+                        <div class="col-md-6">
+                            <label class="form-label fw-semibold text-secondary">Etiquetas</label>
+                            <div class="dropdown">
+                                <button class="btn btn-outline-secondary dropdown-toggle w-100 text-start shadow-sm"
+                                        type="button"
+                                        id="dropdownEtiquetas"
+                                        data-bs-toggle="dropdown"
+                                        aria-expanded="false">
+                                    Seleccione una o más etiquetas
+                                </button>
+                                <ul class="dropdown-menu w-100 p-2 rounded-3 shadow-sm"
+                                    id="etiquetasCheckboxList"
+                                    style="max-height: 200px; overflow-y: auto;">
+                                    @foreach (var etiqueta in Model.Etiquetas)
+                                    {
+                                        var isChecked = Model.EtiquetaIds != null && Model.EtiquetaIds.Contains(int.Parse(etiqueta.Value));
+                                        <li class="mb-1">
+                                            <div class="form-check">
+                                                <input class="form-check-input etiqueta-checkbox"
+                                                       type="checkbox"
+                                                       value="@etiqueta.Value"
+                                                       id="etq_@etiqueta.Value"
+                                                       @(isChecked ? "checked" : "") />
+                                                <label class="form-check-label" for="etq_@etiqueta.Value">
+                                                    @etiqueta.Text
+                                                </label>
+                                            </div>
+                                        </li>
+                                    }
+                                </ul>
+                            </div>
+                            <div id="etiquetasSeleccionadas"></div>
+                            <span asp-validation-for="EtiquetaIds" class="text-danger small"></span>
+                        </div>
+                    </div>
+
+                    <!--Solo si el producto es libro-->
+                    <!-- Año de publicación -->
+                    <div class="row mb-4 d-none" id="camposLibro">
+                        <div class="col-md-6 mb-3">
+                            <label asp-for="AnioPublicacion" class="form-label fw-semibold">Año de Publicación</label>
+                            <input asp-for="AnioPublicacion" class="form-control form-control-lg rounded-3 shadow-sm" id="AnioPublicacion" />
+                            <span asp-validation-for="AnioPublicacion" class="text-danger small"></span>
+                        </div>
+                        <!-- Editorial -->
+                        <div class="col-md-6 mb-3">
+                            <label asp-for="Editorial" class="form-label fw-semibold">Editorial</label>
+                            <input asp-for="Editorial" class="form-control form-control-lg rounded-3 shadow-sm" id="Editorial" />
+                            <span asp-validation-for="Editorial" class="text-danger small"></span>
+                        </div>
+                        <!-- Autor -->
+                        <div class="col-md-6 mb-3">
+                            <label asp-for="AutorId" class="form-label fw-semibold">Autor</label>
+                            <select asp-for="AutorId" class="form-select form-select-lg rounded-3 shadow-sm" asp-items="Model.Autores" id="AutorId">
+                                <option value="">Seleccione un autor</option>
+                            </select>
+                            <span asp-validation-for="AutorId" class="text-danger small"></span>
+                        </div>
+                        <!-- Clasificación edad -->
+                        <div class="col-md-6 mb-3">
+                            <label asp-for="ClasificacionEdad" class="form-label fw-semibold">Clasificación de Edad</label>
+                            <input asp-for="ClasificacionEdad" type="number" class="form-control form-control-lg rounded-3 shadow-sm" id="ClasificacionEdad" min="0" max="40" onkeydown="return ['ArrowUp','ArrowDown','Tab'].includes(event.key)" />
+                            <span asp-validation-for="ClasificacionEdad" class="text-danger small"></span>
+                        </div>
+                    </div>
+
+                    <!-- Personalizable -->
+                    <div class="row mb-4 d-none" id="personalizableBox">
+                        <div class="col-md-6">
+                            <div class="form-check mt-3">
+                                <input asp-for="EsPersonalizable" class="form-check-input" type="checkbox" id="EsPersonalizable" />
+                                <label class="form-check-label fw-semibold" for="EsPersonalizable">
+                                    ¿Este producto es personalizable?
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Valoraciones -->
+                    <div class="row mb-4">
+                        <div class="col-md-6">
+                            <label class="form-label fw-semibold text-secondary">Promedio de Valoraciones</label>
+                            <div class="d-flex align-items-center">
+                                @{
+                                    var promedio = Model.PromedioValoracion;
+                                    var estrellasLlenas = (int)Math.Floor(promedio);
+                                    var tieneMediaEstrella = (promedio - estrellasLlenas) >= 0.5;
+                                    var estrellasVacias = 5 - estrellasLlenas - (tieneMediaEstrella ? 1 : 0);
+                                }
+
+                                <div class="me-2">
+                                    @for (int i = 0; i < estrellasLlenas; i++)
+                                    {
+                                        <i class="fas fa-star text-warning"></i>
+                                    }
+                                    @if (tieneMediaEstrella)
+                                    {
+                                        <i class="fas fa-star-half-alt text-warning"></i>
+                                    }
+                                    @for (int i = 0; i < estrellasVacias; i++)
+                                    {
+                                        <i class="far fa-star text-warning"></i>
+                                    }
+                                </div>
+                                <span class="text-muted">(@promedio.ToString("0.0"))</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="text-center mt-5">
+                        <button type="submit" id="btnGuardar" class="btn btn-lg w-50 text-white" style="background-color: #B22222;" disabled>
+                            Guardar Producto
+                        </button>
+                        @if (TempData["MensajeExito"] != null)
+                        {
+                            <!-- Mensaje flotante -->
+                            <div class="position-fixed top-50 start-50 translate-middle p-3" style="z-index: 1100;">
+                                <div class="alert alert-success alert-dismissible fade show shadow-lg d-flex align-items-center" role="alert" style="min-width: 300px; backdrop-filter: blur(5px);">
+                                    <div class="me-3">
+                                        <i class="fas fa-check-circle fa-2x"></i>
+                                    </div>
+                                    <div>
+                                        <h5 class="mb-0">@TempData["MensajeExito"]</h5>
+                                    </div>
+                                    <button type="button" class="btn-close ms-auto" data-bs-dismiss="alert" aria-label="Close"></button>
+                                </div>
+                            </div>
+
+                            <style>
+                                .alert-success {
+                                    background-color: rgba(25, 135, 84, 0.95);
+                                    border: none;
+                                    color: white;
+                                    border-radius: 12px;
+                                    animation: pulse 1.5s infinite;
+                                }
+                            </style>
+
+                            <script>
+                                // Desvanecer y redirigir después de 1 segundos
+                                setTimeout(function() {
+                                    $('.alert').animate({
+                                        opacity: 0,
+                                        top: "-=20"
+                                    }, 500, function() {
+                                        window.location.href = '@Url.Action("Index")';
+                                    });
+                                }, 1000);
+                            </script>
+                        }
+                    </div>
+                    <!-- Botón para volver al catálogo -->
+                    <div class="text-center mt-3">
+                        <a class="animated-button"
+                           asp-action="Index">
+                            <svg viewBox="0 0 24 24" class="arr-2" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M7.8284 10.9999L13.1924 5.63589L11.7782 4.22168L4 11.9999L11.7782 19.778L13.1924 18.3638L7.8284 12.9999H20V10.9999H7.8284Z"></path>
+                            </svg>
+                            <span class="text">Volver al catálogo</span>
+                            <span class="circle"></span>
+                            <svg viewBox="0 0 24 24" class="arr-1" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M7.8284 10.9999L13.1924 5.63589L11.7782 4.22168L4 11.9999L11.7782 19.778L13.1924 18.3638L7.8284 12.9999H20V10.9999H7.8284Z"></path>
+                            </svg>
+                        </a>
+                    </div>
+                </form>
+            </div>
+
+            <div class="card-footer text-center text-muted small">
+                CultureOnline &copy; @DateTime.Now.Year
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script>
+        $(document).ready(function () {
+             /*
+             Función para mostrar/ocultar los campos específicos de libros
+             basado en el tipo de producto seleccionado
+            */
+            function toggleCamposLibro() {
+                const tipo = $('#TipoProducto').val().toLowerCase();
+                const esLibro = tipo === "libro";
+
+                $('#camposLibro').toggleClass('d-none', !esLibro);
+
+                if (!esLibro) {
+                    $('#AnioPublicacion').val('');
+                    $('#AutorId').val('');
+                    $('#ClasificacionEdad').val('');
+                    $('#Editorial').val('');
+                }
+            }
+            function togglePersonalizable() {
+                const tipo = $('#TipoProducto').val().toLowerCase();
+                const esSeparador = tipo === "marcapáginas";
+
+                $('#personalizableBox').toggleClass('d-none', !esSeparador);
+
+                if (!esSeparador) {
+                    $('#EsPersonalizable').prop('checked', false);
+                }
+            }
+
+            // Ejecutar al cargar la página
+            toggleCamposLibro();
+            togglePersonalizable();
+
+            // Ejecutar cuando cambie la selección
+            $('#TipoProducto').on('change', function () {
+                toggleCamposLibro();
+                togglePersonalizable();
+            });
+
+            // Inicializar categorías y etiquetas seleccionadas al cargar la página
+            function inicializarCheckboxes() {
+                // Categorías
+                let categoriasSeleccionadas = [];
+                $('.categoria-checkbox:checked').each(function () {
+                    categoriasSeleccionadas.push($(this).val());
+                });
+                if (categoriasSeleccionadas.length === 0) {
+                    $('#dropdownCategorias').text('Seleccione una o más categorías');
+                } else {
+                    $('#dropdownCategorias').text(categoriasSeleccionadas.length + ' seleccionadas');
+                }
+
+                // Etiquetas
+                let etiquetasSeleccionadas = [];
+                $('.etiqueta-checkbox:checked').each(function () {
+                    etiquetasSeleccionadas.push($(this).val());
+                });
+                if (etiquetasSeleccionadas.length === 0) {
+                    $('#dropdownEtiquetas').text('Seleccione una o más etiquetas');
+                } else {
+                    $('#dropdownEtiquetas').text(etiquetasSeleccionadas.length + ' seleccionadas');
+                }
+
+                // Actualizar inputs hidden para categorías y etiquetas
+                $('#categoriasSeleccionadas').empty();
+                categoriasSeleccionadas.forEach(function (valor) {
+                    $('#categoriasSeleccionadas').append(
+                        `<input type="hidden" name="CategoriaIds" value="${valor}" />`
+                    );
+                });
+
+                $('#etiquetasSeleccionadas').empty();
+                etiquetasSeleccionadas.forEach(function (valor) {
+                    $('#etiquetasSeleccionadas').append(
+                        `<input type="hidden" name="EtiquetaIds" value="${valor}" />`
+                    );
+                });
+            }
+
+            // Inicializar al cargar
+            inicializarCheckboxes();
+
+            // Cambiar texto y actualizar inputs cuando cambien checkboxes de categorías
+            $('.categoria-checkbox').on('change', function () {
+                inicializarCheckboxes();
+            });
+
+            // Cambiar texto y actualizar inputs cuando cambien checkboxes de etiquetas
+            $('.etiqueta-checkbox').on('change', function () {
+                inicializarCheckboxes();
+            });
+
+            // Validación para habilitar el botón de Guardar
+            function validarCamposBasicos() {
+                const nombre = $('#Nombre').val().trim();
+                const precio = $('#Precio').val().trim();
+                const stock = $('#Stock').val().trim();
+                const tipoProducto = $('#TipoProducto').val();
+
+                let valid = nombre !== '' && precio !== '' && stock !== '' && tipoProducto !== '';
+
+                // Si es Libro, validar campos obligatorios libro
+                if (tipoProducto.toLowerCase() === "libro") {
+                    const anio = $('#AnioPublicacion').val().trim();
+                    const editorial = $('#Editorial').val().trim();
+                    const autor = $('#AutorId').val();
+                    const clasificacion = $('#ClasificacionEdad').val().trim();
+
+                    valid = valid && anio !== '' && editorial !== '' && autor !== '' && clasificacion !== '';
+                }
+
+                $('#btnGuardar').prop('disabled', !valid);
+            }
+
+            // Validar cuando cambien los inputs
+            $('#Nombre, #Precio, #Stock, #TipoProducto, #AnioPublicacion, #Editorial, #AutorId, #ClasificacionEdad').on('input change', validarCamposBasicos);
+
+            validarCamposBasicos();
+
+            // Manejar vista previa de imágenes al seleccionar nuevas imagenes
+            $('#inputImagen').on('change', function () {
+                const files = this.files;
+                const preview = $('#previewImagenes');
+                //preview.empty();
+
+                if (files.length === 0) {
+                    return;
+                }
+
+                for (let i = 0; i < files.length; i++) {
+                    const file = files[i];
+                    if (!file.type.startsWith('image/')) continue;
+
+                    const reader = new FileReader();
+                    reader.onload = function (e) {
+                             const imgHtml = `
+                             <div class="text-center me-2 mb-2 position-relative preview-nueva-imagen" style="width: 90px;">
+                             <img src="${e.target.result}" alt="Preview Imagen" style="width: 80px; height: 80px; object-fit: cover; border-radius: 8px; border: 1px solid #ccc; padding: 2px;" />
+                             <div class="small text-truncate">${file.name}</div>
+                             <button type="button" class="btn btn-sm btn-outline-danger mt-1 btn-quitar-imagen-nueva">Quitar</button>
+                             </div>`;
+                           preview.append(imgHtml);
+
+                    };
+                    reader.readAsDataURL(file);
+                }
+            });
+
+         // Evento para quitar imágenes nuevas
+        $('#previewImagenes').on('click', '.btn-quitar-imagen-nueva', function () {
+            $(this).closest('.preview-nueva-imagen').remove();
+        });
+
+        // Botones quitar imagenes cargadas es decir ya existentes
+        $(document).on('click', '.btn-quitar-imagen', function() {
+        const imagenRuta = $(this).data('imagenruta');
+        const divImagen = $(this).closest('div');
+
+        // Eliminar visualmente
+        divImagen.remove();
+
+        // Agregar campo hidden al formulario para enviar al servidor
+        $('<input>').attr({
+            type: 'hidden',
+            name: 'ImagenesEliminadas',
+            value: imagenRuta
+        }).appendTo('form');
+
+            });
+        });
+    </script>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+}

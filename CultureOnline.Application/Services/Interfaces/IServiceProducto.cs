@@ -12,7 +12,7 @@ namespace CultureOnline.Application.Services.Interfaces
         Task<ICollection<ProductoDTO>> ListAsync();
         Task<ProductoDTO> FindByIdAsync(int id);
         Task<List<ReseñaDTO>> GetReseñasPorProductoAsync(int productoId);
-        Task UpdateAsync(int id, ProductoDTO dto, string[] selectedCategorias); // Agregado para permitir actualización de producto
+        Task UpdateAsync(int id, ProductoDTO dto, string[] selectedCategorias); 
         //Task<ICollection<ProductoDTO>> GetProductoByCategoria(int categoriaId);
 
     }

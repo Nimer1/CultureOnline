@@ -1,0 +1,51 @@
+﻿@model IEnumerable<CultureOnline.Application.DTOs.UsuarioDTO>
+
+<table class="table align-middle mx-auto" style="width: 100%; table-layout: auto;">
+    <thead>
+        <tr>
+            <th class="text-center">Nombre</th>
+            <th class="text-center">Correo</th>
+            <th class="text-center">Rol</th>
+            <th class="text-center">Estado</th>
+            <th class="text-center">Acciones</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var u in Model)
+        {
+            <tr class="fila-con-borde">
+                <td class="text-center">@u.Nombre</td>
+                <td class="text-center">@u.Correo</td>
+                <td class="text-center">@u.IDRolNavigation?.Descripcion</td>
+                <td class="text-center">@u.Estado</td>
+                <td class="text-center">
+                    <div class="d-flex justify-content-center gap-3 flex-wrap align-items-center">
+                        <!-- Botón ver detalle -->
+                        <a class="btn-verDetalle" href="@Url.Action("Details", "Usuario", new { id = u.Id })">
+                            Ver Detalle
+                        </a>
+
+                        <!-- Botón editar -->
+                        <div class="circulo-contenedor">
+                            <a class="mx-3" href="@Url.Action("Edit", "Usuario", new { id = u.Id })"
+                               data-bs-toggle="tooltip" data-bs-placement="top" title="Editar">
+                                <i class="fas fa-edit"></i>
+                            </a>
+                        </div>
+                    </div>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+        tooltipTriggerList.forEach(function (tooltipTriggerEl) {
+            new bootstrap.Tooltip(tooltipTriggerEl);
+        });
+    });
+</script>
+
+

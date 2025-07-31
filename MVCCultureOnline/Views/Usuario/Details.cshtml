@@ -1,0 +1,29 @@
+﻿@model CultureOnline.Application.DTOs.UsuarioDTO
+
+@{
+    ViewData["Title"] = "Detalle de Usuario";
+}
+
+<h3 class="text-center mt-4 mb-4">Detalle del usuario</h3>
+
+<div class="card-resena">
+    <div class="card-details">
+        <p class="text-title">@Model.Nombre
+        </p>
+
+        <p class="text-body">
+            <strong>Correo electrónico:</strong> @Model.Correo
+        </p>
+        <p class="text-body"><strong>Rol:</strong> @Model.IDRolNavigation?.Descripcion</p>
+
+        <p class="text-body"><strong>Estado:</strong> @Model.Estado</p>
+
+        <p class="text-body">
+            <strong>Último inicio de sesión:</strong>
+            @((Model.UltimoInicioSesion != null) ? Model.UltimoInicioSesion.Value.ToString("dd/MM/yyyy HH:mm") : "No registrado")
+
+        </p>
+    </div>
+
+    <a asp-action="Index" class="card-button">Volver al listado</a>
+</div>

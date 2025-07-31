@@ -19,10 +19,7 @@ namespace CultureOnline.Infraestructure.Repository.Implementations
             _context = context;
         }
 
-        public async Task<ICollection<TipoPromocion>> ListAsync()
-        {
-            return await _context.Set<TipoPromocion>().ToListAsync();
-        }
+
 
         public async Task<TipoPromocion> FindByIdAsync(int id)
         {
@@ -32,39 +29,11 @@ namespace CultureOnline.Infraestructure.Repository.Implementations
             return @object!;
 
         }
-        Task<ICollection<TipoPromocion>> IRepositoryTipoPromocion.ListAsync()
+        public async Task<ICollection<TipoPromocion>> ListAsync()
         {
-            throw new NotImplementedException();
+            return await _context.TipoPromocion.ToListAsync();
         }
 
-        Task<TipoPromocion> IRepositoryTipoPromocion.FindByIdAsync(int id)
-        {
-            throw new NotImplementedException();
-        }
 
-        public Task<TipoPromocion> FindByNameAsync(string name)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<int> AddAsync(TipoPromocion tipoPromocion)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task UpdateAsync(int id, TipoPromocion tipoPromocion)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task DeleteByIdAsync(int id)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<ICollection<TipoPromocion>> GetTipoPromocionByName(string name)
-        {
-            throw new NotImplementedException();
-        }
     }
 }

@@ -1,6 +1,6 @@
 ﻿@model IEnumerable<CultureOnline.Application.DTOs.ReseñaDTO>
 
-<table class="table align-middle w-100" style="table-layout:auto;">
+<table class="table align-middle w-85 mx-auto" style="table-layout:auto;">
     <thead>
         <tr>
             <th class="text-center">Fecha</th>
@@ -16,7 +16,7 @@
             <tr>
                 <td class="text-center">@(r.Fecha?.ToShortDateString())</td>
                 <td class="text-center">@r.Usuario?.Nombre</td>
-                <td>
+                <td class="text-center">
                     @{
                         var nombreProducto = r.Producto?.Nombre ?? "";
                         var etiqueta = nombreProducto.ToLower().Contains("separador")
@@ -49,19 +49,19 @@
                         </a>
 
                         <!-- botón crear -->
-                        <div class="circulo-contenedor">
+                        <!--<div class="circulo-contenedor">-->
                             @*<a class="mx-3" href="@Url.Action("Crear", "Reseña", new { id = r.Id })"
                                data-bs-toggle="tooltip" data-bs-placement="top" title="Crear">
                                 <i class="fas fa-plus"></i>
                             </a>*@
                             <!-- botón editar -->
-                           <a class="mx-3" href="@Url.Action("Editar", "Reseña", new { id = r.Id })"
+                           <!--<a class="mx-3" href="@Url.Action("Editar", "Reseña", new { id = r.Id })"
                                data-bs-toggle="tooltip" data-bs-placement="top" title="Editar">
                                 <i class="fas fa-edit"></i>
                             </a>
 
                         
-                        </div>
+                        </div>-->
                     </div>
                 </td>
 

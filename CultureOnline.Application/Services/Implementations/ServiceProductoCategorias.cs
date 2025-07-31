@@ -23,7 +23,6 @@ namespace CultureOnline.Application.Services.Implementations
         {
             //Obtener datos del repositorio 
             var list = await _repository.ListAsync();
-            // Map List<Autor> a ICollection<BodegaDTO> 
             var collection = _mapper.Map<ICollection<ProductoCategoriasDTO>>(list);
             // Return lista 
             return collection;

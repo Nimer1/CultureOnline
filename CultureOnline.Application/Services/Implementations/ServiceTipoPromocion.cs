@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace CultureOnline.Application.Services.Implementations
 {
-    internal class ServiceTipoPromocion:IServiceTipoPromocion
+    public class ServiceTipoPromocion:IServiceTipoPromocion
     {
 
         private readonly IRepositoryTipoPromocion _repository;
@@ -33,20 +33,9 @@ namespace CultureOnline.Application.Services.Implementations
         {
             //Obtener datos del repositorio 
             var list = await _repository.ListAsync();
-            // Map List<Autor> a ICollection<BodegaDTO> 
             var collection = _mapper.Map<ICollection<TipoPromocionDTO>>(list);
             // Return lista 
             return collection;
-        }
-
-        Task<TipoPromocionDTO> IServiceTipoPromocion.FindByIdAsync(int id)
-        {
-            throw new NotImplementedException();
-        }
-
-        Task<ICollection<TipoPromocionDTO>> IServiceTipoPromocion.ListAsync()
-        {
-            throw new NotImplementedException();
         }
     }
 }

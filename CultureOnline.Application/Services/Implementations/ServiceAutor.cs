@@ -33,7 +33,7 @@ namespace CultureOnline.Application.Services.Implementations
 
         public async Task<ICollection<AutorDTO>> ListAsync()
         {
-            //Obtener datos del repositorio 
+            //Obtiene los datos del repositorio 
             var list = await _repository.ListAsync();
             // Map List<Autor> a ICollection<BodegaDTO> 
             var collection = _mapper.Map<ICollection<AutorDTO>>(list);

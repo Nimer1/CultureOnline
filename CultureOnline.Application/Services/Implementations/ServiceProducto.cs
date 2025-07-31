@@ -30,14 +30,14 @@ namespace CultureOnline.Application.Services.Implementations
         }
         public async Task<int> AddAsync(ProductoDTO dto, string[] selectedCategorias)
         {
-            // Map LibroDTO to Libro
+            // Map ProductoDTO to Producto
             var objectMapped = _mapper.Map<Productos>(dto);
 
             // Return
             return await _repository.AddAsync(objectMapped, selectedCategorias);
         }
 
-        //Listar productos
+        //Se listan los productos
         public async Task<ProductoDTO> FindByIdAsync(int id)
         {
             var producto = await _repository.FindByIdAsync(id);
@@ -49,7 +49,7 @@ namespace CultureOnline.Application.Services.Implementations
             if (productoDTO.Categorias == null)
                 productoDTO.Categorias = new List<CategoriaDTO>();
 
-            // Trae todas las promociones vigentes
+            // Esto de aqui trae todas las promociones vigentes
             var promociones = await _servicePromocion.ListAsync();
 
             // Promociones directas al producto
@@ -71,12 +71,12 @@ namespace CultureOnline.Application.Services.Implementations
                     p.FechaFin >= DateTime.Now)
                 .ToList();
 
-            // Unir todas las promociones y sumar descuentos
+            // Aquí une todas las promociones y suma los descuentos
             var todasPromociones = promocionesDirectas.Concat(promocionesPorCategoria).Distinct().ToList();
 
             int descuentoTotal = todasPromociones.Sum(p => p.DescuentoPorcentaje);
-            if (descuentoTotal > 100)
-                descuentoTotal = 100;
+            if (descuentoTotal > 80)
+                descuentoTotal = 80;
 
             if (descuentoTotal > 0)
             {
@@ -151,12 +151,11 @@ namespace CultureOnline.Application.Services.Implementations
         }
 
 
-        // Actualizar un producto por ID
+        // Actualiza un producto por ID
         public async Task UpdateAsync(int id, ProductoDTO dto, string[] selectedCategorias)
         {
-            //Obtenga el modelo original a actualizar
+            //Se obtiene el modelo original a actualizar
             var @object = await _repository.FindByIdAsync(id);
-            //       source, destination
             var entity = _mapper.Map(dto, @object!);
 
 

@@ -4,6 +4,10 @@
 @{
     ViewData["Title"] = "Detalle del Producto";
     var mensajeError = TempData["MensajeError"] as string;
+    if (!string.IsNullOrEmpty(mensajeError))
+    {
+        Layout = null;
+    }
     int usuarioId = 0;
     if (User.Identity.IsAuthenticated)
     {
@@ -18,15 +22,16 @@
 
 @if (!string.IsNullOrEmpty(mensajeError))
 {
-    <div class="alert alert-warning alert-dismissible fade show" role="alert">
+    <div class="alert alert-warning alert-dismissible fade show" role="alert" style="max-width:600px; margin:40px auto;">
         <strong>Atención:</strong> @mensajeError
         <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
     </div>
+    return;
 }
 
 <h3 class="text-center mt-4 mb-4">Detalle del Producto</h3>
 
-<div class="card mx-auto" style="max-width: 820px;">
+<div class="card mx-auto" style="max-width: 820px;" id="bloque-detalle-producto">
     <div class="row g-0">
 
         <div class="col-md-6">
@@ -101,14 +106,17 @@
                     }
                 </p>
 
-                @if (!string.IsNullOrEmpty(Model.IdAutorNavigation?.Descripcion))
-                {
-                    <p class="card-text"><b>@Html.DisplayNameFor(m => m.IdAutorNavigation):</b> @Model.IdAutorNavigation.Descripcion</p>
-                }
+                <p class="card-text">
+                    <b>@Html.DisplayNameFor(m => m.Stock):</b> @Model.Stock
+                </p>
 
                 @if (!string.IsNullOrEmpty(Model.Editorial))
                 {
                     <p class="card-text"><b>@Html.DisplayNameFor(m => m.Editorial):</b> @Model.Editorial</p>
+                }
+                @if (!string.IsNullOrEmpty(Model.IdAutorNavigation?.Descripcion))
+                {
+                    <p class="card-text"><b>@Html.DisplayNameFor(m => m.IdAutorNavigation):</b> @Model.IdAutorNavigation.Descripcion</p>
                 }
 
                 @if (!string.IsNullOrWhiteSpace(Model.ClasificacionEdad))
@@ -182,77 +190,28 @@
     </div>
 
     <h4 class="mt-5 mb-3 ms-3">Reseñas de clientes</h4>
-
-
+    
     <div id="reseñas-container">
-        @if (Model.Reseñas != null && Model.Reseñas.Any())
-        {
-            <div id="reseñas-list" style="display:flex; flex-wrap: nowrap; gap: 1rem; max-width: 820px; margin: auto;">
-                @for (int i = 0; i < Model.Reseñas.Count; i++)
-                {
-                    var reseña = Model.Reseñas[i];
-                    <div class="card reseña-item" data-index="@i" style="flex: 0 0 48%; display:none;">
-                        <div class="card-header d-flex align-items-center">
-                            <div class="avatar me-2">
-                                @reseña.Usuario?.Nombre?.Substring(0, 2).ToUpper()
-                            </div>
-                            <div class="user-info">
-                                <div class="user-name">@reseña.Usuario?.Nombre</div>
-                                <div class="user-role">@reseña.Fecha?.ToString("dd/MM/yyyy")</div>
-                            </div>
-                        </div>
-                        <div class="card-body">
-                            <div class="rating text-warning mb-2">
-                                @{
-                                    int estrellas = reseña.Valoracion;
-                                    int pvacias = 5 - estrellas;
-                                }
-                                @for (int j = 0; j < estrellas; j++)
-                                {
-                                    <i class="fas fa-star"></i>
-                                }
-                                @for (int j = 0; j < pvacias; j++)
-                                {
-                                    <i class="far fa-star"></i>
-                                }
-                            </div>
-                            <p class="card-text">@reseña.Comentario</p>
-                        </div>
-                    </div>
-                }
-            </div>
-
-            <div id="paginacion-reseñas" class="text-center my-4">
-                <button id="btnAnterior" class="btn btn-cereza me-2" disabled>
-                    <i class="fas fa-arrow-left me-1"></i> Anterior
-                </button>
-                <span id="paginaActual" class="mx-2 fw-semibold">1</span> /
-                <span id="totalPaginas">@Math.Ceiling((double)Model.Reseñas.Count / 2)</span>
-                <button id="btnSiguiente" class="btn btn-cereza ms-2">
-                    Siguiente <i class="fas fa-arrow-right ms-1"></i>
-                </button>
-            </div>
-
-        }
-        else
-        {
-            <h6 class="mt-4" style="margin-left: 15px;">*Este producto aún no tiene reseñas.</h6>
-        }
+        @await Html.PartialAsync("~/Views/Reseña/_ReseñasParcial.cshtml", Model.Reseñas?.Where(r => r.Aprobada == true).OrderByDescending(r => r.Fecha).ToList() ?? new List<CultureOnline.Application.DTOs.ReseñaDTO>())
 
         <div class="text-start mb-4 ms-3">
             @if (User.Identity.IsAuthenticated)
             {
-                if (reseñaUsuario != null)
+                @if (reseñaUsuario != null)
                 {
-                    <a href="@Url.Action("Edit", "Reseña", new { id = reseñaUsuario.Id })" class="menu__link">
+                    // Botón para editar la reseña (AJAX)
+                    <a id="btnEditarResena" href="#" class="menu__link" data-id="@reseñaUsuario.Id">
                         <i class="fas fa-edit me-2"></i> Editar mi reseña
                     </a>
+                    <div id="contenedorFormularioResena" style="display:none;"></div>
                 }
                 else
                 {
-                    <a href="@Url.Action("Create", "Reseña", new { productoId = Model.Id })" class="menu__link">
-                        <i class="fas fa-plus me-2"></i> Agregar un comentario
+                    // Botón para crear una nueva reseña (AJAX)
+                    <a id="btnMostrarFormularioResena" class="menu__link" style="color:#a30000; font-weight:500; font-size:1.2rem; cursor:pointer; display:inline-flex; align-items:center; gap:8px;">
+                        <i class="fas fa-plus"></i> Agregar un comentario
                     </a>
+                    <div id="contenedorFormularioResena" style="display:none;"></div>
                 }
             }
             else
@@ -262,10 +221,10 @@
                 </a>
             }
         </div>
-
     </div>
 
     <div class="card-footer text-center bg-white border-0 mt-3">
+      <div class="d-flex justify-content-center gap-4 flex-wrap">
         <a class="animated-button"
            asp-action="Index">
             <svg viewBox="0 0 24 24" class="arr-2" xmlns="http://www.w3.org/2000/svg">
@@ -277,9 +236,114 @@
                 <path d="M7.8284 10.9999L13.1924 5.63589L11.7782 4.22168L4 11.9999L11.7782 19.778L13.1924 18.3638L7.8284 12.9999H20V10.9999H7.8284Z"></path>
             </svg>
         </a>
-    </div>
+        <a class="animated-button"
+           asp-controller="Producto"
+           asp-action="Edit"
+           asp-route-id="@Model.Id">
+            <svg viewBox="0 0 24 24" class="arr-2" xmlns="http://www.w3.org/2000/svg">
+                <path d="M16.1716 13.0001L10.8076 18.3641L12.2218 19.7783L20 12.0001L12.2218 4.22205L10.8076 5.63626L16.1716 11.0001H4V13.0001H16.1716Z"></path>
+            </svg>
+            <span class="text">Editar Producto</span>
+            <span class="circle"></span>
+            <svg viewBox="0 0 24 24" class="arr-1" xmlns="http://www.w3.org/2000/svg">
+                <path d="M16.1716 13.0001L10.8076 18.3641L12.2218 19.7783L20 12.0001L12.2218 4.22205L10.8076 5.63626L16.1716 11.0001H4V13.0001H16.1716Z"></path>
+            </svg>
+        </a>
 
+    </div>
+</div>
 
 @section Scripts {
-    <script src="~/js/producto.js"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    const contenedor = document.getElementById('contenedorFormularioResena');
+    // Crear reseña
+    const btnMostrar = document.getElementById('btnMostrarFormularioResena');
+    if (btnMostrar) {
+        btnMostrar.addEventListener('click', async function (e) {
+            e.preventDefault();
+            btnMostrar.style.display = 'none';
+            const response = await fetch('@Url.Action("Create", "Reseña", new { productoId = Model.Id, pedidoId = 0 })');
+            const html = await response.text();
+            contenedor.innerHTML = html;
+            contenedor.style.display = 'block';
+            inicializarEstrellas();
+        });
+    }
+    // Editar reseña
+    const btnEditar = document.getElementById('btnEditarResena');
+    if (btnEditar) {
+        btnEditar.addEventListener('click', async function (e) {
+            e.preventDefault();
+            btnEditar.style.display = 'none';
+            const id = btnEditar.getAttribute('data-id');
+            const response = await fetch(`/Reseña/Edit/${id}`);
+            const html = await response.text();
+            contenedor.innerHTML = html;
+            contenedor.style.display = 'block';
+            inicializarEstrellas();
+        });
+    }
+});
+
+// Función para inicializar estrellas y envío AJAX del formulario
+function inicializarEstrellas() {
+    const stars = document.querySelectorAll('#star-rating .star');
+    const valoracionInput = document.getElementById('Valoracion');
+    let currentRating = valoracionInput && valoracionInput.value ? parseInt(valoracionInput.value) : 0;
+    if (stars.length) {
+        stars.forEach(star => {
+            star.addEventListener('mouseover', function () {
+                const val = parseInt(this.getAttribute('data-value'));
+                highlightStars(val);
+            });
+            star.addEventListener('mouseout', function () {
+                highlightStars(currentRating);
+            });
+            star.addEventListener('click', function () {
+                currentRating = parseInt(this.getAttribute('data-value'));
+                valoracionInput.value = currentRating;
+                highlightStars(currentRating);
+            });
+        });
+        function highlightStars(rating) {
+            stars.forEach(star => {
+                const val = parseInt(star.getAttribute('data-value'));
+                star.style.color = val <= rating ? '#ffc107' : '#ccc';
+            });
+        }
+        highlightStars(currentRating);
+    }
+    //    Busca el formulario que tiene el id 'formReseña'
+    const formResena = document.getElementById('formReseña');
+    if (formResena) {
+        formResena.addEventListener('submit', async function (e) {
+            e.preventDefault();
+            const form = e.target;
+            const data = new FormData(form);
+            const response = await fetch(form.action, {
+                method: 'POST',
+                body: data,
+                headers: { 'X-Requested-With': 'XMLHttpRequest' }
+            });
+            if (response.ok) {
+                const result = await response.json();
+                if (result.success) {
+                    // Recarga el bloque de detalle del producto (estrellas y reseñas)
+                    fetch(`/Producto/DetalleParcial/${result.productoId}`)
+                        .then(r => r.text())
+                        .then(html => {
+                            document.getElementById('bloque-detalle-producto').outerHTML = html;
+                        });
+                }
+            } else {
+                // Si hay error de validación, recarga el formulario con los errores
+                const html = await response.text();
+                form.outerHTML = html;
+                inicializarEstrellas();
+            }
+        });
+    }
+}
+</script>
 }

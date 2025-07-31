@@ -1,114 +1,226 @@
-﻿@model CultureOnline.Application.DTOs.ReseñaDTO  
-@{  
-    ViewData["Title"] = "Crear Reseña";  
-    var pedidos = ViewBag.ListPedidos as List<CultureOnline.Application.DTOs.PedidoDTO> ?? new List<CultureOnline.Application.DTOs.PedidoDTO>();  
-    var productoId = ViewBag.ProductoId;  
-    bool tienePedidos = pedidos != null && pedidos.Any();  
-}  
-<div class="container mt-5" style="max-width: 600px;">  
-    <h2 class="mb-4 text-center">Nueva Reseña</h2>  
-    @if (!ViewData.ModelState.IsValid)
-    {
-        <div class="alert alert-danger">
-            <ul>
-                @foreach (var error in ViewData.ModelState.Values.SelectMany(v => v.Errors))
-                {
-                    <li>@error.ErrorMessage</li>
-                }
-            </ul>
-        </div>
+﻿@model CultureOnline.Application.DTOs.ReseñaDTO
+
+@{
+    Layout = null;
+    string nombreUsuario = Model.Usuario?.Nombre ?? User.Identity?.Name ?? "";
+    string fechaResena = Model.Fecha != null ? Model.Fecha.Value.ToString("dd/MM/yyyy HH:mm") : DateTime.Now.ToString("dd/MM/yyyy HH:mm");
+    var pedidos = ViewBag.ListPedidos as List<CultureOnline.Application.DTOs.PedidoDTO> ?? new List<CultureOnline.Application.DTOs.PedidoDTO>();
+    var productoId = ViewBag.ProductoId;
+}
+
+<style>
+
+    .form {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        max-width: 100%;
+        margin: 50px auto;
+        background-color: #fff;
+        padding: 20px;
+        border-radius: 20px;
+        box-shadow: 0 0 20px rgba(0,0,0,0.1);
+        position: relative;
     }
-    <form id="formReseña" asp-action="Create" method="post" class="border rounded p-4 shadow-sm bg-light">  
-        <input type="hidden" asp-for="ProductoId" />  
 
-        <div class="mb-3">  
-            <label asp-for="PedidoId" class="form-label">Pedido asociado</label>  
-            <select asp-for="PedidoId" class="form-select" asp-items="@(new SelectList(pedidos, "Id", "NumeroFactura"))">  
-                <option value="">Seleccione un pedido</option>  
-            </select>  
-            <span asp-validation-for="PedidoId" class="text-danger"></span>  
-        </div>  
+    .title {
+        font-size: 28px;
+        color: #D4A054;
+        font-weight: 600;
+        letter-spacing: -1px;
+        position: relative;
+        display: flex;
+        align-items: center;
+        padding-left: 30px;
+    }
 
-        <div class="mb-3">  
-            <label asp-for="Comentario" class="form-label">Comentario</label>  
-            <textarea asp-for="Comentario" class="form-control"></textarea>  
-            <span asp-validation-for="Comentario" class="text-danger"></span>  
-        </div>  
+        .title::before,
+        .title::after {
+            position: absolute;
+            content: "";
+            height: 16px;
+            width: 16px;
+            border-radius: 50%;
+            left: 0px;
+            background-color: #D4A054;
+        }
 
-        <div class="mb-3">  
-            <label asp-for="Valoracion" class="form-label">Valoración</label>  
-            <div id="star-rating" class="mb-2">  
-                @for (int i = 1; i <= 5; i++)  
-                {  
-                    <span class="star" data-value="@i" style="font-size:2rem; cursor:pointer; color:#ccc;">&#9733;</span>  
-                }  
-            </div>  
-            <input type="hidden" asp-for="Valoracion" />  
-            <span asp-validation-for="Valoracion" class="text-danger"></span>  
-        </div>  
+        .title::after {
+            animation: pulse 1s linear infinite;
+        }
 
-        <div class="d-flex justify-content-between mt-4">  
-            <button type="submit" class="btn btn-dark">Guardar</button>  
-            <a asp-action="Index" class="btn btn-outline-secondary">Cancelar</a>  
-        </div>  
-    </form>  
-</div>  
+    @@keyframes pulse {
+        from
 
-@section Scripts {  
-    <script>  
-        const stars = document.querySelectorAll('#star-rating .star');  
-        const valoracionInput = document.getElementById('Valoracion');  
-        let currentRating = 0;  
+    {
+        transform: scale(0.9);
+        opacity: 1;
+    }
 
-        stars.forEach(star => {  
-            star.addEventListener('mouseover', function () {  
-                const val = parseInt(this.getAttribute('data-value'));  
-                highlightStars(val);  
-            });  
-            star.addEventListener('mouseout', function () {  
-                highlightStars(currentRating);  
-            });  
-            star.addEventListener('click', function () {  
-                currentRating = parseInt(this.getAttribute('data-value'));  
-                valoracionInput.value = currentRating;  
-                highlightStars(currentRating);  
-            });  
-        });  
+    to {
+        transform: scale(1.8);
+        opacity: 0;
+    }
 
-        function highlightStars(rating) {  
-            stars.forEach(star => {  
-                const val = parseInt(star.getAttribute('data-value'));  
-                star.style.color = val <= rating ? '#ffc107' : '#ccc';  
-            });  
-        }  
-    </script>  
+    }
 
-    <script>
-        document.getElementById('formReseña').addEventListener('submit', async function (e) {
-            e.preventDefault();
-            const form = e.target;
-            const data = new FormData(form);
-            const response = await fetch(form.action, {
-                method: 'POST',
-                body: data,
-                headers: { 'X-Requested-With': 'XMLHttpRequest' }
-            });
-            if (response.ok) {
-                const result = await response.json();
-                if (result.success) {
-                    // Cargar el HTML actualizado de las reseñas
-                    fetch(`/Producto/ReseñasParcial?productoId=${result.productoId}`)
-                        .then(r => r.text())
-                        .then(html => {
-                            document.getElementById('reseñas-container').innerHTML = html;
-                        });
-                    // Opcional: cerrar modal, mostrar mensaje, etc.
-                }
-            } else {
-                // Manejar errores de validación
-                const html = await response.text();
-                document.getElementById('formReseña').outerHTML = html;
+    .message, .signin {
+        color: rgba(88, 87, 87, 0.822);
+        font-size: 14px;
+        text-align: center;
+        font-weight: bolder;
+    }
+
+        .signin a {
+            color: #D4A054;
+        }
+
+            .signin a:hover {
+                text-decoration: underline #D4A054;
             }
-        });
+
+    .form label {
+        position: relative;
+    }
+
+    .form .input {
+        width: 100%;
+        padding: 10px 10px 20px 10px;
+        border: 1px solid rgba(105, 105, 105, 0.397);
+        border-radius: 10px;
+        outline: none;
+    }
+
+        .form .input + span {
+            position: absolute;
+            left: 10px;
+            top: 15px;
+            color: grey;
+            font-size: 0.9em;
+            pointer-events: none;
+            transition: 0.3s ease;
+        }
+
+        .form .input:placeholder-shown + span {
+            top: 15px;
+            font-size: 0.9em;
+        }
+
+        .form .input:focus + span,
+        .form .input:valid + span {
+            top: 0px;
+            font-size: 0.7em;
+            font-weight: 600;
+            color: #D4A054;
+        }
+
+    .submit {
+        border: none;
+        outline: none;
+        background-color: #D4A054;
+        padding: 10px;
+        border-radius: 10px;
+        color: white;
+        font-size: 16px;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+        font-weight:bold;
+    }
+
+        .submit:hover {
+            background-color: #A86C2C;
+        }
+
+    .star {
+        font-size: 2rem;
+        cursor: pointer;
+        color: #ccc;
+        transition: color 0.2s ease;
+    }
+</style>
+
+<form id="formReseña" asp-action="Create" method="post" class="form">
+    @Html.AntiForgeryToken()
+    <p class="title">Nueva Reseña</p>
+    <p class="message">Valora el producto y deja tus comentarios</p>
+
+    <input type="hidden" asp-for="ProductoId" />
+    <input type="hidden" name="PedidoId" value="@(pedidos.FirstOrDefault()?.Id ?? 0)" />
+    <input type="hidden" asp-for="UsuarioId" />
+    <input type="hidden" asp-for="Fecha" />
+
+    <label>
+        <input class="input" type="text" value="@nombreUsuario" readonly />
+       
+    </label>
+
+    <label>
+        <input class="input" type="text" value="@fechaResena" readonly />
+  
+    </label>
+
+    <label>
+        <textarea asp-for="Comentario" class="input" required></textarea>
+        <span>Comentario</span>
+        <span asp-validation-for="Comentario" class="text-danger"></span>
+    </label>
+
+    <label>
+        <input type="hidden" asp-for="Valoracion" id="Valoracion" />
+        <span>Valoración</span>
+        <div id="star-rating">
+            @for (int i = 1; i <= 5; i++)
+            {
+                <span class="star" data-value="@i">&#9733;</span>
+            }
+        </div>
+        <span asp-validation-for="Valoracion" class="text-danger"></span>
+    </label>
+
+
+    <button type="submit" class="submit">Guardar Cambios</button>
+    <p class="signin">¿Cambiaste de idea? <a asp-action="Index">Cancelar</a></p>
+</form>
+
+@section Scripts {
+    <script>
+         // Seleccionar todos los elementos estrella del contenedor #star-rating
+        const stars = document.querySelectorAll('#star-rating .star');
+         // Obtener el input oculto que almacenará el valor de la valoración
+        const valoracionInput = document.getElementById('Valoracion');
+         // Inicializar la valoración actual (lee del input o usa 0 por defecto)
+        let currentRating = valoracionInput && valoracionInput.value ? parseInt(valoracionInput.value) : 0;
+
+         // Verifica si existen estrellas en el DOM
+        if (stars.length) {
+            stars.forEach(star => {
+                   // Evento al pasar el mouse sobre una estrella
+                star.addEventListener('mouseover', function () {
+                    const val = parseInt(this.getAttribute('data-value'));
+                    highlightStars(val);
+                });
+                // Evento al quitar el mouse de una estrella
+                star.addEventListener('mouseout', function () {
+                    highlightStars(currentRating);
+                });
+                 // Evento al hacer clic en una estrella
+                star.addEventListener('click', function () {
+                    currentRating = parseInt(this.getAttribute('data-value'));
+                    valoracionInput.value = currentRating;
+                    highlightStars(currentRating);
+                });
+            });
+
+            
+           //Función para resaltar visualmente las estrellas
+            function highlightStars(rating) {
+                stars.forEach(star => {
+                    const val = parseInt(star.getAttribute('data-value'));
+                    star.style.color = val <= rating ? '#ffc107' : '#ccc';
+                });
+            }
+
+            highlightStars(currentRating);
+        }
     </script>
 }

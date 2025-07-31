@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace CultureOnline.Application.Services.Implementations
 {
-    internal class ServiceRolUsuario: IServiceRolUsuario
+    public class ServiceRolUsuario: IServiceRolUsuario
     {
 
         private readonly IRepositoryRolUsuario _repository;
@@ -33,7 +33,6 @@ namespace CultureOnline.Application.Services.Implementations
         {
             //Obtener datos del repositorio 
             var list = await _repository.ListAsync();
-            // Map List<Autor> a ICollection<BodegaDTO> 
             var collection = _mapper.Map<ICollection<RolUsuarioDTO>>(list);
             // Return lista 
             return collection;

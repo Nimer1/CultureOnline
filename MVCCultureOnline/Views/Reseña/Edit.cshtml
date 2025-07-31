@@ -1,82 +1,213 @@
 @model CultureOnline.Application.DTOs.ReseñaDTO
 @{
     ViewData["Title"] = "Editar Reseña";
+    Layout = null;
+
+    bool esEdicion = Model != null && Model.Id > 0;
+    string nombreUsuario = Model.Usuario?.Nombre ?? User.Identity?.Name ?? "";
+    string fechaResena = Model.Fecha != null ? Model.Fecha.Value.ToString("dd/MM/yyyy HH:mm") : DateTime.Now.ToString("dd/MM/yyyy HH:mm");
 }
 
-<div class="container mt-5" style="max-width: 600px;">
-    <h2 class="mb-4 text-center">Editar Reseña</h2>
-
-    @if (!ViewData.ModelState.IsValid)
-    {
-        <div class="alert alert-danger">
-            <ul>
-                @foreach (var error in ViewData.ModelState.Values.SelectMany(v => v.Errors))
-                {
-                    <li>@error.ErrorMessage</li>
-                }
-            </ul>
-        </div>
+<style>
+    .form {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        max-width: 100%;
+        margin: 50px auto;
+        background-color: #fff;
+        padding: 20px;
+        border-radius: 20px;
+        box-shadow: 0 0 20px rgba(0,0,0,0.1);
+        position: relative;
     }
 
-    <form asp-action="Edit" method="post" class="border rounded p-4 shadow-sm bg-light">
-        <input type="hidden" asp-for="Id" />
-        <input type="hidden" asp-for="ProductoId" />
-        <input type="hidden" asp-for="PedidoId" />
+    .title {
+        font-size: 28px;
+        color: #D4A054;
+        font-weight: 600;
+        letter-spacing: -1px;
+        position: relative;
+        display: flex;
+        align-items: center;
+        padding-left: 30px;
+    }
 
-        <div class="mb-3">
-            <label asp-for="Comentario" class="form-label">Comentario</label>
-            <textarea asp-for="Comentario" class="form-control" rows="3"></textarea>
-            <span asp-validation-for="Comentario" class="text-danger"></span>
-        </div>
+        .title::before,
+        .title::after {
+            position: absolute;
+            content: "";
+            height: 16px;
+            width: 16px;
+            border-radius: 50%;
+            left: 0px;
+            background-color: #D4A054;
+        }
 
-        <div class="mb-3">
-            <label asp-for="Valoracion" class="form-label">Valoración</label>
-            <div id="star-rating" class="mb-2">
-                @for (int i = 1; i <= 5; i++)
-                {
-                    var selected = Model.Valoracion == i ? "#ffc107" : "#ccc";
-                    <span class="star" data-value="@i" style="font-size:2rem; cursor:pointer; color:@selected;">&#9733;</span>
-                }
-            </div>
-            <input type="hidden" asp-for="Valoracion" />
-            <span asp-validation-for="Valoracion" class="text-danger"></span>
-        </div>
+        .title::after {
+            animation: pulse 1s linear infinite;
+        }
 
-        <div class="d-flex justify-content-between mt-4">
-            <button type="submit" class="btn btn-dark">Guardar Cambios</button>
-            <a asp-action="Index" class="btn btn-outline-secondary">Cancelar</a>
+    @@keyframes pulse {
+        from {
+            transform: scale(0.9);
+            opacity: 1;
+        }
+
+        to {
+            transform: scale(1.8);
+            opacity: 0;
+        }
+    }
+
+    .message, .signin {
+        color: rgba(88, 87, 87, 0.822);
+        font-size: 14px;
+        text-align: center;
+        font-weight: bolder;
+    }
+
+        .signin a {
+            color: #D4A054;
+        }
+
+            .signin a:hover {
+                text-decoration: underline #D4A054;
+            }
+
+    .form label {
+        position: relative;
+    }
+
+    .form .input {
+        width: 100%;
+        padding: 10px 10px 20px 10px;
+        border: 1px solid rgba(105, 105, 105, 0.397);
+        border-radius: 10px;
+        outline: none;
+    }
+
+        .form .input + span {
+            position: absolute;
+            left: 10px;
+            top: 15px;
+            color: grey;
+            font-size: 0.9em;
+            pointer-events: none;
+            transition: 0.3s ease;
+        }
+
+        .form .input:placeholder-shown + span {
+            top: 15px;
+            font-size: 0.9em;
+        }
+
+        .form .input:focus + span,
+        .form .input:valid + span {
+            top: 0px;
+            font-size: 0.7em;
+            font-weight: 600;
+            color: #D4A054;
+        }
+
+    .submit {
+        border: none;
+        outline: none;
+        background-color: #D4A054;
+        padding: 10px;
+        border-radius: 10px;
+        color: white;
+        font-size: 16px;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+        font-weight: bold;
+    }
+
+        .submit:hover {
+            background-color: #A86C2C;
+        }
+
+    .star {
+        font-size: 2rem;
+        cursor: pointer;
+        color: #ccc;
+        transition: color 0.2s ease;
+    }
+</style>
+
+<form asp-action="Edit" method="post" class="form">
+    @Html.AntiForgeryToken()
+    <p class="title">Editar Reseña</p>
+    <p class="message">Modifica tu valoración y comentario</p>
+
+    <input type="hidden" asp-for="Id" />
+    <input type="hidden" asp-for="ProductoId" />
+    <input type="hidden" asp-for="PedidoId" />
+    <input type="hidden" asp-for="UsuarioId" />
+    <input type="hidden" asp-for="Fecha" />
+
+    <label>
+        <input class="input" type="text" value="@nombreUsuario" readonly />
+    </label>
+
+    <label>
+        <input class="input" type="text" value="@fechaResena" readonly />
+    </label>
+
+    <label>
+        <textarea asp-for="Comentario" class="input" required></textarea>
+        <span>Comentario</span>
+        <span asp-validation-for="Comentario" class="text-danger"></span>
+    </label>
+
+    <label>
+        <input type="hidden" asp-for="Valoracion" id="Valoracion" />
+        <span>Valoración</span>
+        <div id="star-rating">
+            @for (int i = 1; i <= 5; i++)
+            {
+                var selected = Model.Valoracion >= i ? "#ffc107" : "#ccc";
+                <span class="star" data-value="@i" style="color:@selected;">&#9733;</span>
+            }
         </div>
-    </form>
-</div>
+        <span asp-validation-for="Valoracion" class="text-danger"></span>
+    </label>
+
+    <button type="submit" class="submit">Guardar Cambios</button>
+    <p class="signin">¿Cambiaste de idea? <a asp-action="Index">Cancelar</a></p>
+</form>
 
 @section Scripts {
     <script>
+        // Selección de elementos del DOM
         const stars = document.querySelectorAll('#star-rating .star');
         const valoracionInput = document.getElementById('Valoracion');
-        let currentRating = parseInt(valoracionInput.value) || 0;
+        let currentRating = valoracionInput && valoracionInput.value ? parseInt(valoracionInput.value) : 0;
 
-        highlightStars(currentRating);
-
-        stars.forEach(star => {
-            star.addEventListener('mouseover', function () {
-                const val = parseInt(this.getAttribute('data-value'));
-                highlightStars(val);
-            });
-            star.addEventListener('mouseout', function () {
-                highlightStars(currentRating);
-            });
-            star.addEventListener('click', function () {
-                currentRating = parseInt(this.getAttribute('data-value'));
-                valoracionInput.value = currentRating;
-                highlightStars(currentRating);
-            });
-        });
-
-        function highlightStars(rating) {
+        if (stars.length) {
             stars.forEach(star => {
-                const val = parseInt(star.getAttribute('data-value'));
-                star.style.color = val <= rating ? '#ffc107' : '#ccc';
+                star.addEventListener('mouseover', function () {
+                    const val = parseInt(this.getAttribute('data-value'));
+                    highlightStars(val);
+                });
+                star.addEventListener('mouseout', function () {
+                    highlightStars(currentRating);
+                });
+                star.addEventListener('click', function () {
+                    currentRating = parseInt(this.getAttribute('data-value'));
+                    valoracionInput.value = currentRating;
+                    highlightStars(currentRating);
+                });
             });
+
+            function highlightStars(rating) {
+                stars.forEach(star => {
+                    const val = parseInt(star.getAttribute('data-value'));
+                    star.style.color = val <= rating ? '#ffc107' : '#ccc';
+                });
+            }
+
+            highlightStars(currentRating);
         }
     </script>
 }

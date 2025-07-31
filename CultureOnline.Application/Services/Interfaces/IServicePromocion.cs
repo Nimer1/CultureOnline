@@ -10,7 +10,9 @@ namespace CultureOnline.Application.Services.Interfaces
     public interface IServicePromocion
     {
         Task<PromocionDTO> FindByIdAsync(int id);
-        Task<ICollection<PromocionDTO>> FindByNameAsync(string nombre);
+       
         Task<ICollection<PromocionDTO>> ListAsync();
+        Task AddAsync(PromocionDTO dto);
+        Task UpdateAsync(int id, PromocionDTO dto);
     }
 }

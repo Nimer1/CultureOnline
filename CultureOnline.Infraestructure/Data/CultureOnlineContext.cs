@@ -45,6 +45,7 @@ public partial class CultureOnlineContext : DbContext
     public virtual DbSet<Usuario> Usuario { get; set; }
     public virtual DbSet<ProductoPersonalizado> ProductosPersonalizados { get; set; }
     public virtual DbSet<ProductoCategorias> ProductoCategorias { get; set; }
+    public virtual DbSet<ProductoEtiquetas> ProductoEtiquetas { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -200,6 +201,20 @@ public partial class CultureOnlineContext : DbContext
                 .HasForeignKey(d => d.ProductoId)
                 .HasConstraintName("FK_ProductoImagenes_Productos");
         });
+
+        modelBuilder.Entity<ProductoEtiquetas>()
+     .HasKey(pe => new { pe.ProductoId, pe.EtiquetaId });
+
+        modelBuilder.Entity<ProductoEtiquetas>()
+            .HasOne(pe => pe.Producto)
+            .WithMany(p => p.ProductoEtiquetas)
+            .HasForeignKey(pe => pe.ProductoId);
+
+        modelBuilder.Entity<ProductoEtiquetas>()
+            .HasOne(pe => pe.Etiqueta)
+            .WithMany(e => e.ProductoEtiquetas)
+            .HasForeignKey(pe => pe.EtiquetaId);
+
         modelBuilder.Entity<Productos>(entity =>
         {
             entity.Property(e => e.ClasificacionEdad).HasMaxLength(20);
@@ -220,14 +235,14 @@ public partial class CultureOnlineContext : DbContext
                 .HasForeignKey(d => d.IdAutor)
                 .HasConstraintName("FK_Productos_Autor");
 
-            // Relación con Imágenes del Producto
+            // Relación con imágenes del Producto
             entity.HasMany(p => p.ProductoImagenes)
                 .WithOne(pi => pi.Producto)
                 .HasForeignKey(pi => pi.ProductoId)
                 .HasConstraintName("FK_ProductoImagenes_Productos");
 
-            // Relación con Etiquetas (muchos a muchos anónima, esta sí puede quedar así si no tenés entidad explícita)
-            entity.HasMany(d => d.Etiquetas)
+            // Relación con Etiquetas
+            /*entity.HasMany(d => d.Etiquetas)
                 .WithMany(p => p.Producto)
                 .UsingEntity<Dictionary<string, object>>(
                     "ProductoEtiquetas",
@@ -242,10 +257,10 @@ public partial class CultureOnlineContext : DbContext
                     j =>
                     {
                         j.HasKey("ProductoId", "EtiquetaId");
-                    });
+                    });*/
 
             // Relación con Categorías (muchos a muchos explícita)
-            entity.HasMany(p => p.Categorias)
+            /*entity.HasMany(p => p.Categorias)
                 .WithMany(c => c.Productos)
                 .UsingEntity<ProductoCategorias>(
                     j => j
@@ -260,7 +275,7 @@ public partial class CultureOnlineContext : DbContext
                     {
                         j.ToTable("ProductoCategorias");
                         j.HasKey(pc => new { pc.ProductoId, pc.CategoriaId });
-                    });
+                    });*/
         });
 
 
@@ -362,6 +377,5 @@ public partial class CultureOnlineContext : DbContext
         });
 
     }
-
     partial void OnModelCreatingPartial(ModelBuilder modelBuilder);
 }

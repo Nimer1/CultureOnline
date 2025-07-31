@@ -11,5 +11,7 @@ namespace CultureOnline.Infraestructure.Repository.Interfaces
     {
         Task<ICollection<Promociones>> ListAsync();
         Task<Promociones> FindByIdAsync(int id);
+        Task AddAsync(Promociones promocion);
+        Task UpdateAsync(int id, Promociones promocion);
     }
 }

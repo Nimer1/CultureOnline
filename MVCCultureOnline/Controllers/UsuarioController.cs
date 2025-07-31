@@ -1,16 +1,20 @@
 ﻿using CultureOnline.Application.DTOs;
 using CultureOnline.Application.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
+using MVCCultureOnline.Views.ViewModels;
 
 namespace MVCCultureOnline.Controllers
 {
     public class UsuarioController : Controller
     {
         private readonly IServiceUsuario _serviceUsuario;
+        private readonly IServiceRolUsuario _serviceRolUsuario;
 
-        public UsuarioController(IServiceUsuario serviceUsuario)
+        public UsuarioController(IServiceUsuario serviceUsuario, IServiceRolUsuario serviceRolUsuario)
         {
             _serviceUsuario = serviceUsuario;
+            _serviceRolUsuario = serviceRolUsuario;
         }
 
         [HttpGet]
@@ -44,53 +48,63 @@ namespace MVCCultureOnline.Controllers
         // POST: UsuarioController/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(UsuarioDTO dto)
+        public async Task<IActionResult> Create(ViewModelRegistro model)
         {
-
             if (!ModelState.IsValid)
             {
-                // Lee del ModelState todos los errores que
-                // vienen para el lado del server
-                string errors = string.Join("; ", ModelState.Values
-                                   .SelectMany(x => x.Errors)
-                                   .Select(x => x.ErrorMessage));
-                return BadRequest(errors);
+                return View(model);
             }
-            // Asignar valores por defecto
-            dto.IDRol = 2;
-            dto.Estado = "Activo";
-            dto.UltimoInicioSesion = DateTime.Now;
+
+            // Mapea el ViewModel a UsuarioDTO
+            var dto = new UsuarioDTO
+            {
+                Nombre = model.Nombre,
+                Correo = model.Correo,
+                Contrasena = model.Contrasena,
+                IDRol = 2,
+                Estado = "Activo",
+                UltimoInicioSesion = DateTime.Now
+            };
 
             await _serviceUsuario.AddAsync(dto);
-            return RedirectToAction("Index", "Login");
 
+            return RedirectToAction("Index", "Login");
         }
 
+
         // GET: UsuarioController/Details/5
-        public async Task<IActionResult> Details(string id)
+        public async Task<IActionResult> Details(int id)
         {
             var @object = await _serviceUsuario.FindByIdAsync(id);
             return View(@object);
         }
 
         // GET: UsuarioController/Edit/5
-        public async Task<IActionResult> Edit(string id)
+        public async Task<IActionResult> Edit(int id)
         {
-            var @object = await _serviceUsuario.FindByIdAsync(id);
-            return View(@object);
+            /*var @object = await _serviceUsuario.FindByIdAsync(id);
+            return View(@object);*/
+            var usuario = await _serviceUsuario.FindByIdAsync(id);
+
+            var roles = await _serviceRolUsuario.ListAsync();
+            ViewBag.Roles = new SelectList(roles, "IDRol", "Descripcion", usuario.IDRol);
+
+            return View(usuario);
         }
 
         // POST: UsuarioController/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(string id, UsuarioDTO dto)
+        public async Task<IActionResult> Edit(int id, UsuarioDTO dto)
         {
             await _serviceUsuario.UpdateAsync(id, dto);
+            TempData["MensajeExito"] = "Usuario actualizado correctamente";
             return RedirectToAction("Index");
+
         }
 
         // GET: UsuarioController/Delete/5
-        public async Task<IActionResult> Delete(string id)
+        public async Task<IActionResult> Delete(int id)
         {
             var @object = await _serviceUsuario.FindByIdAsync(id);
             return View(@object);
@@ -99,7 +113,7 @@ namespace MVCCultureOnline.Controllers
         // POST: UsuarioController/Delete/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Delete(string id, IFormCollection collection)
+        public async Task<IActionResult> Delete(int id, IFormCollection collection)
         {
             await _serviceUsuario.DeleteAsync(id);
             return RedirectToAction("Index");
