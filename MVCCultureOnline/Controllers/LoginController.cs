@@ -1,11 +1,16 @@
 ﻿using CultureOnline.Application.Services.Interfaces;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using MVCCultureOnline.Models;
 using MVCCultureOnline.Util;
 using MVCCultureOnline.Views.ViewModels;
+using System.Runtime.Intrinsics.Arm;
 using System.Security.Claims;
+using System.Security.Cryptography;
+using System.Text;
+using Aes = System.Security.Cryptography.Aes;
 
 namespace MVCCultureOnline.Controllers
 {
@@ -108,11 +113,13 @@ namespace MVCCultureOnline.Controllers
         }
 
         [HttpGet]
+        [Authorize]
         public async Task<IActionResult> CerrarSesion()
         {
             await HttpContext.SignOutAsync();
             return RedirectToAction("Index", "Home");
         }
+       
     }
 
 }

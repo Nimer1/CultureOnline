@@ -31,11 +31,11 @@ namespace CultureOnline.Application.Services.Implementations
         public async Task<string> AddAsync(UsuarioDTO dto)
         {
             // Llave secreta
-            //string secret = _options.Value.Crypto.Secret;
+            string secret = _options.Value.Crypto.Secret;
             // Password encriptado
-            //string passwordEncrypted = Cryptography.Encrypt(dto.Contrasena!, secret);
+            string passwordEncrypted = Cryptography.Encrypt(dto.Contrasena!, secret);
             // Establecer password DTO
-            //dto.Contrasena = passwordEncrypted;
+            dto.Contrasena = passwordEncrypted;
             var objectMapped = _mapper.Map<Usuario>(dto);
 
             return await _repository.AddAsync(objectMapped);
@@ -77,13 +77,13 @@ namespace CultureOnline.Application.Services.Implementations
             UsuarioDTO usuarioDTO = null!;
 
             // Llave secreta
-            //string secret = _options.Value.Crypto.Secret;
+            string secret = _options.Value.Crypto.Secret;
             // Password encriptado
-            //string passwordEncrypted = Cryptography.Encrypt(password, secret);
+            string passwordEncrypted = Cryptography.Encrypt(password, secret);
 
-            //var @object = await _repository.LoginAsync(id, passwordEncrypted);
+            var @object = await _repository.LoginAsync(id, passwordEncrypted);
 
-            var @object = await _repository.LoginAsync(id, password);
+            //var @object = await _repository.LoginAsync(id, password);
 
 
             if (@object != null)
